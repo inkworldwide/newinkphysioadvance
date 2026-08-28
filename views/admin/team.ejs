@@ -1,0 +1,124 @@
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold"><i class="ri-team-line me-2 text-primary"></i>Team Members & Leadership Statements</h5>
+        <span class="badge bg-primary text-white rounded-pill"><%= members.length %> Members</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table pe-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Designation / Role Title</th>
+              <th>Group</th>
+              <th class="text-center">About Page Display</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (members.length === 0) { %>
+              <tr><td colspan="5" class="text-center text-muted-pe py-4">No team members yet.</td></tr>
+            <% } %>
+            <% members.forEach(m => { %>
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <img src="<%= m.photo || '/images/team/default-avatar.png' %>" alt="<%= m.name %>" class="rounded-circle" style="width:38px; height:38px; object-fit:cover;">
+                    <div>
+                      <div class="fw-bold text-dark">
+                        <%= m.name %>
+                        <span class="badge bg-light text-primary border ms-1 font-weight-bold">Pos #<%= m.display_order %></span>
+                      </div>
+                      <div class="text-muted small"><%= m.qualification %></div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="fw-semibold text-dark"><%= m.designation || m.role %></span></td>
+                <td><span class="badge bg-light text-dark border text-capitalize"><%= m.group_name.replace('_',' ') %></span></td>
+                <td class="text-center">
+                  <form action="/admin/team/<%= m.id %>/toggle-about" method="POST" class="d-inline">
+                    <% if (m.show_on_about) { %>
+                      <button type="submit" class="btn btn-sm btn-success rounded-pill px-3 shadow-sm" title="Click to hide from About page">
+                        <i class="ri-checkbox-circle-fill me-1"></i> Shown on About
+                      </button>
+                    <% } else { %>
+                      <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="Click to show on About page">
+                        <i class="ri-add-circle-line me-1"></i> Add to About
+                      </button>
+                    <% } %>
+                  </form>
+                </td>
+                <td class="text-end">
+                  <div class="d-flex align-items-center justify-content-end gap-1">
+                    <a href="/admin/team/<%= m.id %>/edit" class="btn btn-sm btn-outline-primary" title="Edit Details & Statement">
+                      <i class="ri-edit-line"></i> Edit
+                    </a>
+                    <form action="/admin/team/<%= m.id %>/delete" method="POST" onsubmit="return confirm('Remove this team member?')" class="d-inline">
+                      <button class="btn btn-sm btn-outline-danger" title="Delete Member"><i class="ri-delete-bin-line"></i></button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card p-4 shadow-sm">
+      <h6 class="fw-bold mb-3"><i class="ri-user-add-line text-primary me-2"></i>Add Team Member & Statement</h6>
+      <form action="/admin/team" method="POST">
+        <div class="mb-3">
+          <label class="form-label font-weight-semibold">Full Name</label>
+          <input type="text" name="name" class="form-control" required placeholder="e.g. Dr. John Doe">
+        </div>
+        <div class="mb-3">
+          <label class="form-label font-weight-semibold">Designation / Role Title</label>
+          <input type="text" name="designation" class="form-control" placeholder="e.g. Founder, Co-Founder, Chairman, Trustee" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Role</label>
+          <input type="text" name="role" class="form-control" placeholder="e.g. Leadership Board">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Qualification</label>
+          <input type="text" name="qualification" class="form-control" placeholder="e.g. BPT, MPT, PhD">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Group</label>
+          <select name="group_name" class="form-select">
+            <option value="founding">Founding / Leadership</option>
+            <option value="advisory">Advisory Board / Trustees</option>
+            <option value="legal_business">Legal & Business</option>
+            <option value="teaching">Teaching Staff / Instructors</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <div class="form-check form-switch p-2 bg-light rounded border">
+            <input class="form-check-input ms-0 me-2" type="checkbox" name="show_on_about" value="1" id="showAboutNew" checked>
+            <label class="form-check-label font-weight-bold" for="showAboutNew">
+              <i class="ri-star-fill text-warning me-1"></i> Display on About Page
+            </label>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label font-weight-semibold">About Page Quote / Statement</label>
+          <textarea name="statement" rows="3" class="form-control" placeholder="Enter quote or statement to showcase on the About Us page..."></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label font-weight-bold text-primary">
+            <i class="ri-sort-asc me-1"></i> Position / Display Order
+          </label>
+          <input type="number" name="display_order" class="form-control form-control-lg fw-bold text-primary border-primary" value="1" min="1">
+          <span class="text-muted small">1 = First (leftmost), 2 = Second, 3 = Third...</span>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm">
+          <i class="ri-check-line me-1"></i> Add Team Member
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

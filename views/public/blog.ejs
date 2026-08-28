@@ -1,0 +1,38 @@
+<section class="pe-hero-strip">
+  <div class="container">
+    <span class="pe-hero-eyebrow"><i class="ri-quill-pen-line"></i> PhysioEdvance Blog</span>
+    <h1 class="mb-2 mt-2">Blog</h1>
+    <p class="mb-0">Articles, poems, quotes, and experiences from the PhysioEdvance team.</p>
+  </div>
+</section>
+
+<section class="pe-section">
+  <div class="container">
+    <div class="d-flex gap-2 mb-4 flex-wrap">
+      <a href="/blog" class="btn btn-sm <%= !filterType ? 'btn-primary' : 'btn-outline-primary' %>">All</a>
+      <a href="/blog?type=article" class="btn btn-sm <%= filterType==='article' ? 'btn-primary' : 'btn-outline-primary' %>">Articles</a>
+      <a href="/blog?type=poem" class="btn btn-sm <%= filterType==='poem' ? 'btn-primary' : 'btn-outline-primary' %>">Poems</a>
+      <a href="/blog?type=quote" class="btn btn-sm <%= filterType==='quote' ? 'btn-primary' : 'btn-outline-primary' %>">Quotes</a>
+      <a href="/blog?type=experience" class="btn btn-sm <%= filterType==='experience' ? 'btn-primary' : 'btn-outline-primary' %>">Experiences</a>
+    </div>
+
+    <% if (posts.length === 0) { %>
+      <p class="text-muted-pe text-center py-5">No posts yet.</p>
+    <% } %>
+
+    <div class="row g-4">
+      <% posts.forEach(p => { %>
+        <div class="col-md-6 col-lg-4">
+          <a href="/blog/<%= p.slug %>" class="text-decoration-none">
+            <div class="card pe-blog-card h-100 p-3">
+              <span class="badge pe-blog-type-badge mb-2 text-capitalize" style="width:fit-content;"><%= p.post_type %></span>
+              <h6 class="text-dark"><%= p.title %></h6>
+              <p class="text-muted-pe small mb-2"><%= p.excerpt %></p>
+              <div class="text-muted-pe small mt-auto">by <%= p.author_name || 'PhysioEdvance' %></div>
+            </div>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

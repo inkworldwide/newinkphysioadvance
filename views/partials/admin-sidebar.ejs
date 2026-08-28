@@ -1,0 +1,45 @@
+<div class="pe-sidebar" id="peSidebar">
+  <div class="pe-sidebar-brand">
+    <a href="/" class="d-flex align-items-center gap-2 text-decoration-none">
+      <img src="/images/logo-icon.png" alt="PhysioEdvance" class="pe-logo-img" style="height:2.25rem;width:auto;">
+      <span class="pe-sidebar-brand-text">Physio<b>Edvance</b></span>
+    </a>
+  </div>
+
+  <div class="pe-sidebar-menu">
+    <% if (currentUser && currentUser.role === 'admin') { %>
+      <p class="pe-menu-label">Main</p>
+      <a href="/admin/dashboard" class="pe-menu-link <%= currentPath==='/admin/dashboard'?'active':'' %>"><i class="ri-dashboard-2-line"></i><span>Dashboard</span></a>
+
+      <p class="pe-menu-label">Manage</p>
+      <a href="/admin/courses" class="pe-menu-link <%= currentPath==='/admin/courses'?'active':'' %>"><i class="ri-book-2-line"></i><span>Courses</span></a>
+      <a href="/admin/categories" class="pe-menu-link <%= currentPath==='/admin/categories'?'active':'' %>"><i class="ri-folder-2-line"></i><span>Subjects</span></a>
+      <a href="/admin/users" class="pe-menu-link <%= currentPath==='/admin/users'?'active':'' %>"><i class="ri-team-line"></i><span>Users</span></a>
+      <a href="/admin/orders" class="pe-menu-link <%= currentPath==='/admin/orders'?'active':'' %>"><i class="ri-shopping-bag-3-line"></i><span>Orders</span></a>
+
+      <p class="pe-menu-label">Content</p>
+      <a href="/admin/features" class="pe-menu-link <%= currentPath==='/admin/features'?'active':'' %>"><i class="ri-apps-2-line"></i><span>Hero Feature Cards</span></a>
+      <a href="/admin/specialties" class="pe-menu-link <%= currentPath==='/admin/specialties'?'active':'' %>"><i class="ri-pulse-line"></i><span>Clinical Specialties</span></a>
+      <a href="/admin/team" class="pe-menu-link <%= currentPath==='/admin/team'?'active':'' %>"><i class="ri-team-line"></i><span>Team</span></a>
+      <a href="/admin/blog" class="pe-menu-link <%= currentPath==='/admin/blog'?'active':'' %>"><i class="ri-article-line"></i><span>Blog</span></a>
+      <a href="/admin/live-sessions" class="pe-menu-link <%= currentPath==='/admin/live-sessions'?'active':'' %>"><i class="ri-vidicon-line"></i><span>Live Sessions</span></a>
+      <a href="/admin/appointments" class="pe-menu-link <%= currentPath==='/admin/appointments'?'active':'' %>"><i class="ri-calendar-check-line"></i><span>Appointments</span></a>
+
+      <p class="pe-menu-label">Account</p>
+      <a href="/admin/profile" class="pe-menu-link <%= currentPath==='/admin/profile'?'active':'' %>"><i class="ri-user-settings-line"></i><span>Profile</span></a>
+      <a href="/" class="pe-menu-link"><i class="ri-global-line"></i><span>View Site</span></a>
+
+    <% } else if (currentUser && currentUser.role === 'instructor') { %>
+      <p class="pe-menu-label">Main</p>
+      <a href="/instructor/dashboard" class="pe-menu-link <%= currentPath==='/instructor/dashboard'?'active':'' %>"><i class="ri-dashboard-2-line"></i><span>Dashboard</span></a>
+
+      <p class="pe-menu-label">Teaching</p>
+      <a href="/instructor/courses" class="pe-menu-link <%= currentPath.startsWith('/instructor/courses')?'active':'' %>"><i class="ri-book-2-line"></i><span>My Courses</span></a>
+      <a href="/instructor/courses/new" class="pe-menu-link"><i class="ri-add-circle-line"></i><span>Create Course</span></a>
+
+      <p class="pe-menu-label">Account</p>
+      <a href="/instructor/profile" class="pe-menu-link <%= currentPath==='/instructor/profile'?'active':'' %>"><i class="ri-user-settings-line"></i><span>Profile</span></a>
+      <a href="/" class="pe-menu-link"><i class="ri-global-line"></i><span>View Site</span></a>
+    <% } %>
+  </div>
+</div>

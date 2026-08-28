@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header">Orders & Payments</div>
+  <div class="table-responsive">
+    <table class="table pe-table mb-0">
+      <thead><tr><th>Transaction ID</th><th>Student</th><th>Course</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody>
+        <% if (orders.length === 0) { %>
+          <tr><td colspan="7" class="text-center text-muted-pe py-4">No orders yet.</td></tr>
+        <% } %>
+        <% orders.forEach(o => { %>
+          <tr>
+            <td class="small text-muted-pe"><%= o.transaction_id %></td>
+            <td><%= o.student_name %><br><span class="text-muted-pe small"><%= o.student_email %></span></td>
+            <td><%= o.course_title %></td>
+            <td class="fw-semibold">₹<%= o.amount.toLocaleString() %></td>
+            <td class="text-capitalize"><%= o.payment_method.replace('_',' ') %></td>
+            <td><span class="badge badge-soft-success text-capitalize"><%= o.status %></span></td>
+            <td class="text-muted-pe"><%= new Date(o.created_at).toLocaleDateString() %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

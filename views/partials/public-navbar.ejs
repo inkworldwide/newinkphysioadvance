@@ -1,0 +1,158 @@
+<nav class="navbar navbar-expand-lg pe-navbar sticky-top">
+  <div class="container-fluid px-3 px-lg-4 px-xl-5">
+    <!-- Brand -->
+    <a class="navbar-brand pe-brand" href="/">
+      <img src="/images/logo-icon.png" alt="PhysioEdvance" class="pe-logo-img">
+      <span class="pe-brand-text">Physio<span class="text-primary-pe">Edvance</span></span>
+    </a>
+
+    <!-- Search (desktop) -->
+    <form action="/courses" method="GET" class="d-none d-lg-flex align-items-center pe-nav-search mx-lg-2 mx-xl-3">
+      <i class="ri-search-line pe-search-icon"></i>
+      <input type="text" name="search" placeholder="Search subjects, courses..." aria-label="Search">
+      <button type="submit" class="pe-search-btn" aria-label="Search">
+        <i class="ri-arrow-right-line"></i>
+      </button>
+    </form>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <i class="ri-menu-3-line fs-4"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1 gap-xl-2">
+        <li class="nav-item">
+          <a class="nav-link <%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
+        </li>
+
+        <!-- SUBJECTS MEGA MENU (Fix #5) -->
+        <!-- SUBJECTS DROPDOWN with year sub-menus -->
+        <li class="nav-item dropdown pe-subjects-dropdown">
+          <a class="nav-link dropdown-toggle <%= currentPath.startsWith('/subjects') || currentPath.startsWith('/courses') ? 'active' : '' %>"
+             href="/subjects" id="subjectsDropdown" role="button"
+             data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            Subjects
+          </a>
+          <ul class="dropdown-menu pe-subjects-menu shadow-lg" aria-labelledby="subjectsDropdown">
+            <!-- Year 1 -->
+            <li class="dropdown-submenu">
+              <a class="dropdown-item pe-submenu-trigger" href="/subjects#year-1">
+                <span class="pe-year-dot" style="background:#0a5dc2;">1</span>
+                Year 1 <small class="text-muted-pe">Foundation</small>
+                <i class="ri-arrow-right-s-line ms-auto"></i>
+              </a>
+              <ul class="dropdown-menu pe-submenu">
+                <li><a class="dropdown-item" href="/subjects/anatomy"><i class="ri-skull-2-line me-2 text-primary-pe"></i>Anatomy</a></li>
+                <li><a class="dropdown-item" href="/subjects/physiology"><i class="ri-pulse-line me-2 text-primary-pe"></i>Physiology</a></li>
+                <li><a class="dropdown-item" href="/subjects/biochemistry"><i class="ri-test-tube-line me-2 text-primary-pe"></i>Biochemistry</a></li>
+                <li><a class="dropdown-item" href="/subjects/biomechanics"><i class="ri-rotate-lock-line me-2 text-primary-pe"></i>Biomechanics</a></li>
+                <li><a class="dropdown-item" href="/subjects/psychology"><i class="ri-brain-line me-2 text-primary-pe"></i>Psychology</a></li>
+                <li><a class="dropdown-item" href="/subjects/sociology"><i class="ri-group-line me-2 text-primary-pe"></i>Sociology</a></li>
+              </ul>
+            </li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <!-- Year 2 -->
+            <li class="dropdown-submenu">
+              <a class="dropdown-item pe-submenu-trigger" href="/subjects#year-2">
+                <span class="pe-year-dot" style="background:#2d9cdb;">2</span>
+                Year 2 <small class="text-muted-pe">Core Clinical</small>
+                <i class="ri-arrow-right-s-line ms-auto"></i>
+              </a>
+              <ul class="dropdown-menu pe-submenu">
+                <li><a class="dropdown-item" href="/subjects/pathology"><i class="ri-microscope-line me-2 text-primary-pe"></i>Pathology</a></li>
+                <li><a class="dropdown-item" href="/subjects/microbiology"><i class="ri-bug-line me-2 text-primary-pe"></i>Microbiology</a></li>
+                <li><a class="dropdown-item" href="/subjects/exercise-therapy"><i class="ri-run-line me-2 text-primary-pe"></i>Exercise Therapy</a></li>
+                <li><a class="dropdown-item" href="/subjects/electrotherapy"><i class="ri-flashlight-line me-2 text-primary-pe"></i>Electrotherapy</a></li>
+                <li><a class="dropdown-item" href="/subjects/pharmacology"><i class="ri-capsule-line me-2 text-primary-pe"></i>Pharmacology</a></li>
+              </ul>
+            </li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <!-- Year 3 -->
+            <li class="dropdown-submenu">
+              <a class="dropdown-item pe-submenu-trigger" href="/subjects#year-3">
+                <span class="pe-year-dot" style="background:#2FA75F;">3</span>
+                Year 3 <small class="text-muted-pe">Advanced Clinical</small>
+                <i class="ri-arrow-right-s-line ms-auto"></i>
+              </a>
+              <ul class="dropdown-menu pe-submenu">
+                <li><a class="dropdown-item" href="/subjects/general-medicine"><i class="ri-hospital-line me-2 text-primary-pe"></i>General Medicine</a></li>
+                <li><a class="dropdown-item" href="/subjects/general-surgery"><i class="ri-scissors-cut-line me-2 text-primary-pe"></i>General Surgery</a></li>
+                <li><a class="dropdown-item" href="/subjects/orthopedics-and-traumatology"><i class="ri-bone-line me-2 text-primary-pe"></i>Orthopedics</a></li>
+                <li><a class="dropdown-item" href="/subjects/physiotherapy-in-orthopedics"><i class="ri-walk-line me-2 text-primary-pe"></i>Physio in Ortho</a></li>
+                <li><a class="dropdown-item" href="/subjects/sports-medicine"><i class="ri-run-line me-2 text-primary-pe"></i>Sports Medicine</a></li>
+                <li><a class="dropdown-item" href="/subjects/obg"><i class="ri-heart-pulse-line me-2 text-primary-pe"></i>OBG</a></li>
+              </ul>
+            </li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <!-- Year 4 -->
+            <li class="dropdown-submenu">
+              <a class="dropdown-item pe-submenu-trigger" href="/subjects#year-4">
+                <span class="pe-year-dot" style="background:#F05D5D;">4</span>
+                Year 4 <small class="text-muted-pe">Specialisation</small>
+                <i class="ri-arrow-right-s-line ms-auto"></i>
+              </a>
+              <ul class="dropdown-menu pe-submenu">
+                <li><a class="dropdown-item" href="/subjects/neurology-neuromedicine-and-neurosurgery"><i class="ri-mental-health-line me-2 text-primary-pe"></i>Neurology</a></li>
+                <li><a class="dropdown-item" href="/subjects/pediatrics-and-pediatric-neurology"><i class="ri-parent-line me-2 text-primary-pe"></i>Pediatrics</a></li>
+                <li><a class="dropdown-item" href="/subjects/physiotherapy-in-neurological-conditions"><i class="ri-brain-line me-2 text-primary-pe"></i>Physio in Neuro</a></li>
+                <li><a class="dropdown-item" href="/subjects/community-medicine"><i class="ri-community-line me-2 text-primary-pe"></i>Community Medicine</a></li>
+                <li><a class="dropdown-item" href="/subjects/research-methodology"><i class="ri-file-chart-line me-2 text-primary-pe"></i>Research Methods</a></li>
+                <li><a class="dropdown-item" href="/subjects/biostatistics"><i class="ri-bar-chart-line me-2 text-primary-pe"></i>Biostatistics</a></li>
+              </ul>
+            </li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <!-- Other -->
+            <li class="dropdown-submenu">
+              <a class="dropdown-item pe-submenu-trigger" href="/subjects#other">
+                <span class="pe-year-dot" style="background:#6A7283;">+</span>
+                Other Subjects <small class="text-muted-pe">Electives</small>
+                <i class="ri-arrow-right-s-line ms-auto"></i>
+              </a>
+              <ul class="dropdown-menu pe-submenu">
+                <li><a class="dropdown-item" href="/subjects/manual-therapy"><i class="ri-hand-heart-line me-2 text-primary-pe"></i>Manual Therapy</a></li>
+                <li><a class="dropdown-item" href="/subjects/dry-needling"><i class="ri-first-aid-kit-line me-2 text-primary-pe"></i>Dry Needling</a></li>
+                <li><a class="dropdown-item" href="/subjects/yoga-in-diseased-conditions"><i class="ri-mental-health-line me-2 text-primary-pe"></i>Yoga</a></li>
+                <li><a class="dropdown-item" href="/subjects/nutrition"><i class="ri-leaf-line me-2 text-primary-pe"></i>Nutrition</a></li>
+                <li><a class="dropdown-item" href="/subjects/evidence-based-practice"><i class="ri-file-search-line me-2 text-primary-pe"></i>Evidence Based Practice</a></li>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li><a class="dropdown-item fw-600 text-primary-pe" href="/subjects"><i class="ri-grid-line me-2"></i>View All Subjects →</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item"><a class="nav-link <%= currentPath === '/the-team' ? 'active' : '' %>" href="/the-team">The Team</a></li>
+        <li class="nav-item"><a class="nav-link <%= currentPath === '/live-sessions' ? 'active' : '' %>" href="/live-sessions">Live Classes</a></li>
+        <li class="nav-item"><a class="nav-link <%= currentPath === '/blog' ? 'active' : '' %>" href="/blog">Blog</a></li>
+        <li class="nav-item"><a class="nav-link <%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a></li>
+        <li class="nav-item"><a class="nav-link <%= currentPath === '/contact' ? 'active' : '' %>" href="/contact">Contact</a></li>
+      </ul>
+
+      <!-- Auth buttons -->
+      <div class="d-flex align-items-center gap-2 ms-lg-2 ms-xl-3 mt-3 mt-lg-0 flex-shrink-0">
+        <% if (currentUser) { %>
+          <a href="<%= (currentUser.role === 'admin' || currentUser.role === 'superadmin') ? '/admin/dashboard' : currentUser.role === 'instructor' ? '/instructor/dashboard' : '/dashboard' %>" class="btn btn-outline-primary btn-sm">My Dashboard</a>
+          <div class="dropdown">
+            <a class="d-flex align-items-center gap-2 text-decoration-none" href="#" data-bs-toggle="dropdown">
+              <img src="<%= currentUser.avatar || '' %>" class="avatar-xs border" alt="<%= currentUser.name %>"
+                onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(currentUser.name) %>&background=0a5dc2&color=fff'">
+              <span class="fw-600 small d-none d-lg-inline text-dark"><%= currentUser.name.split(' ')[0] %></span>
+              <i class="ri-arrow-down-s-line small text-muted-pe"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/profile"><i class="ri-user-line me-2 text-primary-pe"></i>My Profile</a></li>
+              <li><a class="dropdown-item" href="/my-courses"><i class="ri-book-2-line me-2 text-primary-pe"></i>My Courses</a></li>
+              <% if (currentUser.role === 'admin' || currentUser.role === 'superadmin') { %><li><a class="dropdown-item" href="/admin/dashboard"><i class="ri-shield-line me-2 text-primary-pe"></i>Admin Panel</a></li><% } %>
+              <% if (currentUser.role === 'instructor') { %><li><a class="dropdown-item" href="/instructor/dashboard"><i class="ri-award-line me-2 text-primary-pe"></i>Instructor</a></li><% } %>
+              <li><hr class="dropdown-divider my-1"></li>
+              <li><a class="dropdown-item text-danger" href="/auth/logout"><i class="ri-logout-box-line me-2"></i>Logout</a></li>
+            </ul>
+          </div>
+        <% } else { %>
+          <a href="/auth/login" class="btn btn-outline-primary btn-sm">Login</a>
+          <a href="/auth/register" class="btn btn-primary btn-sm">Sign Up Free <i class="ri-arrow-right-up-line"></i></a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= currentLesson ? currentLesson.title : course.title %> | PhysioEdvance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/learn.css">
+</head>
+<body class="pe-learn-body">
+
+  <div class="pe-learn-topbar">
+    <a href="/courses/<%= course.slug %>" class="pe-learn-back"><i class="ri-arrow-left-line"></i> <span class="d-none d-md-inline">Back to course</span></a>
+    <span class="pe-learn-title d-none d-md-inline"><%= course.title %></span>
+    <div class="d-flex align-items-center gap-3 ms-auto">
+      <div class="pe-learn-progress d-none d-sm-flex align-items-center gap-2">
+        <div class="progress" style="width:120px;"><div class="progress-bar" style="width:<%= enrollment ? enrollment.progress_percent : 0 %>%"></div></div>
+        <span class="small text-muted-pe"><%= enrollment ? Math.round(enrollment.progress_percent) : 0 %>%</span>
+      </div>
+      <button class="pe-learn-toggle-sidebar" id="learnSidebarToggle"><i class="ri-menu-line"></i></button>
+    </div>
+  </div>
+
+  <div class="pe-learn-wrapper">
+    <div class="pe-learn-main">
+      <% if (!currentLesson) { %>
+        <div class="text-center py-5">
+          <i class="ri-folder-open-line" style="font-size:3rem;color:var(--pe-text-muted);"></i>
+          <p class="text-muted-pe mt-2">This course doesn't have any lessons yet.</p>
+        </div>
+      <% } else if (quiz) { %>
+        <!-- ===== QUIZ VIEW ===== -->
+        <div class="pe-learn-content">
+          <h3 class="mb-1"><%= quiz.title %></h3>
+          <p class="text-muted-pe mb-4"><%= quiz.description %> &middot; Pass mark: <%= quiz.pass_percentage %>% &middot; <%= questions.length %> questions</p>
+
+          <form action="/quiz/submit" method="POST" id="quizForm">
+            <input type="hidden" name="quizId" value="<%= quiz.id %>">
+            <input type="hidden" name="courseSlug" value="<%= course.slug %>">
+            <input type="hidden" name="lessonId" value="<%= currentLesson.id %>">
+
+            <% questions.forEach((q, idx) => { %>
+              <div class="card p-4 mb-3">
+                <h6 class="mb-3"><%= idx + 1 %>. <%= q.question %></h6>
+                <div class="d-flex flex-column gap-2">
+                  <% ['a','b','c','d'].forEach(opt => { %>
+                    <label class="pe-quiz-option">
+                      <input type="radio" name="q_<%= q.id %>" value="<%= opt %>" required>
+                      <span><%= q['option_' + opt] %></span>
+                    </label>
+                  <% }) %>
+                </div>
+              </div>
+            <% }) %>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100">Submit Quiz</button>
+          </form>
+        </div>
+      <% } else { %>
+        <!-- ===== VIDEO / ARTICLE VIEW ===== -->
+        <div class="pe-learn-content">
+          <% if (currentLesson.type === 'article') { %>
+            <div class="pe-article-card mb-4">
+              <h3 class="pe-article-title mb-3"><%= currentLesson.title %></h3>
+              <div class="pe-article-content"><%- currentLesson.content %></div>
+            </div>
+          <% } else { %>
+            <% if (currentLesson.video_url) { %>
+              <% const isLocalFile = /\.(mp4|webm|ogg)$/i.test(currentLesson.video_url); %>
+              <% if (isLocalFile) { %>
+                <div class="pe-video-native mb-3">
+                  <video class="pe-video-native-el" controls controlsList="nodownload" preload="metadata" playsinline>
+                    <source src="<%= currentLesson.video_url %>" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              <% } else { %>
+                <div class="pe-video-wrapper mb-3">
+                  <iframe src="<%= currentLesson.video_url %>" frameborder="0" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+                </div>
+              <% } %>
+            <% } else { %>
+              <div class="pe-video-wrapper mb-3 d-flex align-items-center justify-content-center flex-column text-center" style="background:#1a2138;color:#fff;">
+                <i class="ri-video-upload-line" style="font-size:2.5rem;opacity:0.6;"></i>
+                <p class="small mt-2 mb-0 opacity-75 px-4">No video has been linked for this lesson yet.<br>The instructor can add a real lecture from the course builder.</p>
+              </div>
+            <% } %>
+            <h3 class="mb-2"><%= currentLesson.title %></h3>
+            <p class="text-muted-pe small mb-4"><i class="ri-time-line"></i> <%= currentLesson.duration_minutes %> minutes</p>
+          <% } %>
+
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4">
+            <div class="d-flex gap-2">
+              <% if (prevLesson) { %>
+                <a href="/courses/<%= course.slug %>/learn?lesson=<%= prevLesson.id %>" class="btn btn-outline-primary"><i class="ri-arrow-left-line"></i> Previous</a>
+              <% } %>
+              <% if (nextLesson) { %>
+                <a href="/courses/<%= course.slug %>/learn?lesson=<%= nextLesson.id %>" class="btn btn-outline-primary">Next <i class="ri-arrow-right-line"></i></a>
+              <% } %>
+            </div>
+            <% if (!completedIds.includes(currentLesson.id)) { %>
+              <button class="btn btn-success" id="markCompleteBtn" data-lesson="<%= currentLesson.id %>" data-course="<%= course.id %>">
+                <i class="ri-checkbox-circle-line me-1"></i> Mark as Complete
+              </button>
+            <% } else { %>
+              <span class="badge badge-soft-success fs-6 py-2 px-3"><i class="ri-checkbox-circle-fill me-1"></i> Completed</span>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Sidebar: curriculum -->
+    <div class="pe-learn-sidebar" id="learnSidebar">
+      <div class="pe-learn-sidebar-header">
+        <strong class="small"><%= course.title %></strong>
+      </div>
+      <div class="accordion pe-learn-accordion" id="learnAccordion">
+        <% modules.forEach((mod, idx) => { %>
+          <div class="pe-curriculum-module">
+            <h2 class="accordion-header">
+              <button class="accordion-button <%= mod.lessons.some(l=>l.id===currentLesson?.id) ? '' : 'collapsed' %>" type="button" data-bs-toggle="collapse" data-bs-target="#lmod<%= mod.id %>">
+                Module <%= idx + 1 %>: <%= mod.title %>
+              </button>
+            </h2>
+            <div id="lmod<%= mod.id %>" class="accordion-collapse collapse <%= mod.lessons.some(l=>l.id===currentLesson?.id) ? 'show' : '' %>" data-bs-parent="#learnAccordion">
+              <% mod.lessons.forEach(lesson => { %>
+                <a href="/courses/<%= course.slug %>/learn?lesson=<%= lesson.id %>" class="pe-lesson-row text-decoration-none <%= currentLesson && lesson.id === currentLesson.id ? 'active' : '' %>">
+                  <span class="d-flex align-items-center gap-2">
+                    <i class="<%= completedIds.includes(lesson.id) ? 'ri-checkbox-circle-fill text-success' : (lesson.type === 'quiz' ? 'ri-questionnaire-line text-warning' : 'ri-play-circle-line text-primary-pe') %>"></i>
+                    <span class="text-dark"><%= lesson.title %></span>
+                  </span>
+                  <span class="text-muted-pe small"><%= lesson.duration_minutes %>m</span>
+                </a>
+              <% }) %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('learnSidebarToggle')?.addEventListener('click', function() {
+      document.getElementById('learnSidebar').classList.toggle('show');
+    });
+
+    document.getElementById('markCompleteBtn')?.addEventListener('click', async function() {
+      const btn = this;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ri-loader-4-line"></i> Saving...';
+      try {
+        const res = await fetch('/lessons/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lessonId: btn.dataset.lesson, courseId: btn.dataset.course })
+        });
+        const data = await res.json();
+        if (data.success) {
+          location.reload();
+        }
+      } catch (e) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ri-checkbox-circle-line me-1"></i> Mark as Complete';
+      }
+    });
+  </script>
+</body>
+</html>

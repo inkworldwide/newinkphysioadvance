@@ -1,0 +1,81 @@
+<div class="row g-3 mb-4">
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon badge-soft-primary mb-2"><i class="ri-book-2-line"></i></div>
+      <div class="pe-kpi-value"><%= courses.length %></div>
+      <div class="pe-kpi-label">My Courses</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon badge-soft-success mb-2"><i class="ri-group-line"></i></div>
+      <div class="pe-kpi-value"><%= totalStudents %></div>
+      <div class="pe-kpi-label">Total Students</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon badge-soft-warning mb-2"><i class="ri-money-rupee-circle-line"></i></div>
+      <div class="pe-kpi-value">₹<%= totalRevenue.toLocaleString() %></div>
+      <div class="pe-kpi-label">Total Revenue</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon badge-soft-info mb-2"><i class="ri-star-line"></i></div>
+      <div class="pe-kpi-value"><%= avgRating %></div>
+      <div class="pe-kpi-label">Avg. Rating</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>My Courses</span>
+        <a href="/instructor/courses/new" class="btn btn-sm btn-primary"><i class="ri-add-line"></i> New Course</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table pe-table mb-0">
+          <thead><tr><th>Course</th><th>Status</th><th>Students</th><th>Rating</th><th></th></tr></thead>
+          <tbody>
+            <% if (courses.length === 0) { %>
+              <tr><td colspan="5" class="text-center text-muted-pe py-4">You haven't created any courses yet.</td></tr>
+            <% } %>
+            <% courses.forEach(c => { %>
+              <tr>
+                <td class="fw-semibold"><%= c.title %></td>
+                <td><span class="badge <%= c.status === 'published' ? 'badge-soft-success' : 'badge-soft-warning' %> text-capitalize"><%= c.status %></span></td>
+                <td><%= c.students_count %></td>
+                <td><i class="ri-star-fill text-warning"></i> <%= c.rating_avg.toFixed(1) %></td>
+                <td class="text-end"><a href="/instructor/courses/<%= c.id %>/edit" class="btn btn-sm btn-soft-primary">Manage</a></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">Recent Enrollments</div>
+      <div class="p-3">
+        <% if (recentEnrollments.length === 0) { %>
+          <p class="text-muted-pe small text-center py-3">No enrollments yet.</p>
+        <% } %>
+        <% recentEnrollments.forEach(e => { %>
+          <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+            <img src="<%= e.student_avatar %>" class="rounded-circle avatar-sm flex-shrink-0" onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(e.student_name) %>&background=0a5dc2&color=fff'">
+            <div class="flex-grow-1">
+              <div class="small fw-semibold"><%= e.student_name %></div>
+              <div class="text-muted-pe" style="font-size:0.78rem;">enrolled in <%= e.course_title %></div>
+            </div>
+            <span class="text-muted-pe small flex-shrink-0"><%= new Date(e.enrolled_at).toLocaleDateString() %></span>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>

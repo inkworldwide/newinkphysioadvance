@@ -1,0 +1,119 @@
+<section class="pe-subject-hero">
+  <div class="container">
+    <nav class="pe-breadcrumb">
+      <a href="/subjects"><i class="ri-home-3-line"></i> Subjects</a>
+      <i class="ri-arrow-right-s-line"></i>
+      <span><%= category.name %></span>
+    </nav>
+    <div class="d-flex align-items-center gap-4 mt-3">
+      <div class="pe-subject-hero-icon">
+        <i class="<%= category.icon %>"></i>
+      </div>
+      <div>
+        <% if (category.year) { %>
+          <span class="pe-subject-hero-year">Year <%= category.year %> Subject</span>
+        <% } %>
+        <h1 class="text-white mb-1"><%= category.name %></h1>
+        <p class="text-white mb-0" style="opacity:.8;"><%= category.description %></p>
+      </div>
+    </div>
+    <!-- Quick stats row -->
+    <div class="pe-subject-stats mt-4">
+      <div class="pe-subject-stat">
+        <i class="ri-book-2-line"></i>
+        <span><strong><%= courses.length %></strong> Course<%= courses.length !== 1 ? 's' : '' %></span>
+      </div>
+      <div class="pe-subject-stat">
+        <i class="ri-gift-line"></i>
+        <span><strong>Free</strong> Access</span>
+      </div>
+      <div class="pe-subject-stat">
+        <i class="ri-time-line"></i>
+        <span><strong>Lifetime</strong> Access</span>
+      </div>
+      <div class="pe-subject-stat">
+        <i class="ri-award-line"></i>
+        <span><strong>Certificate</strong> on Completion</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pe-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-8">
+
+        <!-- Courses for this subject -->
+        <h5 class="mb-3">Courses</h5>
+        <% if (courses.length === 0) { %>
+          <div class="card p-4 text-center mb-4">
+            <i class="ri-time-line" style="font-size:2rem;color:var(--pe-text-muted);"></i>
+            <p class="text-muted-pe mt-2 mb-0">No course published for this subject yet. Coming soon!</p>
+          </div>
+        <% } %>
+        <div class="row g-3 mb-5">
+          <% courses.forEach(c => { %>
+            <div class="col-md-6">
+              <a href="/courses/<%= c.slug %>" class="text-decoration-none d-block h-100">
+                <div class="pe-fc-card">
+                  <div class="pe-fc-thumb">
+                    <div class="pe-fc-thumb-bg"></div>
+                    <span class="pe-fc-level"><%= c.level %></span>
+                    <div class="pe-fc-play-icon"><i class="ri-play-circle-fill"></i></div>
+                  </div>
+                  <div class="pe-fc-body">
+                    <h5 class="pe-fc-title"><%= c.title %></h5>
+                    <div class="pe-fc-instructor"><i class="ri-user-3-line"></i> <%= c.instructor_name %></div>
+                  </div>
+                  <div class="pe-fc-footer">
+                    <span class="pe-fc-free"><i class="ri-gift-line"></i> Free</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% }) %>
+        </div>
+
+        <!-- Notes (Core Aspects > Notes, year-wise dynamically created) -->
+        <h5 class="mb-3">Notes</h5>
+        <% if (notes.length === 0) { %>
+          <p class="text-muted-pe small mb-5">No notes uploaded for this subject yet.</p>
+        <% } else { %>
+          <div class="card mb-5">
+            <div class="list-group list-group-flush">
+              <% notes.forEach(n => { %>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                  <span><i class="ri-file-text-line me-2 text-primary-pe"></i><%= n.title %></span>
+                  <% if (n.file_url) { %><a href="<%= n.file_url %>" target="_blank" class="btn btn-sm btn-outline-primary">Download</a><% } %>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Research Desk -->
+        <h5 class="mb-3">Research Desk</h5>
+        <% if (research.length === 0) { %>
+          <p class="text-muted-pe small">No research articles for this subject yet.</p>
+        <% } else { %>
+          <% research.forEach(r => { %>
+            <div class="card p-3 mb-2">
+              <h6 class="mb-1"><%= r.title %></h6>
+              <p class="text-muted-pe small mb-1"><%= r.summary %></p>
+              <% if (r.source_url) { %><a href="<%= r.source_url %>" target="_blank" class="small">Read full article <i class="ri-external-link-line"></i></a><% } %>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card p-4">
+          <h6 class="mb-3">About this subject</h6>
+          <p class="small text-muted-pe mb-0"><%= category.description %></p>
+          <% if (category.year) { %><span class="badge badge-soft-primary mt-3">Year <%= category.year %></span><% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

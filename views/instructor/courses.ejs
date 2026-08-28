@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>My Courses</span>
+    <a href="/instructor/courses/new" class="btn btn-sm btn-primary"><i class="ri-add-line"></i> New Course</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table pe-table mb-0">
+      <thead><tr><th>Course</th><th>Subject</th><th>Status</th><th>Price</th><th>Students</th><th>Rating</th><th></th></tr></thead>
+      <tbody>
+        <% if (courses.length === 0) { %>
+          <tr><td colspan="7" class="text-center text-muted-pe py-4">You haven't created any courses yet. <a href="/instructor/courses/new">Create your first course</a>.</td></tr>
+        <% } %>
+        <% courses.forEach(c => { %>
+          <tr>
+            <td class="fw-semibold"><%= c.title %></td>
+            <td><%= c.category_name || '—' %></td>
+            <td><span class="badge <%= c.status === 'published' ? 'badge-soft-success' : 'badge-soft-warning' %> text-capitalize"><%= c.status %></span></td>
+            <td><span class="badge badge-soft-success">Free</span></td>
+            <td><%= c.students_count %></td>
+            <td><i class="ri-star-fill text-warning"></i> <%= c.rating_avg.toFixed(1) %></td>
+            <td class="text-end">
+              <a href="/instructor/courses/<%= c.id %>/edit" class="btn btn-sm btn-soft-primary">Manage</a>
+              <a href="/instructor/courses/<%= c.id %>/students" class="btn btn-sm btn-outline-primary">Students</a>
+              <form action="/instructor/courses/<%= c.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this course permanently?')">
+                <button class="btn btn-sm btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="btn-group">
+    <a href="/admin/users" class="btn btn-sm <%= !filterRole ? 'btn-primary' : 'btn-outline-primary' %>">All</a>
+    <a href="/admin/users?role=student" class="btn btn-sm <%= filterRole==='student' ? 'btn-primary' : 'btn-outline-primary' %>">Students</a>
+    <a href="/admin/users?role=instructor" class="btn btn-sm <%= filterRole==='instructor' ? 'btn-primary' : 'btn-outline-primary' %>">Instructors</a>
+    <a href="/admin/users?role=admin" class="btn btn-sm <%= filterRole==='admin' ? 'btn-primary' : 'btn-outline-primary' %>">Admins</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table pe-table mb-0">
+      <thead><tr><th>User</th><th>Email</th><th>Password</th><th>Role</th><th>Status</th><th>Joined</th><th></th></tr></thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td>
+              <a href="/admin/users/<%= u.id %>" class="d-flex align-items-center gap-2 text-decoration-none text-dark">
+                <img src="<%= u.avatar %>" class="rounded-circle avatar-xs" onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(u.name) %>&background=0a5dc2&color=fff'">
+                <%= u.name %>
+              </a>
+            </td>
+            <td><%= u.email %></td>
+            <td><span class="text-muted-pe" title="Passwords are encrypted and can't be displayed. Use Reset Password on the user's profile if needed.">••••••••</span></td>
+            <td><span class="badge badge-soft-info text-capitalize"><%= u.role %></span></td>
+            <td>
+              <form action="/admin/users/<%= u.id %>/toggle-active" method="POST">
+                <button class="badge <%= u.is_active ? 'badge-soft-success' : 'badge-soft-danger' %> border-0" style="cursor:pointer;">
+                  <%= u.is_active ? 'Active' : 'Inactive' %>
+                </button>
+              </form>
+            </td>
+            <td class="text-muted-pe"><%= new Date(u.created_at).toLocaleDateString() %></td>
+            <td class="text-end">
+              <% if (u.role !== 'admin') { %>
+                <form action="/admin/users/<%= u.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this user permanently?')">
+                  <button class="btn btn-sm btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

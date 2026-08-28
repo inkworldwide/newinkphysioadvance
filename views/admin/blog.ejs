@@ -1,0 +1,58 @@
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">Blog Posts</div>
+      <div class="table-responsive">
+        <table class="table pe-table mb-0">
+          <thead><tr><th>Title</th><th>Type</th><th>Status</th><th>Author</th><th></th></tr></thead>
+          <tbody>
+            <% if (posts.length === 0) { %>
+              <tr><td colspan="5" class="text-center text-muted-pe py-4">No posts yet.</td></tr>
+            <% } %>
+            <% posts.forEach(p => { %>
+              <tr>
+                <td class="fw-semibold"><%= p.title %></td>
+                <td><span class="badge badge-soft-info text-capitalize"><%= p.post_type %></span></td>
+                <td><span class="badge <%= p.status === 'published' ? 'badge-soft-success' : 'badge-soft-warning' %> text-capitalize"><%= p.status %></span></td>
+                <td><%= p.author_name || '—' %></td>
+                <td class="text-end">
+                  <a href="/blog/<%= p.slug %>" target="_blank" class="btn btn-sm btn-outline-primary"><i class="ri-external-link-line"></i></a>
+                  <form action="/admin/blog/<%= p.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this post?')">
+                    <button class="btn btn-sm btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card p-4">
+      <h6 class="mb-3">New Post</h6>
+      <form action="/admin/blog" method="POST">
+        <div class="mb-3"><label class="form-label">Title</label><input type="text" name="title" class="form-control" required></div>
+        <div class="mb-3">
+          <label class="form-label">Type</label>
+          <select name="post_type" class="form-select">
+            <option value="article">Article</option>
+            <option value="poem">Poem</option>
+            <option value="quote">Quote</option>
+            <option value="experience">Experience</option>
+          </select>
+        </div>
+        <div class="mb-3"><label class="form-label">Excerpt</label><textarea name="excerpt" rows="2" class="form-control"></textarea></div>
+        <div class="mb-3"><label class="form-label">Content (HTML allowed)</label><textarea name="content" rows="5" class="form-control"></textarea></div>
+        <div class="mb-3">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Save Post</button>
+      </form>
+    </div>
+  </div>
+</div>

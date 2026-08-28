@@ -1,0 +1,38 @@
+<div class="card">
+  <div class="card-header">All Courses</div>
+  <div class="table-responsive">
+    <table class="table pe-table mb-0">
+      <thead><tr><th>Course</th><th>Instructor</th><th>Status</th><th>Featured</th><th>Students</th><th>Rating</th><th></th></tr></thead>
+      <tbody>
+        <% courses.forEach(c => { %>
+          <tr>
+            <td class="fw-semibold"><%= c.title %></td>
+            <td><%= c.instructor_name %></td>
+            <td>
+              <form action="/admin/courses/<%= c.id %>/toggle-status" method="POST">
+                <button class="badge <%= c.status === 'published' ? 'badge-soft-success' : 'badge-soft-warning' %> text-capitalize border-0" style="cursor:pointer;">
+                  <%= c.status %>
+                </button>
+              </form>
+            </td>
+            <td>
+              <form action="/admin/courses/<%= c.id %>/toggle-featured" method="POST">
+                <button class="badge <%= c.is_featured ? 'badge-soft-primary' : 'bg-light text-muted-pe' %> border-0" style="cursor:pointer;">
+                  <%= c.is_featured ? 'Featured' : 'Not Featured' %>
+                </button>
+              </form>
+            </td>
+            <td><%= c.students_count %></td>
+            <td><i class="ri-star-fill text-warning"></i> <%= c.rating_avg.toFixed(1) %></td>
+            <td class="text-end">
+              <a href="/courses/<%= c.slug %>" target="_blank" class="btn btn-sm btn-outline-primary"><i class="ri-external-link-line"></i></a>
+              <form action="/admin/courses/<%= c.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this course permanently?')">
+                <button class="btn btn-sm btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

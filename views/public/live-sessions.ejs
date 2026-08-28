@@ -1,0 +1,45 @@
+<section class="pe-hero-strip">
+  <div class="container">
+    <span class="pe-hero-eyebrow"><i class="ri-live-line"></i> Live Sessions</span>
+    <h1 class="mb-2 mt-2">Live Classes &amp; Workshops</h1>
+    <p class="mb-0">Live discussions, workshops, webinars, and panel discussions. Topics are posted here with join links shared closer to the session — see you live!</p>
+  </div>
+</section>
+
+<section class="pe-section">
+  <div class="container">
+    <% if (upcoming.length === 0) { %>
+      <div class="pe-empty-state text-center py-5">
+        <div class="pe-about-icon-gradient mx-auto mb-3"><i class="ri-calendar-line"></i></div>
+        <p class="text-muted-pe mt-2 mb-0">No upcoming sessions scheduled right now. Check back soon!</p>
+      </div>
+    <% } %>
+
+    <div class="row g-4">
+      <% upcoming.forEach(s => { %>
+        <div class="col-md-6 col-lg-4">
+          <div class="pe-blog-card h-100 p-4 d-flex flex-column">
+            <span class="badge pe-blog-type-badge mb-2 text-capitalize" style="width:fit-content;"><%= s.session_type.replace('_',' ') %></span>
+            <h6><%= s.title %></h6>
+            <p class="text-muted-pe small mb-2"><%= s.description %></p>
+            <div class="small text-muted-pe mb-1"><i class="ri-calendar-line me-1 text-primary-pe"></i> <%= new Date(s.scheduled_at).toLocaleString() %></div>
+            <% if (s.host_name) { %><div class="small text-muted-pe mb-1"><i class="ri-user-3-line me-1 text-primary-pe"></i> <%= s.host_name %></div><% } %>
+            <div class="small text-muted-pe mb-3"><i class="ri-time-line me-1 text-primary-pe"></i> <%= s.duration_minutes %> min</div>
+
+            <% if (s.zoom_join_url) { %>
+              <a href="<%= s.zoom_join_url %>" target="_blank" rel="noopener" class="btn btn-primary mt-auto"><i class="ri-vidicon-line me-1"></i> Join Session</a>
+            <% } else { %>
+              <% if (currentUser) { %>
+                <form action="/live-sessions/<%= s.id %>/register" method="POST" class="mt-auto">
+                  <button type="submit" class="btn btn-outline-primary w-100"><i class="ri-notification-3-line me-1"></i> Notify Me (link coming soon)</button>
+                </form>
+              <% } else { %>
+                <a href="/auth/login" class="btn btn-outline-primary mt-auto">Log in to register</a>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

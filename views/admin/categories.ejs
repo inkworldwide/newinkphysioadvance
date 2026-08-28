@@ -1,0 +1,48 @@
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">Subjects (Categories)</div>
+      <div class="table-responsive">
+        <table class="table pe-table mb-0">
+          <thead><tr><th>Icon</th><th>Name</th><th>Year</th><th>Courses</th><th></th></tr></thead>
+          <tbody>
+            <% categories.forEach(cat => { %>
+              <tr>
+                <td><i class="<%= cat.icon %> fs-5 text-primary-pe"></i></td>
+                <td class="fw-semibold"><%= cat.name %></td>
+                <td><%= cat.year ? 'Year ' + cat.year : (cat.is_other_subject ? 'Other Subject' : '—') %></td>
+                <td><%= cat.course_count %></td>
+                <td class="text-end">
+                  <form action="/admin/categories/<%= cat.id %>/delete" method="POST" onsubmit="return confirm('Delete this subject?')">
+                    <button class="btn btn-sm btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card p-4">
+      <h6 class="mb-3">Add Subject</h6>
+      <form action="/admin/categories" method="POST">
+        <div class="mb-3"><label class="form-label">Name</label><input type="text" name="name" class="form-control" required></div>
+        <div class="mb-3">
+          <label class="form-label">Year</label>
+          <select name="year" class="form-select">
+            <option value="">Other Subject (no specific year)</option>
+            <option value="1">Year 1</option>
+            <option value="2">Year 2</option>
+            <option value="3">Year 3</option>
+            <option value="4">Year 4</option>
+          </select>
+        </div>
+        <div class="mb-3"><label class="form-label">Remix Icon class</label><input type="text" name="icon" class="form-control" placeholder="ri-pulse-line" value="ri-pulse-line"></div>
+        <div class="mb-3"><label class="form-label">Description</label><textarea name="description" rows="2" class="form-control"></textarea></div>
+        <button type="submit" class="btn btn-primary w-100">Add Subject</button>
+      </form>
+    </div>
+  </div>
+</div>

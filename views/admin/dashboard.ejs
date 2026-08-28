@@ -1,0 +1,178 @@
+<div class="pe-page-head mb-4">
+  <h4 class="mb-1">Welcome back, <%= currentUser.name.split(' ')[0] %> 👋</h4>
+  <p class="text-muted-pe mb-0">Here's what's happening across PhysioEdvance today.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon pe-kpi-icon-blue mb-2"><i class="ri-book-2-line"></i></div>
+      <div class="pe-kpi-value"><%= stats.totalCourses %></div>
+      <div class="pe-kpi-label">Published Courses</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon pe-kpi-icon-green mb-2"><i class="ri-group-line"></i></div>
+      <div class="pe-kpi-value"><%= stats.totalStudents %></div>
+      <div class="pe-kpi-label">Students</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon pe-kpi-icon-info mb-2"><i class="ri-user-star-line"></i></div>
+      <div class="pe-kpi-value"><%= stats.totalInstructors %></div>
+      <div class="pe-kpi-label">Instructors</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon pe-kpi-icon-amber mb-2"><i class="ri-money-rupee-circle-line"></i></div>
+      <div class="pe-kpi-value">₹<%= totalRevenue.toLocaleString() %></div>
+      <div class="pe-kpi-label">Total Revenue</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon pe-kpi-icon-blue mb-2"><i class="ri-folders-line"></i></div>
+      <div class="pe-kpi-value"><%= totalSubjects %></div>
+      <div class="pe-kpi-label">Subjects</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon pe-kpi-icon-red mb-2"><i class="ri-live-line"></i></div>
+      <div class="pe-kpi-value"><%= totalLiveClasses %></div>
+      <div class="pe-kpi-label">Live Classes</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card">
+      <div class="pe-kpi-icon pe-kpi-icon-green mb-2"><i class="ri-user-add-line"></i></div>
+      <div class="pe-kpi-value"><%= stats.totalEnrollments %></div>
+      <div class="pe-kpi-label">Enrollments</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="pe-kpi-card pe-kpi-card-actions">
+      <div class="pe-kpi-icon pe-kpi-icon-info mb-2"><i class="ri-flashlight-line"></i></div>
+      <div class="pe-kpi-label mb-2" style="font-weight:700;color:var(--pe-heading);">Quick Actions</div>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="/admin/courses" class="btn btn-sm btn-soft-primary">Courses</a>
+        <a href="/admin/users" class="btn btn-sm btn-soft-primary">Users</a>
+        <a href="/admin/live-sessions" class="btn btn-sm btn-soft-primary">Live Class</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-lg-7">
+    <div class="pe-admin-card p-4">
+      <h6 class="mb-3"><i class="ri-line-chart-line me-2 text-primary-pe"></i>Revenue (Last 6 Months)</h6>
+      <canvas id="revenueChart" height="110"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="pe-admin-card p-4">
+      <h6 class="mb-3"><i class="ri-pie-chart-line me-2 text-primary-pe"></i>Enrollments by Category</h6>
+      <canvas id="categoryChart" height="180"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="pe-admin-card">
+      <div class="pe-admin-card-header">Recent Orders</div>
+      <div class="table-responsive">
+        <table class="table pe-table mb-0">
+          <thead><tr><th>Student</th><th>Course</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <% if (recentOrders.length === 0) { %>
+              <tr><td colspan="4" class="text-center text-muted-pe py-4">No orders yet.</td></tr>
+            <% } %>
+            <% recentOrders.forEach(o => { %>
+              <tr>
+                <td><%= o.student_name %></td>
+                <td><%= o.course_title %></td>
+                <td>₹<%= o.amount.toLocaleString() %></td>
+                <td><span class="badge badge-soft-success text-capitalize"><%= o.status %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="pe-admin-card mt-4">
+      <div class="pe-admin-card-header">Recent Activity</div>
+      <div class="p-3">
+        <% if (recentActivity.length === 0) { %>
+          <p class="text-muted-pe small mb-0">No recent activity yet.</p>
+        <% } %>
+        <% recentActivity.forEach(a => { %>
+          <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+            <div class="pe-activity-dot"><i class="ri-user-add-line"></i></div>
+            <div class="flex-grow-1">
+              <div class="small fw-semibold"><%= a.name %> <span class="text-muted-pe fw-normal">joined as <%= a.role %></span></div>
+              <div class="text-muted-pe" style="font-size:0.75rem;"><%= new Date(a.created_at).toLocaleString() %></div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="pe-admin-card">
+      <div class="pe-admin-card-header">Top Performing Courses</div>
+      <div class="p-3">
+        <% if (topCourses.length === 0) { %>
+          <p class="text-muted-pe small mb-0">No course data yet.</p>
+        <% } %>
+        <% topCourses.forEach(c => { %>
+          <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+            <div>
+              <div class="small fw-semibold"><%= c.title %></div>
+              <div class="text-muted-pe" style="font-size:0.78rem;">by <%= c.instructor_name %></div>
+            </div>
+            <span class="badge pe-badge-gradient"><%= c.students_count %> students</span>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const revenueData = <%- JSON.stringify(revenueByMonth) %>;
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+      labels: revenueData.map(r => r.month),
+      datasets: [{
+        label: 'Revenue (₹)',
+        data: revenueData.map(r => r.total),
+        borderColor: '#0a5dc2',
+        backgroundColor: 'rgba(64,81,137,0.08)',
+        fill: true,
+        tension: 0.35
+      }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+  });
+
+  const categoryData = <%- JSON.stringify(enrollmentsByCategory) %>;
+  new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+    data: {
+      labels: categoryData.map(c => c.name),
+      datasets: [{
+        data: categoryData.map(c => c.count),
+        backgroundColor: ['#0a5dc2','#0ab39c','#f7b84b','#f06548','#299cdb','#6c7fc9','#9ca8d4','#1a2138']
+      }]
+    },
+    options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
+  });
+</script>

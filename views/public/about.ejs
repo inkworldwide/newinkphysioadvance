@@ -1,0 +1,322 @@
+<!-- ============ HERO SECTION ============ -->
+<section class="pe-about-hero text-center">
+  <div class="container position-relative" style="z-index:2;">
+    <span class="pe-tag-pill-hero mb-3">
+      <i class="ri-heart-pulse-fill text-warning"></i> Empowering the Next Generation of Physiotherapists
+    </span>
+    <h1 class="pe-about-hero-title mb-4">PhysioEdvance</h1>
+    <p class="pe-about-hero-sub mb-4">
+      PhysioEdvance is an edtech platform created specifically for physiotherapy students, with a simple vision — to make learning physiotherapy more structured, understandable, practical, and accessible.
+    </p>
+    <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap mt-2">
+      <span class="badge bg-warning text-dark px-3 py-2 rounded-pill font-weight-bold" style="font-size:0.9rem;">
+        <i class="ri-flashlight-fill me-1"></i> Learn Physiotherapy. Understand Better. Practice Smarter. Advance Further.
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DYNAMIC LEADERSHIP & FOUNDER STATEMENTS ============ -->
+<% if (typeof aboutStatements !== 'undefined' && aboutStatements.length > 0) { %>
+<section class="pe-section bg-light border-bottom py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="pe-eyebrow mb-2 d-inline-block"><i class="ri-user-star-line me-1 text-primary"></i> Executive Leadership & Vision</span>
+      <h2 class="pe-section-title mb-2">Leadership Messages</h2>
+      <p class="pe-section-sub mx-auto" style="max-width: 600px;">Insights, philosophy, and learning vision from the leaders building PhysioEdvance.</p>
+    </div>
+
+    <!-- 3-Column Executive Grid Layout -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+      <% aboutStatements.forEach((stmt) => { %>
+        <div class="col">
+          <div class="card h-100 border-0 shadow-sm rounded-4 pe-leadership-card transition-all bg-white d-flex flex-column overflow-hidden">
+            <!-- Card Executive Top Header Banner -->
+            <div class="pe-leadership-banner p-4 text-center text-white position-relative" style="background: linear-gradient(135deg, #0a5dc2 0%, #1572e8 100%);">
+              <div class="position-relative d-inline-block mb-2">
+                <img src="<%= stmt.photo || '/images/team/default-avatar.png' %>" alt="<%= stmt.name %>" class="rounded-circle border border-4 border-white shadow" style="width: 96px; height: 96px; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(stmt.name) %>&background=0a5dc2&color=fff&size=256'">
+                <span class="position-absolute bottom-0 end-0 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center border border-2 border-white shadow-sm" style="width: 26px; height: 26px; font-size: 0.8rem;" title="Leadership Member">
+                  <i class="ri-star-fill"></i>
+                </span>
+              </div>
+              <h5 class="fw-bold text-white mb-1"><%= stmt.name %></h5>
+              <span class="badge bg-warning text-dark font-weight-bold px-3 py-1 rounded-pill mb-1 d-inline-block shadow-sm" style="font-size: 0.8rem;">
+                <%= stmt.designation || stmt.role %>
+              </span>
+              <% if (stmt.qualification) { %>
+                <div class="text-white-50 small"><%= stmt.qualification %></div>
+              <% } %>
+            </div>
+
+            <!-- Card Statement Body -->
+            <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1">
+              <div>
+                <div class="pe-quote-mark mb-2 text-primary opacity-25" style="font-size: 2.2rem; line-height: 1; height: 26px;">
+                  <i class="ri-double-quotes-l"></i>
+                </div>
+                <p class="card-text text-dark font-weight-normal mb-4" style="line-height: 1.65; font-style: italic; font-size: 0.95rem;">
+                  “<%= stmt.statement || stmt.bio || 'PhysioEdvance aims to be a one-stop learning solution for physiotherapy students.' %>”
+                </p>
+              </div>
+
+              <!-- Card Footer -->
+              <div class="border-top pt-3 mt-auto d-flex align-items-center justify-content-between">
+                <span class="badge bg-light text-primary border rounded-pill px-3 py-1 font-weight-semibold" style="font-size: 0.75rem;">
+                  <i class="ri-shield-check-line me-1 text-primary"></i> Leadership Board
+                </span>
+                <span class="text-muted small fw-semibold" style="font-size: 0.75rem;">
+                  PhysioEdvance
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- ============ ONE PLATFORM EVERYTHING PHYSIOTHERAPY ============ -->
+<section class="pe-section bg-white">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <span class="pe-eyebrow">Complete Ecosystem</span>
+        <h2 class="pe-section-title mb-3">One Platform. Everything Physiotherapy.</h2>
+        <p class="text-muted-pe lead mb-3" style="font-size:1.05rem; line-height:1.7;">
+          Physiotherapy is much more than memorising subjects and preparing for examinations. It is about understanding the human body, connecting concepts, developing clinical reasoning, building practical skills, and becoming confident healthcare professionals.
+        </p>
+        <p class="text-muted-pe mb-4">
+          PhysioEdvance aims to be a one-stop learning solution for physiotherapy students, bringing together the knowledge, resources, guidance, and learning support students need throughout their academic journey.
+        </p>
+        <div class="d-flex align-items-center gap-2 mt-4 flex-wrap">
+          <a href="/subjects" class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">
+            <i class="ri-book-open-line me-1"></i> Explore Subjects
+          </a>
+          <a href="/the-team" class="btn btn-outline-secondary rounded-pill px-4 py-2 ms-md-2">
+            Meet the Team <i class="ri-arrow-right-line"></i>
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="p-4 bg-light rounded-4 border h-100">
+              <div class="pe-category-icon mb-3"><i class="ri-microscope-line text-primary fs-3"></i></div>
+              <h6 class="fw-bold text-dark mb-2">Basic Sciences & Core</h6>
+              <p class="text-muted-pe small mb-0">Anatomy, Physiology, Biochemistry & Biomechanics simplified.</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-4 bg-light rounded-4 border h-100">
+              <div class="pe-category-icon mb-3"><i class="ri-stethoscope-line text-primary fs-3"></i></div>
+              <h6 class="fw-bold text-dark mb-2">Clinical Concepts</h6>
+              <p class="text-muted-pe small mb-0">Orthopedics, Neurology, Exercise Therapy & Electrotherapy.</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-4 bg-light rounded-4 border h-100">
+              <div class="pe-category-icon mb-3"><i class="ri-flask-line text-primary fs-3"></i></div>
+              <h6 class="fw-bold text-dark mb-2">Practical Learning</h6>
+              <p class="text-muted-pe small mb-0">Clinical reasoning, manual skills, and hands-on guidance.</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-4 bg-light rounded-4 border h-100">
+              <div class="pe-category-icon mb-3"><i class="ri-medal-line text-primary fs-3"></i></div>
+              <h6 class="fw-bold text-dark mb-2">Exam & Career Prep</h6>
+              <p class="text-muted-pe small mb-0">Curriculum notes, live workshops, and professional development.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SIMPLE STEPS TO ACCESS & LOGIN ============ -->
+<section class="pe-section bg-light py-5">
+  <div class="container py-2">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary-subtle text-primary fw-bold text-uppercase px-3 py-2 rounded-pill mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+        <i class="ri-user-follow-line me-1"></i> Quick Start Guide
+      </span>
+      <h2 class="pe-section-title font-weight-bold display-6 mb-2 text-dark">
+        Simple Steps to Access & Login to PhysioEdvance
+      </h2>
+      <p class="text-muted mx-auto" style="max-width: 620px; font-size: 1.05rem;">
+        Get instant access to BPT notes, digital library content, live classes, and workshops in 4 easy steps.
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <!-- Step 1: Visit Website / Click Register -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center bg-white transition-all position-relative">
+          <div class="position-absolute top-0 end-0 m-3">
+            <span class="badge bg-primary-subtle text-primary rounded-circle fw-bold fs-6 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">1</span>
+          </div>
+          <div class="pe-category-icon mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.6rem; background: rgba(10, 93, 194, 0.1); color: #0a5dc2; border-radius: 16px;">
+            <i class="ri-global-line"></i>
+          </div>
+          <h5 class="fw-bold text-dark mb-2">1. Visit Website</h5>
+          <p class="text-muted small mb-0">
+            Open <a href="/" class="text-primary fw-bold text-decoration-none">PhysioEdvance</a> and click on the <strong>Login</strong> or <strong>Register</strong> button in the top header.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 2: Enter Student Details -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center bg-white transition-all position-relative">
+          <div class="position-absolute top-0 end-0 m-3">
+            <span class="badge bg-info-subtle text-info rounded-circle fw-bold fs-6 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">2</span>
+          </div>
+          <div class="pe-category-icon mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.6rem; background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border-radius: 16px;">
+            <i class="ri-user-add-line"></i>
+          </div>
+          <h5 class="fw-bold text-dark mb-2">2. Register / Sign Up</h5>
+          <p class="text-muted small mb-0">
+            Create your account by entering your name, email, phone number, and current BPT academic year.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 3: Login & Verify -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center bg-white transition-all position-relative">
+          <div class="position-absolute top-0 end-0 m-3">
+            <span class="badge bg-warning-subtle text-warning rounded-circle fw-bold fs-6 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">3</span>
+          </div>
+          <div class="pe-category-icon mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.6rem; background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-radius: 16px;">
+            <i class="ri-key-2-line"></i>
+          </div>
+          <h5 class="fw-bold text-dark mb-2">3. Login Anywhere</h5>
+          <p class="text-muted small mb-0">
+            Sign in anytime using your email/phone and password on our secure <a href="/auth/login" class="text-primary fw-bold text-decoration-none">Login Portal</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 4: Access Library & Courses -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center bg-white transition-all position-relative">
+          <div class="position-absolute top-0 end-0 m-3">
+            <span class="badge bg-success-subtle text-success rounded-circle fw-bold fs-6 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">4</span>
+          </div>
+          <div class="pe-category-icon mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.6rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: 16px;">
+            <i class="ri-book-open-fill"></i>
+          </div>
+          <h5 class="fw-bold text-dark mb-2">4. Start Learning</h5>
+          <p class="text-muted small mb-0">
+            Unlock instant 100% free access to subject notes, HD video lectures, live workshops, and clinical resources.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login CTA Buttons -->
+    <div class="text-center mt-5">
+      <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
+        <a href="/auth/login" class="btn btn-primary btn-lg rounded-pill px-4 py-2.5 fw-bold shadow-sm">
+          <i class="ri-login-box-line me-1"></i> Login to Your Account
+        </a>
+        <a href="/auth/register" class="btn btn-outline-primary btn-lg rounded-pill px-4 py-2.5 fw-bold">
+          <i class="ri-user-add-line me-1"></i> Create Free Account
+        </a>
+      </div>
+      <p class="text-muted small mt-3 mb-0">
+        <i class="ri-shield-check-line text-success me-1"></i> 100% Free Access for Physiotherapy Students &nbsp;·&nbsp; Quick 1-Minute Setup
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MORE THAN AN EDUCATIONAL PLATFORM ============ -->
+<section class="pe-section bg-white">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <div class="pe-philosophy-quote-card">
+          <span class="badge bg-warning text-dark px-3 py-1 rounded-pill mb-3 font-weight-bold">Our Philosophy</span>
+          <div class="pe-quote-text mb-4">
+            “Because becoming a good physiotherapist doesn't happen overnight. It happens one concept, one skill, one patient, and one learning experience at a time.”
+          </div>
+          <div class="d-flex align-items-center gap-3 border-top border-white-20 pt-3">
+            <img src="/images/team/founder-1.png" alt="Dr. Heena Nawaz PT" class="rounded-circle border border-2 border-white" style="width:48px; height:48px; object-fit:cover;">
+            <div>
+              <h6 class="fw-bold text-white mb-0">Dr. Heena Nawaz PT</h6>
+              <span class="text-white-50 small">Founder & Director, PhysioEdvance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <span class="pe-eyebrow">Academic Community</span>
+        <h2 class="pe-section-title mb-3">More Than an Educational Platform</h2>
+        <p class="text-muted-pe mb-3">
+          PhysioEdvance is built around the belief that every physiotherapy student deserves access to quality learning, proper guidance, and a supportive academic community.
+        </p>
+        <p class="text-muted-pe mb-4">
+          It is a space where students can learn at their own pace, strengthen their fundamentals, clarify concepts, improve their knowledge, and gradually develop the confidence required to step into clinical practice.
+        </p>
+        <ul class="list-unstyled text-muted-pe">
+          <li class="mb-2 d-flex align-items-center"><i class="ri-checkbox-circle-fill text-primary me-2 fs-5"></i> Learn at your own pace with 24/7 access to curriculum notes</li>
+          <li class="mb-2 d-flex align-items-center"><i class="ri-checkbox-circle-fill text-primary me-2 fs-5"></i> Strengthen foundational and advanced clinical reasoning skills</li>
+          <li class="mb-2 d-flex align-items-center"><i class="ri-checkbox-circle-fill text-primary me-2 fs-5"></i> Direct mentorship and guidance from practicing physiotherapists</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISION & MISSION ============ -->
+<section class="pe-section bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="pe-eyebrow">Core Purpose</span>
+      <h2 class="pe-section-title">Our Vision & Purpose</h2>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="pe-vm-card">
+          <div class="pe-vm-icon"><i class="ri-eye-line"></i></div>
+          <h4 class="fw-bold text-dark mb-3">Our Vision</h4>
+          <p class="text-muted-pe mb-0" style="line-height:1.7;">
+            To build a strong learning ecosystem for physiotherapy students where education meets understanding, technology meets teaching, and knowledge meets clinical application.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="pe-vm-card">
+          <div class="pe-vm-icon"><i class="ri-shield-star-line"></i></div>
+          <h4 class="fw-bold text-dark mb-3">Our Commitment</h4>
+          <p class="text-muted-pe mb-0" style="line-height:1.7;">
+            PhysioEdvance is not just about helping students pass examinations. It is about helping them become better learners, better clinicians, and better physiotherapists.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CALL TO ACTION ============ -->
+<section class="pe-cta-section text-center">
+  <div class="container">
+    <div class="pe-cta-inner">
+      <span class="pe-section-label mb-3"><i class="ri-graduation-cap-line"></i> PhysioEdvance</span>
+      <h2 class="pe-cta-title mb-3">Learn Physiotherapy. Understand Better. Practice Smarter. Advance Further.</h2>
+      <p class="pe-cta-sub mb-4">Start exploring the structured curriculum built by physiotherapists, for physiotherapy students.</p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="/subjects" class="btn btn-primary btn-lg pe-cta-btn shadow">
+          <i class="ri-book-open-line me-1"></i> Browse Subjects
+        </a>
+        <a href="/auth/register" class="btn btn-outline-light btn-lg">
+          <i class="ri-user-add-line me-1"></i> Join Free
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

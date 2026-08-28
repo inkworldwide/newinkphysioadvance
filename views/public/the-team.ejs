@@ -1,0 +1,178 @@
+<!-- Hero -->
+<section class="pe-team-hero">
+  <div class="container text-center">
+    <span class="pe-section-label"><i class="ri-team-line"></i> Our People</span>
+    <h1 class="text-white mt-2 mb-3">The Team Behind PhysioEdvance</h1>
+    <p class="text-white-75 mx-auto" style="max-width:600px;">
+      Built by physiotherapists, academics, and industry experts united by one mission —
+      <em>"Help students to help themselves."</em>
+    </p>
+  </div>
+</section>
+
+<!-- Founding Members -->
+<section class="pe-section bg-white">
+  <div class="container">
+    <div class="pe-section-head text-center mb-5">
+      <span class="pe-section-label"><i class="ri-star-line"></i> Founding Members</span>
+      <h2 class="mt-2">The Founders</h2>
+      <p class="text-muted-pe">The visionaries who built PhysioEdvance from the ground up.</p>
+    </div>
+
+    <div class="swiper pe-founding-swiper">
+      <div class="swiper-wrapper pb-5">
+        <% founding.forEach(m => { %>
+          <div class="swiper-slide">
+            <div class="pe-pro-card">
+              <div class="pe-pro-card-top">
+                <div class="pe-pro-img-wrap">
+                  <img src="<%= m.photo %>" alt="<%= m.name %>"
+                    onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(m.name) %>&background=0a5dc2&color=fff&size=256'">
+                </div>
+                <div class="pe-pro-badge"><i class="ri-star-fill"></i> Founder</div>
+              </div>
+              <div class="pe-pro-card-body">
+                <h5 class="pe-pro-name"><%= m.name %></h5>
+                <p class="pe-pro-role"><%= m.designation %></p>
+                <% if (m.qualification) { %>
+                  <span class="pe-pro-qual"><i class="ri-graduation-cap-line"></i> <%= m.qualification %></span>
+                <% } %>
+                <% if (m.bio) { %>
+                  <p class="pe-pro-bio"><%= m.bio %></p>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+      <div class="swiper-pagination pe-swiper-pagination"></div>
+      <div class="pe-swiper-arrow pe-swiper-arrow-prev pe-founding-prev"><i class="ri-arrow-left-s-line"></i></div>
+      <div class="pe-swiper-arrow pe-swiper-arrow-next pe-founding-next"><i class="ri-arrow-right-s-line"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- Advisory Board -->
+<% if (advisory.length) { %>
+<section class="pe-section" style="background:var(--pe-body-bg);">
+  <div class="container">
+    <div class="pe-section-head text-center mb-5">
+      <span class="pe-section-label"><i class="ri-award-line"></i> Advisory Board</span>
+      <h2 class="mt-2">Our Expert Advisors</h2>
+      <p class="text-muted-pe">Clinical and academic experts guiding the quality of PhysioEdvance.</p>
+    </div>
+
+    <div class="swiper pe-advisory-swiper">
+      <div class="swiper-wrapper pb-5">
+        <% advisory.forEach(m => { %>
+          <div class="swiper-slide">
+            <div class="pe-pro-card pe-pro-card-sm">
+              <div class="pe-pro-card-top">
+                <div class="pe-pro-img-wrap pe-pro-img-fixed">
+                  <img src="<%= m.photo %>" alt="<%= m.name %>"
+                    onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(m.name) %>&background=0a5dc2&color=fff&size=200'">
+                </div>
+                <div class="pe-pro-badge pe-pro-badge-advisory"><i class="ri-award-line"></i> Advisor</div>
+              </div>
+              <div class="pe-pro-card-body">
+                <h5 class="pe-pro-name"><%= m.name %></h5>
+                <p class="pe-pro-role"><%= m.designation %></p>
+                <% if (m.qualification) { %>
+                  <span class="pe-pro-qual"><i class="ri-graduation-cap-line"></i> <%= m.qualification %></span>
+                <% } %>
+                <% if (m.bio) { %>
+                  <p class="pe-pro-bio"><%= m.bio %></p>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+      <div class="swiper-pagination pe-swiper-pagination"></div>
+      <div class="pe-swiper-arrow pe-swiper-arrow-prev pe-advisory-prev"><i class="ri-arrow-left-s-line"></i></div>
+      <div class="pe-swiper-arrow pe-swiper-arrow-next pe-advisory-next"><i class="ri-arrow-right-s-line"></i></div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- Legal & Business -->
+<% if (legalBusiness.length) { %>
+<section class="pe-section bg-white">
+  <div class="container">
+    <div class="pe-section-head text-center mb-5">
+      <span class="pe-section-label"><i class="ri-briefcase-line"></i> Legal & Business</span>
+      <h2 class="mt-2">Legal & Business Advisory</h2>
+      <p class="text-muted-pe">The experts guiding PhysioEdvance's legal, financial, and strategic direction.</p>
+    </div>
+    <div class="swiper pe-legal-swiper" style="padding-bottom:3rem;">
+      <div class="swiper-wrapper">
+        <% legalBusiness.forEach(m => { %>
+          <div class="swiper-slide">
+            <div class="pe-pro-card pe-pro-card-sm">
+              <div class="pe-pro-card-top">
+                <div class="pe-pro-img-wrap pe-pro-img-fixed">
+                  <img src="<%= m.photo %>" alt="<%= m.name %>"
+                    onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(m.name) %>&background=00264d&color=fff&size=200'">
+                </div>
+                <div class="pe-pro-badge" style="background:var(--pe-secondary);"><i class="ri-briefcase-line"></i> Legal</div>
+              </div>
+              <div class="pe-pro-card-body">
+                <h5 class="pe-pro-name"><%= m.name %></h5>
+                <p class="pe-pro-role"><%= m.designation %></p>
+                <% if (m.qualification) { %>
+                  <span class="pe-pro-qual"><i class="ri-graduation-cap-line"></i> <%= m.qualification %></span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+      <div class="swiper-pagination pe-swiper-pagination"></div>
+      <div class="pe-swiper-arrow pe-swiper-arrow-prev pe-legal-prev"><i class="ri-arrow-left-s-line"></i></div>
+      <div class="pe-swiper-arrow pe-swiper-arrow-next pe-legal-next"><i class="ri-arrow-right-s-line"></i></div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- CTA -->
+<section class="pe-cta-section">
+  <div class="container text-center pe-cta-inner">
+    <h2 class="pe-cta-title">Join the PhysioEdvance Community</h2>
+    <p class="pe-cta-sub">Start learning from India's best physiotherapy educators — free, forever.</p>
+    <div class="d-flex gap-3 justify-content-center mt-4">
+      <a href="/auth/register" class="btn btn-primary btn-lg pe-cta-btn"><i class="ri-user-add-line"></i> Create Free Account</a>
+      <a href="/subjects" class="btn btn-outline-light btn-lg">Explore Subjects <i class="ri-arrow-right-line"></i></a>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (document.querySelector('.pe-founding-swiper')) {
+    new Swiper('.pe-founding-swiper', {
+      slidesPerView: 1, spaceBetween: 24, loop: false,
+      pagination: { el: '.pe-founding-swiper .pe-swiper-pagination', clickable: true },
+      navigation: { prevEl: '.pe-founding-prev', nextEl: '.pe-founding-next' },
+      breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+    });
+  }
+  if (document.querySelector('.pe-advisory-swiper')) {
+    new Swiper('.pe-advisory-swiper', {
+      slidesPerView: 1, spaceBetween: 24, loop: false,
+      pagination: { el: '.pe-advisory-swiper .pe-swiper-pagination', clickable: true },
+      navigation: { prevEl: '.pe-advisory-prev', nextEl: '.pe-advisory-next' },
+      breakpoints: { 480: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1200: { slidesPerView: 4 } }
+    });
+  }
+  if (document.querySelector('.pe-legal-swiper')) {
+    new Swiper('.pe-legal-swiper', {
+      slidesPerView: 1, spaceBetween: 24, loop: false,
+      pagination: { el: '.pe-legal-swiper .pe-swiper-pagination', clickable: true },
+      navigation: { prevEl: '.pe-legal-prev', nextEl: '.pe-legal-next' },
+      breakpoints: { 480: { slidesPerView: 2 }, 768: { slidesPerView: 3 }, 1200: { slidesPerView: 4 } }
+    });
+  }
+});
+</script>

@@ -1,0 +1,133 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <a href="/admin/users" class="btn btn-sm btn-outline-primary"><i class="ri-arrow-left-line"></i> Back to Users</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="pe-admin-card p-4 text-center">
+      <img src="<%= profileUser.avatar %>" class="rounded-circle mb-3"
+        style="width:6rem;height:6rem;object-fit:cover;border:3px solid var(--pe-primary-light);"
+        onerror="this.src='https://ui-avatars.com/api/?name=<%= encodeURIComponent(profileUser.name) %>&background=0a5dc2&color=fff&size=256'">
+      <h5 class="mb-0"><%= profileUser.name %></h5>
+      <p class="text-muted-pe small mb-2"><%= profileUser.email %></p>
+      <span class="badge pe-badge-gradient text-capitalize mb-3"><%= profileUser.role %></span>
+
+      <ul class="list-unstyled text-start small mb-3">
+        <li class="d-flex justify-content-between border-bottom py-2">
+          <span class="text-muted-pe">Status</span>
+          <span class="badge <%= profileUser.is_active ? 'badge-soft-success' : 'badge-soft-danger' %>"><%= profileUser.is_active ? 'Active' : 'Inactive' %></span>
+        </li>
+        <li class="d-flex justify-content-between border-bottom py-2">
+          <span class="text-muted-pe">Phone</span><span><%= profileUser.phone || '—' %></span>
+        </li>
+        <li class="d-flex justify-content-between border-bottom py-2">
+          <span class="text-muted-pe">Joined</span><span><%= new Date(profileUser.created_at).toLocaleDateString() %></span>
+        </li>
+        <% if (profileUser.bio) { %>
+          <li class="py-2"><span class="text-muted-pe d-block mb-1">Bio</span><%= profileUser.bio %></li>
+        <% } %>
+      </ul>
+
+      <div class="d-flex flex-column gap-2">
+        <form action="/admin/users/<%= profileUser.id %>/reset-password" method="POST" onsubmit="return confirm('Generate a new temporary password for this user? Their current password will stop working.')">
+          <button class="btn btn-outline-primary btn-sm w-100"><i class="ri-lock-password-line"></i> Reset Password</button>
+        </form>
+        <p class="text-muted-pe" style="font-size:.72rem;">
+          <i class="ri-information-line"></i> Passwords are one-way encrypted for security and can never be shown as plain text — resetting generates a new temporary one you can share with the user.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <% if (profileUser.role === 'instructor') { %>
+      <div class="pe-admin-card p-4 mb-4">
+        <h6 class="mb-1"><i class="ri-book-2-line me-2 text-primary-pe"></i>Courses by <%= profileUser.name %></h6>
+        <p class="text-muted-pe small mb-3"><%= courses.length %> course<%= courses.length !== 1 ? 's' : '' %> total</p>
+
+        <% if (courses.length === 0) { %>
+          <p class="text-muted-pe small mb-0">This instructor hasn't created any courses yet.</p>
+        <% } %>
+
+        <div class="accordion" id="instructorCourses">
+          <% courses.forEach((c, ci) => { %>
+            <div class="pe-builder-module mb-3">
+              <div class="pe-builder-module-header">
+                <div>
+                  <div class="fw-semibold"><%= c.title %> <span class="badge badge-soft-info text-capitalize ms-1"><%= c.status %></span></div>
+                  <div class="text-muted-pe" style="font-size:.78rem;">
+                    <%= c.category_name || 'General' %> · <%= c.modules.length %> module<%= c.modules.length !== 1 ? 's' : '' %>
+                    · <%= c.lessonCount %> lesson<%= c.lessonCount !== 1 ? 's' : '' %>
+                    · <%= c.videoCount %> video<%= c.videoCount !== 1 ? 's' : '' %>
+                    · <%= c.students_count %> student<%= c.students_count !== 1 ? 's' : '' %>
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-soft-primary" type="button" data-bs-toggle="collapse" data-bs-target="#course<%= c.id %>">
+                  View Modules <i class="ri-arrow-down-s-line"></i>
+                </button>
+              </div>
+              <div id="course<%= c.id %>" class="collapse">
+                <% if (c.modules.length === 0) { %>
+                  <div class="pe-builder-lesson-row text-muted-pe">No modules added yet.</div>
+                <% } %>
+                <% c.modules.forEach(m => { %>
+                  <div class="pe-builder-lesson-row flex-column align-items-start">
+                    <div class="fw-semibold small mb-1"><i class="ri-folder-2-line me-1 text-primary-pe"></i><%= m.title %></div>
+                    <% if (m.lessons.length === 0) { %>
+                      <div class="text-muted-pe" style="font-size:.78rem;">No lessons in this module yet.</div>
+                    <% } %>
+                    <% m.lessons.forEach(l => { %>
+                      <div class="d-flex align-items-center justify-content-between w-100 py-1" style="font-size:.82rem;">
+                        <span>
+                          <i class="ri-<%= l.type === 'video' ? 'play-circle-line' : l.type === 'article' ? 'file-text-line' : l.type === 'quiz' ? 'question-line' : 'file-line' %> me-1 text-primary-pe"></i>
+                          <%= l.title %>
+                          <span class="text-muted-pe">(<%= l.duration_minutes %>m)</span>
+                        </span>
+                        <% if (l.type === 'video' && l.video_url) { %>
+                          <a href="<%= l.video_url %>" target="_blank" class="text-primary-pe small"><i class="ri-external-link-line"></i></a>
+                        <% } %>
+                      </div>
+                    <% }) %>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } else if (profileUser.role === 'student') { %>
+      <div class="pe-admin-card p-4">
+        <h6 class="mb-1"><i class="ri-graduation-cap-line me-2 text-primary-pe"></i>Enrolled Courses</h6>
+        <p class="text-muted-pe small mb-3"><%= enrollments.length %> enrollment<%= enrollments.length !== 1 ? 's' : '' %> total</p>
+
+        <% if (enrollments.length === 0) { %>
+          <p class="text-muted-pe small mb-0">This student hasn't enrolled in any courses yet.</p>
+        <% } %>
+
+        <div class="table-responsive">
+          <table class="table pe-table mb-0">
+            <thead><tr><th>Course</th><th>Instructor</th><th>Progress</th><th>Status</th></tr></thead>
+            <tbody>
+              <% enrollments.forEach(e => { %>
+                <tr>
+                  <td><%= e.title %></td>
+                  <td><%= e.instructor_name %></td>
+                  <td style="min-width:120px;">
+                    <div class="progress" style="height:6px;"><div class="progress-bar" style="width:<%= e.progress_percent %>%"></div></div>
+                    <span class="text-muted-pe" style="font-size:.75rem;"><%= e.progress_percent %>%</span>
+                  </td>
+                  <td><span class="badge <%= e.status === 'completed' ? 'badge-soft-success' : 'badge-soft-info' %> text-capitalize"><%= e.status %></span></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="pe-admin-card p-4">
+        <h6 class="mb-2"><i class="ri-shield-star-line me-2 text-primary-pe"></i>Administrator Account</h6>
+        <p class="text-muted-pe small mb-0">Admins manage the whole platform and don't have courses or enrollments of their own.</p>
+      </div>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<% if (!zoomConfigured) { %>
+  <div class="alert alert-warning mb-4">
+    <i class="ri-error-warning-line me-1"></i>
+    Zoom is not connected yet. You can still create session listings (topic + schedule), but real Zoom join links
+    won't be generated until you add <code>ZOOM_ACCOUNT_ID</code>, <code>ZOOM_CLIENT_ID</code>, <code>ZOOM_CLIENT_SECRET</code> to <code>.env</code>.
+    See <code>README.md</code> for setup steps.
+  </div>
+<% } %>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">Live Sessions</div>
+      <div class="table-responsive">
+        <table class="table pe-table mb-0">
+          <thead><tr><th>Title</th><th>Type</th><th>When</th><th>Zoom</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <% if (sessions.length === 0) { %>
+              <tr><td colspan="6" class="text-center text-muted-pe py-4">No live sessions scheduled yet.</td></tr>
+            <% } %>
+            <% sessions.forEach(s => { %>
+              <tr>
+                <td class="fw-semibold"><%= s.title %></td>
+                <td><span class="badge badge-soft-info text-capitalize"><%= s.session_type.replace('_',' ') %></span></td>
+                <td class="text-muted-pe"><%= new Date(s.scheduled_at).toLocaleString() %></td>
+                <td>
+                  <% if (s.zoom_join_url) { %>
+                    <a href="<%= s.zoom_join_url %>" target="_blank" class="badge badge-soft-success text-decoration-none">Real link &#x2197;</a>
+                  <% } else { %>
+                    <span class="badge bg-light text-muted-pe">Not generated</span>
+                  <% } %>
+                </td>
+                <td><span class="badge badge-soft-primary text-capitalize"><%= s.status %></span></td>
+                <td class="text-end">
+                  <form action="/admin/live-sessions/<%= s.id %>/notify" method="POST" class="d-inline" onsubmit="return confirm('Send SMS reminder to all registrants?')">
+                    <button class="btn btn-sm btn-outline-primary" title="Notify registrants via SMS"><i class="ri-sms-line"></i></button>
+                  </form>
+                  <form action="/admin/live-sessions/<%= s.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Delete this session?')">
+                    <button class="btn btn-sm btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card p-4">
+      <h6 class="mb-3">Create Live Session</h6>
+      <form action="/admin/live-sessions" method="POST">
+        <div class="mb-3"><label class="form-label">Title</label><input type="text" name="title" class="form-control" required></div>
+        <div class="mb-3">
+          <label class="form-label">Type</label>
+          <select name="session_type" class="form-select">
+            <option value="live_class">Live Class</option>
+            <option value="discussion">Live Discussion</option>
+            <option value="workshop">Workshop</option>
+            <option value="webinar">Webinar</option>
+            <option value="podcast">Podcast</option>
+            <option value="panel_discussion">Panel Discussion</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Subject (optional)</label>
+          <select name="category_id" class="form-select">
+            <option value="">None</option>
+            <% categories.forEach(c => { %><option value="<%= c.id %>"><%= c.name %></option><% }) %>
+          </select>
+        </div>
+        <div class="mb-3"><label class="form-label">Description</label><textarea name="description" rows="2" class="form-control"></textarea></div>
+        <div class="row g-3 mb-3">
+          <div class="col-7"><label class="form-label">Date & Time</label><input type="datetime-local" name="scheduled_at" class="form-control" required></div>
+          <div class="col-5"><label class="form-label">Duration (min)</label><input type="number" name="duration_minutes" class="form-control" value="60"></div>
+        </div>
+        <div class="form-check mb-3">
+          <input type="checkbox" name="create_zoom" class="form-check-input" id="createZoom" <%= zoomConfigured ? '' : 'disabled' %>>
+          <label class="form-check-label small" for="createZoom">
+            Create a real Zoom meeting automatically <% if (!zoomConfigured) { %><span class="text-muted-pe">(connect Zoom first)</span><% } %>
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Create Session</button>
+      </form>
+    </div>
+  </div>
+</div>
