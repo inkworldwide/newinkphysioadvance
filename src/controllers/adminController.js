@@ -242,6 +242,12 @@ exports.toggleAboutShow = async (req, res) => {
   res.redirect('/admin/team');
 };
 
+exports.toggleTeamMemberActive = async (req, res) => {
+  const newStatus = await Team.toggleActive(req.params.id);
+  req.flash('success', newStatus ? 'Member is now visible on the public Team page.' : 'Member is now hidden from the public Team page.');
+  res.redirect('/admin/team');
+};
+
 exports.reorderTeamMember = async (req, res) => {
   const { id } = req.params;
   const { direction, order } = req.body;

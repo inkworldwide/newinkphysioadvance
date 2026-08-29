@@ -77,6 +77,13 @@ const Team = {
     await db.prepare(`UPDATE team_members SET show_on_about = ? WHERE id = ?`).run(newStatus, id);
     return newStatus;
   },
+  async toggleActive(id) {
+    const member = await this.findById(id);
+    if (!member) return null;
+    const newStatus = member.is_active ? 0 : 1;
+    await db.prepare(`UPDATE team_members SET is_active = ? WHERE id = ?`).run(newStatus, id);
+    return newStatus;
+  },
   async update(id, data) {
     const existing = await this.findById(id);
     const targetGroup = data.group_name || (existing ? existing.group_name : 'founding');

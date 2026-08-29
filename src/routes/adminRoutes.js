@@ -42,7 +42,10 @@ router.get('/team', adminController.teamIndex);
 router.post('/team', adminController.addTeamMember);
 router.get('/team/:id/edit', adminController.editTeamMember);
 router.post('/team/:id/update', adminController.updateTeamMember);
+router.get('/team/:id/toggle-about', adminController.toggleAboutShow);
 router.post('/team/:id/toggle-about', adminController.toggleAboutShow);
+router.get('/team/:id/toggle-active', adminController.toggleTeamMemberActive);
+router.post('/team/:id/toggle-active', adminController.toggleTeamMemberActive);
 router.post('/team/:id/reorder', adminController.reorderTeamMember);
 router.post('/team/:id/delete', adminController.deleteTeamMember);
 

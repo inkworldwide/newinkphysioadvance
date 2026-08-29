@@ -1,47 +1,110 @@
-<div class="row g-4">
-  <div class="col-lg-8">
-    <div class="card">
-      <div class="card-header">Subjects (Categories)</div>
-      <div class="table-responsive">
-        <table class="table pe-table mb-0">
-          <thead><tr><th>Icon</th><th>Name</th><th>Year</th><th>Courses</th><th></th></tr></thead>
-          <tbody>
-            <% categories.forEach(cat => { %>
-              <tr>
-                <td><i class="<%= cat.icon %> fs-5 text-primary-pe"></i></td>
-                <td class="fw-semibold"><%= cat.name %></td>
-                <td><%= cat.year ? 'Year ' + cat.year : (cat.is_other_subject ? 'Other Subject' : '—') %></td>
-                <td><%= cat.course_count %></td>
-                <td class="text-end">
-                  <form action="/admin/categories/<%= cat.id %>/delete" method="POST" onsubmit="return confirm('Delete this subject?')">
-                    <button class="btn btn-sm btn-outline-danger"><i class="ri-delete-bin-line"></i></button>
-                  </form>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+  <div>
+    <h3 class="fw-bold text-dark mb-1"><i class="ri-book-open-line text-primary me-2"></i>Manage Subjects (Categories)</h3>
+    <p class="text-muted small mb-0">Organize and manage BPT academic year curriculum subjects and electives.</p>
   </div>
-  <div class="col-lg-4">
-    <div class="card p-4">
-      <h6 class="mb-3">Add Subject</h6>
-      <form action="/admin/categories" method="POST">
-        <div class="mb-3"><label class="form-label">Name</label><input type="text" name="name" class="form-control" required></div>
-        <div class="mb-3">
-          <label class="form-label">Year</label>
-          <select name="year" class="form-select">
-            <option value="">Other Subject (no specific year)</option>
-            <option value="1">Year 1</option>
-            <option value="2">Year 2</option>
-            <option value="3">Year 3</option>
-            <option value="4">Year 4</option>
-          </select>
+  <button type="button" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
+    <i class="ri-add-circle-fill me-1"></i> Add Subject
+  </button>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+  <div class="table-responsive">
+    <table class="table pe-table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Icon</th>
+          <th>Subject Name</th>
+          <th>Academic Year</th>
+          <th>Total Courses</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (categories.length === 0) { %>
+          <tr><td colspan="5" class="text-center text-muted py-4">No subjects added yet.</td></tr>
+        <% } %>
+        <% categories.forEach(cat => { %>
+          <tr>
+            <td>
+              <div class="pe-category-icon m-0" style="width:40px; height:40px; font-size:1.2rem; background:rgba(10,93,194,0.1); color:#0a5dc2; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                <i class="<%= cat.icon || 'ri-book-open-line' %>"></i>
+              </div>
+            </td>
+            <td class="fw-bold text-dark fs-6"><%= cat.name %></td>
+            <td>
+              <% if (cat.year) { %>
+                <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-1 rounded-pill">Year <%= cat.year %></span>
+              <% } else if (cat.is_other_subject) { %>
+                <span class="badge bg-secondary-subtle text-secondary fw-bold px-3 py-1 rounded-pill">Other Subject</span>
+              <% } else { %>
+                <span class="badge bg-light text-muted px-3 py-1 rounded-pill">General</span>
+              <% } %>
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border px-3 py-1 rounded-pill fw-bold"><%= cat.course_count %> course<%= cat.course_count !== 1 ? 's' : '' %></span>
+            </td>
+            <td class="text-end">
+              <form action="/admin/categories/<%= cat.id %>/delete" method="POST" onsubmit="return confirm('Delete this subject?')" class="d-inline">
+                <button class="btn btn-sm btn-outline-danger rounded-circle p-2" style="width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;" title="Delete Subject">
+                  <i class="ri-delete-bin-line"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ ADD SUBJECT MODAL POP-UP ============ -->
+<div class="modal fade" id="addSubjectModal" tabindex="-1" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; max-height: 90vh;">
+      <div class="modal-header bg-primary text-white p-4">
+        <h5 class="modal-title font-weight-bold text-white d-flex align-items-center gap-2" id="addSubjectModalLabel">
+          <i class="ri-add-circle-fill text-warning fs-4"></i> Add New Subject
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form action="/admin/categories" method="POST" class="d-flex flex-column h-100">
+        <div class="modal-body p-4" style="overflow-y: auto;">
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Subject Name</label>
+            <input type="text" name="name" class="form-control form-control-lg" placeholder="e.g. Anatomy, Biomechanics" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Academic Year</label>
+            <select name="year" class="form-select form-select-lg">
+              <option value="">Other Subject (no specific year)</option>
+              <option value="1">Year 1 (Foundation)</option>
+              <option value="2">Year 2 (Core Clinical)</option>
+              <option value="3">Year 3 (Advanced Clinical)</option>
+              <option value="4">Year 4 (Specialisation)</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Remix Icon Class</label>
+            <input type="text" name="icon" class="form-control" placeholder="e.g. ri-pulse-line, ri-microscope-line" value="ri-pulse-line">
+            <span class="text-muted small">Supports Remix Icons (e.g. <code>ri-pulse-line</code>, <code>ri-stethoscope-line</code>)</span>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Description</label>
+            <textarea name="description" rows="3" class="form-control" placeholder="Brief subject description..."></textarea>
+          </div>
         </div>
-        <div class="mb-3"><label class="form-label">Remix Icon class</label><input type="text" name="icon" class="form-control" placeholder="ri-pulse-line" value="ri-pulse-line"></div>
-        <div class="mb-3"><label class="form-label">Description</label><textarea name="description" rows="2" class="form-control"></textarea></div>
-        <button type="submit" class="btn btn-primary w-100">Add Subject</button>
+
+        <div class="modal-footer bg-light p-3 border-top justify-content-between">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold shadow-sm py-2">
+            <i class="ri-check-line me-1"></i> Add Subject
+          </button>
+        </div>
       </form>
     </div>
   </div>

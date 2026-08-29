@@ -79,7 +79,7 @@
     // Featured Courses Swiper
     if (document.querySelector('.pe-courses-swiper')) {
       window.peCoursesSwiper = new Swiper('.pe-courses-swiper', {
-        slidesPerView:1, slidesPerGroup:1, spaceBetween:20, loop:false,
+        slidesPerView:1, spaceBetween:20, loop:false,
         autoplay:{delay:3500,disableOnInteraction:false},
         pagination:{
           el:'.pe-courses-swiper .pe-swiper-pagination',
@@ -89,10 +89,7 @@
           }
         },
         navigation:{prevEl:'.pe-courses-swiper .pe-swiper-prev',nextEl:'.pe-courses-swiper .pe-swiper-next'},
-        breakpoints:{
-          640:{slidesPerView:2, slidesPerGroup:2},
-          1024:{slidesPerView:3, slidesPerGroup:3}
-        }
+        breakpoints:{640:{slidesPerView:2},1024:{slidesPerView:3}}
       });
     }
     // Team Swiper

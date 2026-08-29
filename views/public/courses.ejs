@@ -1,107 +1,105 @@
-<section class="pe-hero-strip">
-  <div class="container">
-    <span class="pe-hero-eyebrow"><i class="ri-compass-3-line"></i> Explore</span>
-    <h1 class="mb-2 mt-2">Explore Subjects &amp; Courses</h1>
-    <p class="mb-0">Browse <%= courses.length %> course<%= courses.length !== 1 ? 's' : '' %> across Anatomy, Physiology, Pathology, Pharmacology, Microbiology and exam-prep tracks.</p>
+<!-- ============ UNIFIED ROYAL GRADIENT HERO BANNER ============ -->
+<section class="pe-hero-strip position-relative py-5 text-white overflow-hidden text-center" style="background: linear-gradient(135deg, #0a5dc2 0%, #0284c7 100%);">
+  <div class="container position-relative z-2 py-3">
+    <span class="badge bg-warning text-dark font-weight-bold text-uppercase px-3.5 py-2 rounded-pill mb-3 shadow-sm" style="font-size: 0.8rem; letter-spacing: 0.05em; background-color: #f59e0b !important;">
+      <i class="ri-compass-3-line me-1"></i> Course Catalog & Digital Library
+    </span>
+    <h1 class="display-4 font-weight-bold text-white mb-2" style="letter-spacing: -0.02em;">
+      Explore Subjects & Courses
+    </h1>
+    <p class="text-white-75 lead mx-auto mb-0" style="font-size: 1.1rem; line-height: 1.6; max-width: 680px;">
+      Browse <%= courses.length %> course<%= courses.length !== 1 ? 's' : '' %> across Anatomy, Physiology, Pathology, Pharmacology, Microbiology, and exam-prep tracks.
+    </p>
   </div>
 </section>
 
-<section class="pe-section">
+<section class="pe-section bg-light-subtle py-5">
   <div class="container">
     <div class="row g-4">
       <!-- Filters sidebar -->
       <div class="col-lg-3">
-        <div class="card p-3">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
           <form method="GET" action="/courses">
-            <h6 class="mb-3">Search</h6>
-            <input type="text" name="search" class="form-control mb-4" placeholder="Search courses..." value="<%= filters.search %>">
+            <h6 class="fw-bold text-dark mb-3"><i class="ri-search-line me-1 text-primary"></i> Search</h6>
+            <input type="text" name="search" class="form-control form-control-lg mb-4 bg-light border-0" placeholder="Search courses..." value="<%= filters.search %>" style="font-size: 0.9rem;">
 
-            <h6 class="mb-3">Subject</h6>
+            <h6 class="fw-bold text-dark mb-3"><i class="ri-book-open-line me-1 text-primary"></i> Subject</h6>
             <div class="d-flex flex-column gap-2 mb-4">
-              <label class="d-flex align-items-center gap-2 small">
+              <label class="d-flex align-items-center gap-2 small fw-semibold text-dark">
                 <input type="radio" name="category" value="" <%= !filters.category ? 'checked' : '' %> onchange="this.form.submit()"> All Subjects
               </label>
               <% categories.forEach(cat => { %>
-                <label class="d-flex align-items-center gap-2 small">
+                <label class="d-flex align-items-center gap-2 small text-secondary">
                   <input type="radio" name="category" value="<%= cat.slug %>" <%= filters.category === cat.slug ? 'checked' : '' %> onchange="this.form.submit()">
-                  <%= cat.name %> <span class="text-muted-pe">(<%= cat.course_count %>)</span>
+                  <%= cat.name %> <span class="text-muted small">(<%= cat.course_count %>)</span>
                 </label>
               <% }) %>
             </div>
 
-            <h6 class="mb-3">Level</h6>
+            <h6 class="fw-bold text-dark mb-3"><i class="ri-signal-tower-line me-1 text-primary"></i> Level</h6>
             <div class="d-flex flex-column gap-2 mb-4">
               <% ['Beginner','Intermediate','Advanced'].forEach(lvl => { %>
-                <label class="d-flex align-items-center gap-2 small">
+                <label class="d-flex align-items-center gap-2 small text-secondary">
                   <input type="radio" name="level" value="<%= lvl %>" <%= filters.level === lvl ? 'checked' : '' %> onchange="this.form.submit()"> <%= lvl %>
                 </label>
               <% }) %>
-              <label class="d-flex align-items-center gap-2 small">
+              <label class="d-flex align-items-center gap-2 small text-secondary">
                 <input type="radio" name="level" value="" <%= !filters.level ? 'checked' : '' %> onchange="this.form.submit()"> Any Level
               </label>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 btn-sm">Apply Filters</button>
-            <a href="/courses" class="btn btn-outline-primary w-100 btn-sm mt-2">Clear All</a>
+            <button type="submit" class="btn btn-primary w-100 rounded-pill font-weight-bold shadow-sm" style="background: linear-gradient(135deg, #0a5dc2 0%, #0369a1 100%); border: none;">
+              Apply Filters
+            </button>
           </form>
         </div>
       </div>
 
-      <!-- Course grid -->
+      <!-- Course list -->
       <div class="col-lg-9">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <span class="text-muted-pe small"><%= courses.length %> result<%= courses.length !== 1 ? 's' : '' %></span>
-          <form method="GET" action="/courses" class="d-flex align-items-center gap-2">
-            <input type="hidden" name="category" value="<%= filters.category %>">
-            <input type="hidden" name="search" value="<%= filters.search %>">
-            <input type="hidden" name="level" value="<%= filters.level %>">
-            <label class="small text-muted-pe mb-0">Sort:</label>
-            <select name="sort" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
-              <option value="" <%= !filters.sort ? 'selected':'' %>>Newest</option>
-              <option value="popular" <%= filters.sort==='popular'?'selected':'' %>>Most Popular</option>
-              <option value="rating" <%= filters.sort==='rating'?'selected':'' %>>Highest Rated</option>
-              <option value="price_low" <%= filters.sort==='price_low'?'selected':'' %>>Price: Low to High</option>
-              <option value="price_high" <%= filters.sort==='price_high'?'selected':'' %>>Price: High to Low</option>
-            </select>
-          </form>
-        </div>
-
         <% if (courses.length === 0) { %>
-          <div class="text-center py-5">
-            <i class="ri-search-line" style="font-size:3rem; color:var(--pe-text-muted);"></i>
-            <h5 class="mt-3">No courses found</h5>
-            <p class="text-muted-pe">Try adjusting your filters or search term.</p>
-          </div>
-        <% } else { %>
-          <div class="row g-4">
-            <% courses.forEach(course => { %>
-              <div class="col-md-6">
-                <a href="/courses/<%= course.slug %>" class="text-decoration-none d-block h-100">
-                  <div class="pe-fc-card">
-                    <div class="pe-fc-thumb">
-                      <div class="pe-fc-thumb-bg"></div>
-                      <span class="pe-fc-level"><%= course.level %></span>
-                      <div class="pe-fc-play-icon"><i class="ri-play-circle-fill"></i></div>
-                    </div>
-                    <div class="pe-fc-body">
-                      <span class="pe-fc-cat"><%= course.category_name || 'General' %></span>
-                      <h5 class="pe-fc-title"><%= course.title %></h5>
-                      <div class="pe-fc-instructor"><i class="ri-user-3-line"></i> <%= course.instructor_name %></div>
-                      <div class="pe-fc-meta">
-                        <span><i class="ri-star-fill"></i> <%= course.rating_avg.toFixed(1) %> <span class="text-muted-pe">(<%= course.rating_count %>)</span></span>
-                        <span><i class="ri-time-line"></i> <%= course.duration_hours %>h</span>
-                      </div>
-                    </div>
-                    <div class="pe-fc-footer">
-                      <span class="pe-fc-free"><i class="ri-gift-line"></i> Free</span>
-                      <span class="badge badge-soft-primary"><%= course.target_exam %></span>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            <% }) %>
+          <div class="card border-0 shadow-sm rounded-4 text-center py-5 bg-white">
+            <div class="my-3">
+              <i class="ri-book-open-line display-4 text-muted"></i>
+            </div>
+            <h5 class="fw-bold text-dark">No courses found matching your filter criteria.</h5>
+            <p class="text-muted small">Try adjusting your search terms or clearing the subject filters.</p>
+            <div class="mt-2">
+              <a href="/courses" class="btn btn-outline-primary rounded-pill px-4">Reset Filters</a>
+            </div>
           </div>
         <% } %>
+
+        <div class="row g-4">
+          <% courses.forEach(c => { %>
+            <div class="col-md-6 col-xl-4">
+              <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white transition-all pe-course-card">
+                <img src="<%= c.thumbnail || '/images/courses/default-course.jpg' %>" alt="<%= c.title %>" class="card-img-top" style="height: 180px; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80'">
+                <div class="card-body p-4 d-flex flex-column">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-primary-subtle text-primary font-weight-bold px-2.5 py-1 rounded-pill small">
+                      <%= c.category_name %>
+                    </span>
+                    <span class="badge bg-light text-muted border px-2 py-1 rounded-pill small">
+                      <%= c.level %>
+                    </span>
+                  </div>
+                  <h6 class="fw-bold text-dark mb-2" style="line-height: 1.4;"><%= c.title %></h6>
+                  <p class="text-secondary small mb-3 line-clamp-2" style="font-size: 0.85rem;"><%= c.excerpt || c.description %></p>
+                  
+                  <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                    <span class="badge bg-success-subtle text-success font-weight-bold px-3 py-1.5 rounded-pill">
+                      100% Free Access
+                    </span>
+                    <a href="/courses/<%= c.slug %>" class="btn btn-sm btn-primary rounded-pill px-3 font-weight-bold" style="background: #0a5dc2; border-color: #0a5dc2;">
+                      View Course <i class="ri-arrow-right-line ms-1"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
       </div>
     </div>
   </div>

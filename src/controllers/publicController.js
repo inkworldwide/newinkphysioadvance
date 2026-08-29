@@ -5,7 +5,7 @@ const { Team, Blog, LiveSessions, HeroFeature, ClinicalSpecialty } = require('..
 const { PHYSIOTHERAPY_SPECIALTIES, THERAPY_TYPES, slugify } = require('../config/subjectTaxonomy');
 
 exports.home = async (req, res) => {
-  const featured = await Course.featured();
+  const featured = await Course.featured(6);
   const allCategories = await Course.countCoursesByCategory();
   const categoriesByYear = { 1: [], 2: [], 3: [], 4: [] };
   const otherSubjects = [];
@@ -115,10 +115,26 @@ exports.about = async (req, res) => {
 };
 
 exports.theTeam = async (req, res) => {
+  const teachingStaff = await db.prepare(`SELECT * FROM team_members WHERE (group_name = 'teaching_staff' OR group_name = 'teaching') AND is_active = 1 ORDER BY display_order, id`).all();
+  const nonTeachingStaff = await Team.byGroup('non_teaching_staff');
+  const subjectExperts = await Team.byGroup('subject_experts');
+  const technicalAssistance = await Team.byGroup('technical_assistance');
+  const otherStaff = await Team.byGroup('other_staff');
   const founding = await Team.byGroup('founding');
   const advisory = await Team.byGroup('advisory');
   const legalBusiness = await Team.byGroup('legal_business');
-  res.render('public/the-team', { title: 'The Team', founding, advisory, legalBusiness });
+
+  res.render('public/the-team', {
+    title: 'The Team',
+    teachingStaff,
+    nonTeachingStaff,
+    subjectExperts,
+    technicalAssistance,
+    otherStaff,
+    founding,
+    advisory,
+    legalBusiness
+  });
 };
 
 exports.blogIndex = async (req, res) => {

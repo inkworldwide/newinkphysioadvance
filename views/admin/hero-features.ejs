@@ -75,8 +75,8 @@
 
 <!-- ============ ADD HERO FEATURE CARD MODAL POP-UP ============ -->
 <div class="modal fade" id="addHeroFeatureModal" tabindex="-1" aria-labelledby="addHeroFeatureModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; max-height: 90vh;">
       <div class="modal-header bg-primary text-white p-4">
         <h5 class="modal-title font-weight-bold text-white d-flex align-items-center gap-2" id="addHeroFeatureModalLabel">
           <i class="ri-add-circle-fill text-warning fs-4"></i> Add Hero Feature Card
@@ -84,8 +84,8 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form action="/admin/features" method="POST">
-        <div class="modal-body p-4">
+      <form action="/admin/features" method="POST" class="d-flex flex-column h-100">
+        <div class="modal-body p-4" style="overflow-y: auto;">
           <div class="mb-3">
             <label class="form-label font-weight-bold">Card Title</label>
             <input type="text" name="title" class="form-control form-control-lg" placeholder="e.g. Masterclasses, Live Q&A" required>

@@ -81,8 +81,8 @@
 
 <!-- ============ ADD CLINICAL SPECIALTY MODAL POP-UP ============ -->
 <div class="modal fade" id="addSpecialtyModal" tabindex="-1" aria-labelledby="addSpecialtyModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; max-height: 90vh;">
       <div class="modal-header bg-primary text-white p-4">
         <h5 class="modal-title font-weight-bold text-white d-flex align-items-center gap-2" id="addSpecialtyModalLabel">
           <i class="ri-add-circle-fill text-warning fs-4"></i> Add New Clinical Specialty Card
@@ -90,8 +90,8 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form action="/admin/specialties" method="POST">
-        <div class="modal-body p-4">
+      <form action="/admin/specialties" method="POST" class="d-flex flex-column h-100">
+        <div class="modal-body p-4" style="overflow-y: auto;">
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label font-weight-bold">Specialty Name</label>

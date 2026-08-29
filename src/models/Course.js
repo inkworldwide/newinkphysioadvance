@@ -57,18 +57,7 @@ const Course = {
     return db.prepare(query).all(...params);
   },
 
-  async featured(limit = null) {
-    if (limit && limit > 0) {
-      return db.prepare(`
-        SELECT c.*, cat.name as category_name, cat.slug as category_slug,
-               u.name as instructor_name, u.avatar as instructor_avatar
-        FROM courses c
-        LEFT JOIN categories cat ON c.category_id = cat.id
-        JOIN users u ON c.instructor_id = u.id
-        WHERE c.status = 'published' AND c.is_featured = 1
-        ORDER BY c.rating_avg DESC LIMIT ?
-      `).all(limit);
-    }
+  async featured(limit = 6) {
     return db.prepare(`
       SELECT c.*, cat.name as category_name, cat.slug as category_slug,
              u.name as instructor_name, u.avatar as instructor_avatar
@@ -76,8 +65,8 @@ const Course = {
       LEFT JOIN categories cat ON c.category_id = cat.id
       JOIN users u ON c.instructor_id = u.id
       WHERE c.status = 'published' AND c.is_featured = 1
-      ORDER BY c.rating_avg DESC
-    `).all();
+      ORDER BY c.rating_avg DESC LIMIT ?
+    `).all(limit);
   },
 
   async byInstructor(instructorId) {

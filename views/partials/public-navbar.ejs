@@ -29,8 +29,7 @@
         <!-- SUBJECTS DROPDOWN with year sub-menus -->
         <li class="nav-item dropdown pe-subjects-dropdown">
           <a class="nav-link dropdown-toggle <%= currentPath.startsWith('/subjects') || currentPath.startsWith('/courses') ? 'active' : '' %>"
-             href="/subjects" id="subjectsDropdown" role="button"
-             data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+             href="/subjects" id="subjectsDropdown" role="button" aria-expanded="false" onclick="window.location.href='/subjects';">
             Subjects
           </a>
           <ul class="dropdown-menu pe-subjects-menu shadow-lg" aria-labelledby="subjectsDropdown">
