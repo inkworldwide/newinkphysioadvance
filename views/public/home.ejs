@@ -364,17 +364,17 @@
   <div class="container">
     <div class="row g-4">
       <div class="col-md-6">
-        <div class="card p-4 h-100">
-          <div class="pe-category-icon mb-3"><i class="ri-eye-line"></i></div>
-          <h5>Our Vision</h5>
-          <p class="text-muted-pe small mb-0">To become the one-stop educational destination for physiotherapy students across India — making advanced, clinically-relevant physiotherapy education accessible to every student, regardless of which college they attend.</p>
+        <div class="card p-4 h-100 border-0 shadow-sm rounded-4 bg-white">
+          <div class="pe-category-icon mb-3" style="width: 52px; height: 52px; font-size: 1.5rem; background: rgba(10, 93, 194, 0.1); color: #0a5dc2; border-radius: 14px; display: flex; align-items: center; justify-content: center;"><i class="ri-eye-line"></i></div>
+          <h5 class="fw-bold text-dark mb-2">Our Vision</h5>
+          <p class="text-secondary small mb-0" style="line-height: 1.65;"><%= (typeof visionMission !== 'undefined' && visionMission.vision) ? visionMission.vision : 'To become the one-stop educational destination for physiotherapy students across India — making advanced, clinically-relevant physiotherapy education accessible to every student, regardless of which college they attend.' %></p>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="card p-4 h-100">
-          <div class="pe-category-icon mb-3"><i class="ri-flag-line"></i></div>
-          <h5>Our Mission</h5>
-          <p class="text-muted-pe small mb-0">"Help students to help themselves." We build structured notes, digital library content, live discussions, and research resources that empower physiotherapy students to learn independently and confidently, year after year.</p>
+        <div class="card p-4 h-100 border-0 shadow-sm rounded-4 bg-white">
+          <div class="pe-category-icon mb-3" style="width: 52px; height: 52px; font-size: 1.5rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: 14px; display: flex; align-items: center; justify-content: center;"><i class="ri-flag-line"></i></div>
+          <h5 class="fw-bold text-dark mb-2">Our Mission</h5>
+          <p class="text-secondary small mb-0" style="line-height: 1.65;"><%= (typeof visionMission !== 'undefined' && visionMission.mission) ? visionMission.mission : '"Help students to help themselves." We build structured notes, digital library content, live discussions, and research resources that empower physiotherapy students to learn independently and confidently, year after year.' %></p>
         </div>
       </div>
     </div>
@@ -507,34 +507,82 @@
               </div>
 
               <div class="row g-3 mb-3">
+                <!-- Left Field: Category Type Selector -->
                 <div class="col-md-6">
                   <label class="form-label fw-bold text-dark small">
-                    <i class="ri-apps-line text-primary me-1"></i> Service Interested In
+                    <i class="ri-apps-line text-primary me-1"></i> Interest Category
                   </label>
-                  <select name="service_type" id="serviceTypeSelect" class="form-select form-select-lg bg-light-subtle border-light-subtle">
-                    <% if (typeof specialties !== 'undefined' && specialties.length > 0) { %>
-                      <% specialties.forEach((spec, idx) => { %>
-                        <option value="<%= spec.name %>" <%= idx === 0 ? 'selected' : '' %>><%= spec.name %></option>
-                      <% }) %>
-                    <% } else { %>
-                      <option value="General Physiotherapy Consultation">General Physiotherapy Consultation</option>
-                    <% } %>
+                  <select id="interestCategorySelect" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;" onchange="updateDynamicDropdownOptions()">
+                    <option value="services" selected>🏥 Clinical Services</option>
+                    <option value="courses">🎓 Year / Academic Courses</option>
                   </select>
                 </div>
 
+                <!-- Right Field: Dynamic Option Dropdown -->
                 <div class="col-md-6">
-                  <label class="form-label fw-bold text-dark small">
-                    <i class="ri-graduation-cap-line text-primary me-1"></i> Year / Subject Category
+                  <label class="form-label fw-bold text-dark small" id="dynamicDropdownLabel">
+                    <i class="ri-heart-pulse-line text-primary me-1"></i> Select Clinical Service
                   </label>
-                  <select name="academic_year" class="form-select form-select-lg bg-light-subtle border-light-subtle">
-                    <option value="Year 1" selected>Year 1 (Foundation)</option>
-                    <option value="Year 2">Year 2 (Core Clinical)</option>
-                    <option value="Year 3">Year 3 (Advanced Clinical)</option>
-                    <option value="Year 4">Year 4 (Specialisation)</option>
-                    <option value="Other Subjects">Other Subjects / Electives</option>
+                  <select name="service_type" id="dynamicOptionSelect" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;">
+                    <!-- Dynamically populated via JS -->
                   </select>
                 </div>
               </div>
+
+              <!-- Dynamic Dropdown Option Switcher Script -->
+              <script>
+                const clinicalServicesOptions = [
+                  { value: "Post-Surgery Physiotherapy", text: "Post-Surgery Physiotherapy" },
+                  { value: "Orthopedic & Joint Rehabilitation", text: "Orthopedic & Joint Rehabilitation" },
+                  { value: "Neurological Rehabilitation (Stroke / TBI)", text: "Neurological Rehabilitation (Stroke / TBI)" },
+                  { value: "Sports Injury & Athletic Conditioning", text: "Sports Injury & Athletic Conditioning" },
+                  { value: "Cardiorespiratory ICU & Pulmonary Therapy", text: "Cardiorespiratory ICU & Pulmonary Therapy" },
+                  { value: "Pediatric & Geriatric Physical Therapy", text: "Pediatric & Geriatric Physical Therapy" },
+                  { value: "Clinical Internship & Practical Guidance", text: "Clinical Internship & Practical Guidance" },
+                  { value: "General Physiotherapy Consultation", text: "General Physiotherapy Consultation" }
+                ];
+
+                const academicCoursesOptions = [
+                  { value: "Year 1 (Foundation & Human Osteology)", text: "Year 1 (Foundation & Human Osteology)" },
+                  { value: "Year 2 (Pathology & Biomechanics)", text: "Year 2 (Pathology & Biomechanics)" },
+                  { value: "Year 3 (Medicine, Surgery & Ortho)", text: "Year 3 (Medicine, Surgery & Ortho)" },
+                  { value: "Year 4 (Neurology, Sports & Rehab)", text: "Year 4 (Neurology, Sports & Rehab)" },
+                  { value: "MPT Master Specialty Courses", text: "MPT Master Specialty Courses" },
+                  { value: "Competitive Exam Prep (NPTE / GPAT)", text: "Competitive Exam Prep (NPTE / GPAT)" }
+                ];
+
+                function updateDynamicDropdownOptions() {
+                  const categorySelect = document.getElementById('interestCategorySelect');
+                  const targetSelect = document.getElementById('dynamicOptionSelect');
+                  const labelElement = document.getElementById('dynamicDropdownLabel');
+                  
+                  if (!categorySelect || !targetSelect) return;
+                  
+                  const selectedCategory = categorySelect.value;
+                  targetSelect.innerHTML = '';
+
+                  if (selectedCategory === 'services') {
+                    labelElement.innerHTML = '<i class="ri-heart-pulse-line text-primary me-1"></i> Select Clinical Service';
+                    clinicalServicesOptions.forEach(opt => {
+                      const option = document.createElement('option');
+                      option.value = opt.value;
+                      option.textContent = opt.text;
+                      targetSelect.appendChild(option);
+                    });
+                  } else {
+                    labelElement.innerHTML = '<i class="ri-graduation-cap-line text-primary me-1"></i> Select Academic Year / Course';
+                    academicCoursesOptions.forEach(opt => {
+                      const option = document.createElement('option');
+                      option.value = opt.value;
+                      option.textContent = opt.text;
+                      targetSelect.appendChild(option);
+                    });
+                  }
+                }
+
+                // Initial populate on load
+                document.addEventListener('DOMContentLoaded', updateDynamicDropdownOptions);
+              </script>
 
               <div class="mb-3">
                 <label class="form-label fw-bold text-dark small">

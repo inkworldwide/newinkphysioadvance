@@ -117,24 +117,89 @@
                   </div>
                 </div>
 
-                <div class="mb-3">
-                  <label class="form-label fw-bold text-dark small">
-                    <i class="ri-chat-3-line text-primary me-1"></i> Topic / Subject
-                  </label>
-                  <select name="subject" class="form-select form-select-lg bg-light-subtle border-light-subtle" required>
-                    <option value="General Inquiry" selected>General Student Inquiry</option>
-                    <option value="Course / Subject Question">Course / Subject Content Question</option>
-                    <option value="Live Workshop Info">Live Workshop & Seminar Details</option>
-                    <option value="Partnership / College Connect">College Connect & Partnerships</option>
-                    <option value="Technical Support">Technical / Website Support</option>
-                  </select>
+                <!-- Dynamic Interest Category & Services / Year/Courses Switcher -->
+                <div class="row g-3 mb-3">
+                  <!-- Left Field: Category Type Selector -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark small">
+                      <i class="ri-apps-line text-primary me-1"></i> Interest Category
+                    </label>
+                    <select id="contactInterestCategorySelect" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;" onchange="updateContactDropdownOptions()">
+                      <option value="services" selected>🏥 Clinical Services</option>
+                      <option value="courses">🎓 Year / Academic Courses</option>
+                    </select>
+                  </div>
+
+                  <!-- Right Field: Dynamic Option Dropdown -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold text-dark small" id="contactDynamicDropdownLabel">
+                      <i class="ri-heart-pulse-line text-primary me-1"></i> Select Clinical Service
+                    </label>
+                    <select name="subject" id="contactDynamicOptionSelect" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;">
+                      <!-- Dynamically populated via JS -->
+                    </select>
+                  </div>
                 </div>
+
+                <!-- Dynamic Option Switcher Script -->
+                <script>
+                  const contactClinicalServicesOptions = [
+                    { value: "Post-Surgery Physiotherapy", text: "Post-Surgery Physiotherapy" },
+                    { value: "Orthopedic & Joint Rehabilitation", text: "Orthopedic & Joint Rehabilitation" },
+                    { value: "Neurological Rehabilitation (Stroke / TBI)", text: "Neurological Rehabilitation (Stroke / TBI)" },
+                    { value: "Sports Injury & Athletic Conditioning", text: "Sports Injury & Athletic Conditioning" },
+                    { value: "Cardiorespiratory ICU & Pulmonary Therapy", text: "Cardiorespiratory ICU & Pulmonary Therapy" },
+                    { value: "Pediatric & Geriatric Physical Therapy", text: "Pediatric & Geriatric Physical Therapy" },
+                    { value: "Clinical Internship & Practical Guidance", text: "Clinical Internship & Practical Guidance" },
+                    { value: "General Physiotherapy Consultation", text: "General Physiotherapy Consultation" }
+                  ];
+
+                  const contactAcademicCoursesOptions = [
+                    { value: "Year 1 (Foundation & Human Osteology)", text: "Year 1 (Foundation & Human Osteology)" },
+                    { value: "Year 2 (Pathology & Biomechanics)", text: "Year 2 (Pathology & Biomechanics)" },
+                    { value: "Year 3 (Medicine, Surgery & Ortho)", text: "Year 3 (Medicine, Surgery & Ortho)" },
+                    { value: "Year 4 (Neurology, Sports & Rehab)", text: "Year 4 (Neurology, Sports & Rehab)" },
+                    { value: "MPT Master Specialty Courses", text: "MPT Master Specialty Courses" },
+                    { value: "Research & Biostatistics Desk", text: "Research & Biostatistics Desk" }
+                  ];
+
+                  function updateContactDropdownOptions() {
+                    const categorySelect = document.getElementById('contactInterestCategorySelect');
+                    const targetSelect = document.getElementById('contactDynamicOptionSelect');
+                    const label = document.getElementById('contactDynamicDropdownLabel');
+
+                    if (!categorySelect || !targetSelect || !label) return;
+
+                    const selectedCategory = categorySelect.value;
+                    targetSelect.innerHTML = '';
+
+                    if (selectedCategory === 'services') {
+                      label.innerHTML = '<i class="ri-heart-pulse-line text-primary me-1"></i> Select Clinical Service';
+                      contactClinicalServicesOptions.forEach(opt => {
+                        const el = document.createElement('option');
+                        el.value = opt.value;
+                        el.textContent = opt.text;
+                        targetSelect.appendChild(el);
+                      });
+                    } else {
+                      label.innerHTML = '<i class="ri-graduation-cap-line text-primary me-1"></i> Select Year / Academic Course';
+                      contactAcademicCoursesOptions.forEach(opt => {
+                        const el = document.createElement('option');
+                        el.value = opt.value;
+                        el.textContent = opt.text;
+                        targetSelect.appendChild(el);
+                      });
+                    }
+                  }
+
+                  document.addEventListener('DOMContentLoaded', updateContactDropdownOptions);
+                </script>
 
                 <div class="mb-4">
                   <label class="form-label fw-bold text-dark small">
                     <i class="ri-message-3-line text-primary me-1"></i> Your Message
                   </label>
-                  <textarea name="message" rows="5" class="form-control bg-light-subtle border-light-subtle" placeholder="How can our team help you today? Please provide details..." required></textarea>
+                  <textarea name="message" rows="4" class="form-control bg-light-subtle border-light-subtle" placeholder="How can our team help you today? Please provide details..." required></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm" style="background: linear-gradient(135deg, #0a5dc2 0%, #0369a1 100%); border: none;">

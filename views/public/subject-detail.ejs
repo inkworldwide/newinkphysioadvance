@@ -22,90 +22,53 @@
       </div>
     </div>
 
-    <!-- Quick Stats Pill Row -->
-    <div class="d-flex align-items-center gap-2.5 mt-4 flex-wrap">
-      <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm" style="font-size: 0.85rem; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);">
-        <i class="ri-book-2-line me-1.5 text-warning"></i> <strong><%= courses.length %></strong> Course<%= courses.length !== 1 ? 's' : '' %>
-      </span>
-      <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm" style="font-size: 0.85rem; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);">
-        <i class="ri-gift-line me-1.5 text-success"></i> <strong>100% Free Access</strong>
-      </span>
-      <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm" style="font-size: 0.85rem; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);">
-        <i class="ri-film-line me-1.5 text-info"></i> <strong>Direct HTML5 3D Video</strong>
-      </span>
-      <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm" style="font-size: 0.85rem; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);">
-        <i class="ri-award-line me-1.5 text-warning"></i> <strong>Full BPT Syllabus</strong>
-      </span>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SECTION 1: COURSES IN THIS SUBJECT ============ -->
-<section class="pe-section bg-white py-5 border-bottom">
-  <div class="container">
-    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
-      <div>
-        <h3 class="fw-bold text-dark mb-1">Courses in <%= category.name %></h3>
-        <p class="text-muted small mb-0">Master <%= category.name %> with comprehensive lectures, curriculum notes, and study modules.</p>
+    <!-- Quick Stats Pill Row & Course CTA -->
+    <div class="d-flex align-items-center justify-content-between gap-3 mt-4 flex-wrap">
+      <div class="d-flex align-items-center gap-2.5 flex-wrap">
+        <a href="/subjects/<%= category.slug %>/course" class="text-decoration-none">
+          <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm pe-badge-btn" style="font-size: 0.85rem; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+            <i class="ri-book-2-line me-1.5 text-warning"></i> <strong><%= courses.length %></strong> Course<%= courses.length !== 1 ? 's' : '' %>
+          </span>
+        </a>
+        <a href="#grid-dashboard" class="text-decoration-none">
+          <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm pe-badge-btn" style="font-size: 0.85rem; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+            <i class="ri-gift-line me-1.5 text-success"></i> <strong>100% Free Access</strong>
+          </span>
+        </a>
+        <a href="/subjects/<%= category.slug %>/module/hd-videos" class="text-decoration-none">
+          <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm pe-badge-btn" style="font-size: 0.85rem; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+            <i class="ri-film-line me-1.5 text-info"></i> <strong>Direct HTML5 3D Video</strong>
+          </span>
+        </a>
+        <a href="/subjects/<%= category.slug %>/module/syllabus" class="text-decoration-none">
+          <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm pe-badge-btn" style="font-size: 0.85rem; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+            <i class="ri-award-line me-1.5 text-warning"></i> <strong>Full BPT Syllabus</strong>
+          </span>
+        </a>
+        <a href="/subjects/<%= category.slug %>/module/notes" class="text-decoration-none">
+          <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm pe-badge-btn" style="font-size: 0.85rem; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+            <i class="ri-file-text-line me-1.5 text-info"></i> <strong>Curriculum Notes</strong>
+          </span>
+        </a>
+        <a href="/subjects/<%= category.slug %>/module/research" class="text-decoration-none">
+          <span class="badge bg-white-20 text-white px-3.5 py-2 rounded-pill font-weight-semibold shadow-sm pe-badge-btn" style="font-size: 0.85rem; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+            <i class="ri-microscope-line me-1.5 text-warning"></i> <strong>Research Desk</strong>
+          </span>
+        </a>
       </div>
-      <a href="/subjects" class="btn btn-outline-primary rounded-pill px-4">
-        <i class="ri-arrow-left-line me-1"></i> All Subjects
+
+      <a href="/subjects/<%= category.slug %>/course" class="btn btn-warning btn-lg rounded-pill font-weight-bold px-4 py-2.5 shadow-lg text-dark d-flex align-items-center gap-2" style="background-color: #f59e0b !important; border: none;">
+        <i class="ri-play-circle-fill fs-4"></i> Enter Complete <%= category.name %> Course <i class="ri-arrow-right-line"></i>
       </a>
     </div>
-
-    <% if (courses.length === 0) { %>
-      <div class="card border-0 shadow-sm rounded-4 text-center py-4 bg-light">
-        <h6 class="fw-bold text-dark mb-1">No separate courses published in <%= category.name %> yet.</h6>
-        <p class="text-muted small mb-0">Explore the complete interactive modules, 3D videos, and syllabus below!</p>
-      </div>
-    <% } %>
-
-    <div class="row g-4">
-      <% courses.forEach(c => { %>
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white transition-all pe-course-card">
-            <img src="<%= c.thumbnail || '/images/courses/default-course.jpg' %>" alt="<%= c.title %>" class="card-img-top" style="height: 180px; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80'">
-            <div class="card-body p-4 d-flex flex-column">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-primary-subtle text-primary font-weight-bold px-2.5 py-1 rounded-pill small">
-                  <%= category.name %>
-                </span>
-                <span class="badge bg-light text-muted border px-2 py-1 rounded-pill small">
-                  <%= c.level %>
-                </span>
-              </div>
-              <h5 class="fw-bold text-dark mb-2" style="line-height: 1.4;"><%= c.title %></h5>
-              <p class="text-secondary small mb-3 line-clamp-2" style="font-size: 0.85rem;"><%= c.excerpt || c.description %></p>
-              
-              <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                <span class="badge bg-success-subtle text-success font-weight-bold px-3 py-1.5 rounded-pill">
-                  100% Free Access
-                </span>
-                <a href="/courses/<%= c.slug %>" class="btn btn-sm btn-primary rounded-pill px-3.5 font-weight-bold" style="background: #0a5dc2; border-color: #0a5dc2;">
-                  View Course <i class="ri-arrow-right-line ms-1"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      <% }) %>
-    </div>
   </div>
 </section>
+
+<!-- ============ <!-- ============ INTERACTIVE PORTAL TABS & MODULES ============ -->
 
 <!-- ============ SECTION 2: UBC NEUROANATOMY-STYLE INTERACTIVE GRID DASHBOARD ============ -->
 <section class="pe-section bg-light-subtle py-5 border-bottom">
   <div class="container">
-    <div class="text-center mb-5">
-      <span class="badge bg-primary-subtle text-primary font-weight-bold text-uppercase px-3.5 py-2 rounded-pill mb-2" style="font-size: 0.78rem;">
-        <i class="ri-dashboard-3-line me-1"></i> Interactive Subject Portal
-      </span>
-      <h2 class="fw-bold text-dark display-6 mb-2"><%= category.name %> Functional Dashboard</h2>
-      <p class="text-muted mx-auto" style="max-width: 650px; font-size: 1.05rem;">
-        Click any module tile to open its dedicated view with complete 3D models, cross-sections, video prosections, or full syllabus notes.
-      </p>
-    </div>
-
     <!-- UBC NEUROANATOMY GRID DASHBOARD CONTAINER -->
     <div class="pe-neuro-grid-wrapper p-4 rounded-4 shadow-lg bg-white border">
       <div class="row g-3">
@@ -154,7 +117,7 @@
             <!-- 1. Native HTML5 MP4 Video Player Layer (Active by Default) -->
             <div id="demo3DVideoContainer" class="w-100 h-100 position-relative">
               <video id="demoHTML5Video" autoplay loop muted playsinline controls class="w-100 h-100" style="object-fit: cover; min-height: 340px; background: #020617;">
-                <source src="https://www.neuroanatomy.ca/index_files/neurotrailer.mp4" type="video/mp4">
+                <source src="/videos/stream/<%= category.slug %>-intro" type="video/mp4">
                 <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
                 Your browser does not support HTML5 video.
               </video>
@@ -196,7 +159,7 @@
           </div>
         </div>
 
-        <!-- Right Column: Videos, Interactive Modules -->
+        <!-- Right Column: 3 Boxes (HD Videos, Interactive Modules, MRIs & Radiology) -->
         <div class="col-lg-3 d-flex flex-column gap-3">
           <!-- 4. Videos -->
           <a href="/subjects/<%= category.slug %>/module/hd-videos" class="text-decoration-none flex-fill d-flex">
@@ -213,10 +176,18 @@
               <h5 class="fw-bold text-white mb-0">Interactive Modules <i class="ri-arrow-right-up-line fs-6"></i></h5>
             </div>
           </a>
+
+          <!-- 6. MRIs & Radiology -->
+          <a href="/subjects/<%= category.slug %>/module/mri-scans" class="text-decoration-none flex-fill d-flex">
+            <div class="pe-neuro-card p-4 rounded-4 text-white text-center cursor-pointer flex-fill d-flex flex-column align-items-center justify-content-center transition-all shadow-sm" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);">
+              <i class="ri-pulse-line display-5 mb-2 text-white"></i>
+              <h5 class="fw-bold text-white mb-0">MRIs & Radiology <i class="ri-arrow-right-up-line fs-6"></i></h5>
+            </div>
+          </a>
         </div>
 
-        <!-- Bottom Row: Syllabus, Stroke Model, MRIs -->
-        <div class="col-md-4">
+        <!-- Bottom Row: 2 Equal Boxes (Syllabus, Stroke & Pathology) -->
+        <div class="col-md-6">
           <a href="/subjects/<%= category.slug %>/module/syllabus" class="text-decoration-none">
             <div class="pe-neuro-card p-4 rounded-4 text-white text-center cursor-pointer transition-all shadow-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
               <i class="ri-quill-pen-line fs-2 mb-1 text-white"></i>
@@ -225,7 +196,7 @@
           </a>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <a href="/subjects/<%= category.slug %>/module/stroke-models" class="text-decoration-none">
             <div class="pe-neuro-card p-4 rounded-4 text-white text-center cursor-pointer transition-all shadow-sm" style="background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);">
               <i class="ri-heart-pulse-line fs-2 mb-1 text-white"></i>
@@ -234,312 +205,14 @@
           </a>
         </div>
 
-        <div class="col-md-4">
-          <a href="/subjects/<%= category.slug %>/module/mri-scans" class="text-decoration-none">
-            <div class="pe-neuro-card p-4 rounded-4 text-white text-center cursor-pointer transition-all shadow-sm" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
-              <i class="ri-pulse-line fs-2 mb-1 text-white"></i>
-              <h5 class="fw-bold text-white mb-0">MRIs & Radiology <i class="ri-arrow-right-up-line fs-6"></i></h5>
-            </div>
-          </a>
-        </div>
-
       </div>
     </div>
-
-    <!-- Related Academic Subjects Strip -->
-    <div class="mt-4 card border-0 shadow-sm rounded-4 p-4 bg-white">
-      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-        <h6 class="fw-bold text-dark mb-0"><i class="ri-links-line me-1 text-primary"></i> Related Academic Subjects & Topics:</h6>
-        <span class="badge bg-light text-muted border">BPT Curriculum Path</span>
-      </div>
-      <div class="d-flex flex-wrap gap-2">
-        <% (interactiveData.relatedSubjects || []).forEach(rs => { %>
-          <a href="/subjects/<%= rs.slug %>" class="btn btn-sm btn-light border rounded-pill px-3 py-1.5 fw-bold text-dark">
-            <i class="ri-book-2-line text-primary me-1"></i> <%= rs.name %> <small class="text-muted me-1">(Year <%= rs.year %>)</small> <i class="ri-arrow-right-s-line text-muted"></i>
-          </a>
-        <% }) %>
-      </div>
-    </div>
-
   </div>
 </section>
 
-<!-- ============ DETAILED INTERACTIVE LEARNING SECTIONS ============ -->
-<div class="pe-section bg-white py-5">
-  <div class="container">
+<!-- ============ THREE.JS & INTERACTIVE MEDIA ENGINE ============ -->
 
-    <!-- 1. FULL SYLLABUS SECTION -->
-    <div id="sec-syllabus" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-primary text-white font-weight-bold px-3 py-1 rounded-pill small mb-2">COMPLETE BPT SYLLABUS</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-book-open-line text-primary me-2"></i>Complete <%= category.name %> Syllabus & Topics</h3>
-          <p class="text-muted small mb-0">Full curriculum units, lecture objectives, and high-yield examination topics.</p>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <% (interactiveData.syllabusUnits || []).forEach((u, uIdx) => { %>
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-light-subtle">
-              <div class="d-flex align-items-center justify-content-between mb-3">
-                <span class="badge bg-primary text-white font-weight-bold px-3 py-1 rounded-pill small"><%= u.unit %></span>
-                <span class="badge bg-success-subtle text-success font-weight-bold px-2.5 py-1 rounded-pill small"><i class="ri-check-line me-1"></i> Active Syllabus</span>
-              </div>
-              <h5 class="fw-bold text-dark mb-2"><%= u.title %></h5>
-              <p class="text-secondary small mb-3" style="font-size: 0.88rem; line-height: 1.6;"><%= u.description %></p>
-              
-              <div class="fw-bold small text-dark mb-2"><i class="ri-key-line text-warning me-1"></i> Learning Objectives:</div>
-              <ul class="list-unstyled mb-3">
-                <% u.objectives.forEach(obj => { %>
-                  <li class="small text-secondary mb-1.5 d-flex align-items-start"><i class="ri-arrow-right-s-fill text-primary me-1.5 mt-0.5"></i> <%= obj %></li>
-                <% }) %>
-              </ul>
-
-              <div class="border-top pt-3 mt-auto">
-                <div class="fw-bold small text-dark mb-2">High-Yield Topics:</div>
-                <div class="d-flex flex-wrap gap-1.5">
-                  <% u.topics.forEach(tp => { %>
-                    <span class="badge bg-white text-dark border rounded-pill px-2.5 py-1 small"><%= tp %></span>
-                  <% }) %>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    </div>
-
-    <!-- 2. REGIONS SECTION -->
-    <div id="sec-regions" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-info text-white font-weight-bold px-3 py-1 rounded-pill small mb-2">STRUCTURAL REGIONS</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-brain-line text-info me-2"></i>Anatomical Regions & Structural Maps</h3>
-          <p class="text-muted small mb-0">Overview of primary structural regions, nerve pathways, and functional maps.</p>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <% (interactiveData.regions || []).forEach(rg => { %>
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white border">
-              <div class="pe-category-icon mb-3" style="width: 52px; height: 52px; font-size: 1.5rem; background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-                <i class="<%= rg.icon %>"></i>
-              </div>
-              <h5 class="fw-bold text-dark mb-2"><%= rg.name %></h5>
-              <p class="text-secondary small mb-0" style="line-height: 1.6;"><%= rg.desc %></p>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    </div>
-
-    <!-- 3. INTERACTIVE HOTSPOT MODULE -->
-    <div id="sec-hotspots" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-warning text-dark font-weight-bold px-3 py-1 rounded-pill small mb-2">INTERACTIVE IDENTIFICATION</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-focus-3-line text-warning me-2"></i>Interactive HD Hotspot Diagram Model</h3>
-          <p class="text-muted small mb-0">Click numbered pin buttons on the diagram to inspect anatomical structures, nerve supply, and biomechanics.</p>
-        </div>
-      </div>
-
-      <div class="row g-4 align-items-stretch">
-        <div class="col-lg-6">
-          <div class="card border-0 shadow-sm rounded-4 p-3 bg-light-subtle text-center h-100 position-relative">
-            <div class="position-relative d-inline-block mx-auto my-auto" style="max-width: 100%;">
-              <img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=800&auto=format&fit=crop&q=80" alt="Hotspot Diagram" class="img-fluid rounded-4 shadow-sm" style="max-height: 420px; object-fit: cover;">
-              <% (interactiveData.hotspots || []).forEach(hs => { %>
-                <button type="button" class="btn btn-warning btn-sm rounded-circle position-absolute translate-middle fw-bold shadow-lg pe-hotspot-pin" style="left: <%= hs.x %>%; top: <%= hs.y %>%; width: 34px; height: 34px; border: 3px solid #ffffff;" onclick="showHotspotInfo(<%= hs.id %>)">
-                  <%= hs.id %>
-                </button>
-              <% }) %>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-center border">
-            <% const defaultHs = (interactiveData.hotspots || [])[0] || {}; %>
-            <span class="badge bg-primary text-white font-weight-bold px-3 py-1.5 rounded-pill w-fit mb-3" id="hsBadge">
-              Pin Structure #<span id="hsId"><%= defaultHs.id || 1 %></span>
-            </span>
-            <h4 class="fw-bold text-dark mb-2" id="hsTitle"><%= defaultHs.title || 'Anatomical Structure' %></h4>
-            <p class="text-secondary leading-relaxed mb-4" id="hsDesc" style="font-size: 0.95rem; line-height: 1.6;"><%= defaultHs.description || 'Click any numbered pin on the left diagram to view structural details.' %></p>
-
-            <div class="bg-light rounded-4 p-3.5 mb-3 border">
-              <div class="fw-bold text-dark small mb-1"><i class="ri-flashlight-line text-warning me-1"></i> Innervation / Supply:</div>
-              <div class="text-primary font-weight-semibold small" id="hsNerve"><%= defaultHs.nerveSupply || '-' %></div>
-            </div>
-
-            <div class="bg-light rounded-4 p-3.5 border">
-              <div class="fw-bold text-dark small mb-1"><i class="ri-run-line text-success me-1"></i> Clinical Action / Biomechanics:</div>
-              <div class="text-dark small fw-semibold" id="hsAction"><%= defaultHs.action || '-' %></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. ROTATABLE 3D MODEL -->
-    <div id="sec-3d" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-info text-white font-weight-bold px-3 py-1 rounded-pill small mb-2">3D RECONSTRUCTION</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-box-3-line text-info me-2"></i>Interactive 3D Anatomical Model Viewer</h3>
-          <p class="text-muted small mb-0">Orbit, rotate 360°, and inspect anatomical structures in real-time 3D.</p>
-        </div>
-      </div>
-
-      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border">
-        <div class="ratio ratio-21x9 rounded-4 overflow-hidden border shadow-inner bg-dark">
-          <iframe src="<%= (interactiveData.threeDModel || {}).modelUrl %>" title="3D Model Viewer" allowfullscreen style="border:none;"></iframe>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5. CROSS-SECTIONS WITH TOGGLE LABELS -->
-    <div id="sec-sections" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-primary text-white font-weight-bold px-3 py-1 rounded-pill small mb-2">ANATOMICAL SLICES</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-layout-grid-line text-primary me-2"></i>Coronal, Sagittal & Transverse Cross-Sections</h3>
-          <p class="text-muted small mb-0">Click "Toggle Labels" to test your self-assessment identification.</p>
-        </div>
-        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3.5 font-weight-bold" onclick="toggleAllLabels()">
-          <i class="ri-eye-line me-1"></i> Toggle Labels (Show/Hide)
-        </button>
-      </div>
-
-      <div class="row g-4">
-        <% (interactiveData.crossSections || []).forEach((cs, csIdx) => { %>
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white border">
-              <img src="<%= cs.image %>" alt="<%= cs.title %>" class="card-img-top" style="height: 200px; object-fit: cover;">
-              <div class="card-body p-4">
-                <span class="badge bg-primary-subtle text-primary font-weight-bold px-3 py-1 rounded-pill small mb-2"><%= cs.view %></span>
-                <h6 class="fw-bold text-dark mb-3"><%= cs.title %></h6>
-                <div class="fw-bold text-dark small mb-2">Identified Structures:</div>
-                <div class="d-flex flex-wrap gap-1.5 cs-labels-box" id="cs-labels-<%= csIdx %>">
-                  <% cs.labels.forEach(lbl => { %>
-                    <span class="badge bg-light text-dark border rounded-pill px-2.5 py-1 small"><%= lbl %></span>
-                  <% }) %>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    </div>
-
-    <!-- 6. CLINICAL MRIS -->
-    <div id="sec-mri" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-success text-white font-weight-bold px-3 py-1 rounded-pill small mb-2">RADIOLOGY DESK</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-pulse-line text-success me-2"></i>Clinical MRI & Scan Diagnostic Desk</h3>
-        </div>
-      </div>
-
-      <% (interactiveData.mriScans || []).forEach(mri => { %>
-        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border mb-4">
-          <h5 class="fw-bold text-dark mb-3"><%= mri.title %></h5>
-          <div class="row g-4">
-            <div class="col-md-6 text-center">
-              <div class="rounded-4 overflow-hidden border mb-3">
-                <img src="<%= mri.normalImg %>" alt="Normal Scan" class="img-fluid w-100" style="height: 220px; object-fit: cover;">
-              </div>
-              <span class="badge bg-success-subtle text-success font-weight-bold px-3 py-1.5 rounded-pill mb-2">Normal Anatomical Scan</span>
-              <p class="text-secondary small mb-0"><%= mri.anatomyDesc %></p>
-            </div>
-
-            <div class="col-md-6 text-center">
-              <div class="rounded-4 overflow-hidden border mb-3">
-                <img src="<%= mri.pathologyImg %>" alt="Pathology Scan" class="img-fluid w-100" style="height: 220px; object-fit: cover;">
-              </div>
-              <span class="badge bg-danger-subtle text-danger font-weight-bold px-3 py-1.5 rounded-pill mb-2">Pathology Lesion Scan</span>
-              <p class="text-secondary small mb-0"><%= mri.mriDesc %></p>
-            </div>
-          </div>
-        </div>
-      <% }) %>
-    </div>
-
-    <!-- 7. STROKE & PATHOLOGY MODELS -->
-    <div id="sec-cases" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-danger text-white font-weight-bold px-3 py-1 rounded-pill small mb-2">CLINICAL PATHOLOGY</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-heart-pulse-line text-danger me-2"></i>Stroke & Clinical Pathology Case Models</h3>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <% (interactiveData.clinicalCases || []).forEach(cc => { %>
-          <div class="col-md-6">
-            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white border">
-              <span class="badge bg-danger-subtle text-danger font-weight-bold px-3 py-1.5 rounded-pill w-fit mb-3" style="font-size: 0.8rem;">
-                Clinical Case Model
-              </span>
-              <h5 class="fw-bold text-dark mb-3"><%= cc.title %></h5>
-              
-              <div class="bg-light rounded-3 p-3 mb-3 border">
-                <div class="fw-bold text-dark small mb-1"><i class="ri-user-search-line me-1 text-primary"></i> Patient Presentation:</div>
-                <p class="text-secondary small mb-0"><%= cc.history %></p>
-              </div>
-
-              <div class="fw-bold text-dark small mb-2"><i class="ri-stethoscope-line me-1 text-warning"></i> Diagnostic Findings:</div>
-              <ul class="list-unstyled mb-3">
-                <% cc.findings.forEach(f => { %>
-                  <li class="small text-secondary mb-1.5 d-flex align-items-center"><i class="ri-checkbox-circle-fill text-danger me-2"></i> <%= f %></li>
-                <% }) %>
-              </ul>
-
-              <div class="bg-primary-subtle text-primary rounded-3 p-3 mt-auto border border-primary-subtle">
-                <div class="fw-bold small mb-1"><i class="ri-heart-pulse-fill me-1"></i> Physiotherapy Rehab Protocol:</div>
-                <div class="small fw-semibold"><%= cc.rehabPlan %></div>
-              </div>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    </div>
-
-    <!-- 8. HD VIDEOS WITH WORKING EMBED PLAYERS -->
-    <div id="sec-videos" class="mb-5 pt-3">
-      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 border-bottom pb-3">
-        <div>
-          <span class="badge bg-danger text-white font-weight-bold px-3 py-1 rounded-pill small mb-2">LECTURE VIDEOS</span>
-          <h3 class="fw-bold text-dark mb-1"><i class="ri-vidicon-line text-danger me-2"></i>HD Video Demonstrations & Dissections</h3>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <% (interactiveData.videos || []).forEach((v, vIdx) => { %>
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white border">
-              <div class="ratio ratio-16x9 bg-dark">
-                <iframe src="<%= v.embedUrl %>" title="<%= v.title %>" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border:none;"></iframe>
-              </div>
-              <div class="card-body p-4 d-flex flex-column">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                  <span class="badge bg-danger-subtle text-danger font-weight-bold px-2.5 py-1 rounded-pill small"><%= v.type %></span>
-                  <span class="text-muted small"><i class="ri-time-line me-1"></i> <%= v.duration %></span>
-                </div>
-                <h6 class="fw-bold text-dark mb-2"><%= v.title %></h6>
-                <div class="text-muted small mt-auto pt-2 border-top">
-                  <i class="ri-user-3-line me-1 text-primary"></i> Presenter: <strong><%= v.instructor %></strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% }) %>
-      </div>
-    </div>
-
-  </div>
-</div>
+<!-- ============ -->
 
 <!-- Dynamic Grid Card Styling & Interactive WebGL Script -->
 <style>

@@ -6,8 +6,11 @@ const { requireAuth } = require('../middleware/auth');
 router.get('/', publicController.home);
 
 router.get('/subjects', publicController.subjectsIndex);
+router.get('/subjects/:slug/course', publicController.subjectCourseDetail);
+router.get('/subjects/:slug/lesson/:lessonId', publicController.subjectLessonDetail);
 router.get('/subjects/:slug/module/:section', publicController.subjectSectionDetail);
 router.get('/subjects/:slug', publicController.subjectDetail);
+router.get('/videos/stream/:videoId', publicController.streamVideo);
 
 router.get('/courses', publicController.courseList);
 router.get('/courses/:slug', publicController.courseDetail);

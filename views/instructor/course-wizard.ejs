@@ -1,0 +1,716 @@
+<!-- ============ INSTRUCTOR COURSE CREATION WIZARD ============ -->
+<div class="container-fluid py-4">
+  
+  <!-- Header Title & Actions -->
+  <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1">
+        <i class="ri-magic-line text-primary me-2"></i><%= course ? 'Edit Course Wizard' : 'Create New Course Wizard' %>
+      </h3>
+      <p class="text-secondary small mb-0">Follow the 5-step wizard to build a professional physiotherapy course with internal video, 3D WebGL models, notes, flashcards, and quizzes.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <a href="/instructor/courses" class="btn btn-outline-secondary rounded-pill px-3.5 font-weight-medium">
+        <i class="ri-arrow-left-line me-1"></i> My Courses
+      </a>
+      <% if (course) { %>
+        <a href="/courses/<%= course.slug %>" target="_blank" class="btn btn-outline-info rounded-pill px-3.5 font-weight-medium">
+          <i class="ri-eye-line me-1"></i> Preview as Student
+        </a>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- ============ STEP PROGRESS INDICATOR ============ -->
+  <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white border">
+    <div class="d-flex align-items-center justify-content-between position-relative z-1 flex-wrap gap-3">
+      
+      <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=1" class="d-flex align-items-center gap-2 text-decoration-none <%= step === 1 ? 'text-primary font-weight-bold' : 'text-secondary' %>">
+        <span class="badge rounded-circle p-2 d-flex align-items-center justify-content-center <%= step >= 1 ? 'bg-primary text-white' : 'bg-light text-secondary border' %>" style="width: 38px; height: 38px; font-size: 0.95rem;">1</span>
+        <div>
+          <span class="d-block small text-uppercase font-weight-bold">Step 1</span>
+          <span class="fs-6">Basic Course Info</span>
+        </div>
+      </a>
+
+      <div class="flex-grow-1 bg-secondary bg-opacity-25 d-none d-md-block" style="height: 2px;"></div>
+
+      <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=2" class="d-flex align-items-center gap-2 text-decoration-none <%= step === 2 ? 'text-primary font-weight-bold' : 'text-secondary' %>">
+        <span class="badge rounded-circle p-2 d-flex align-items-center justify-content-center <%= step >= 2 ? 'bg-primary text-white' : 'bg-light text-secondary border' %>" style="width: 38px; height: 38px; font-size: 0.95rem;">2</span>
+        <div>
+          <span class="d-block small text-uppercase font-weight-bold">Step 2</span>
+          <span class="fs-6">Course Structure</span>
+        </div>
+      </a>
+
+      <div class="flex-grow-1 bg-secondary bg-opacity-25 d-none d-md-block" style="height: 2px;"></div>
+
+      <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=3" class="d-flex align-items-center gap-2 text-decoration-none <%= step === 3 ? 'text-primary font-weight-bold' : 'text-secondary' %>">
+        <span class="badge rounded-circle p-2 d-flex align-items-center justify-content-center <%= step >= 3 ? 'bg-primary text-white' : 'bg-light text-secondary border' %>" style="width: 38px; height: 38px; font-size: 0.95rem;">3</span>
+        <div>
+          <span class="d-block small text-uppercase font-weight-bold">Step 3</span>
+          <span class="fs-6">Multi-Content Builder</span>
+        </div>
+      </a>
+
+      <div class="flex-grow-1 bg-secondary bg-opacity-25 d-none d-md-block" style="height: 2px;"></div>
+
+      <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=4" class="d-flex align-items-center gap-2 text-decoration-none <%= step === 4 ? 'text-primary font-weight-bold' : 'text-secondary' %>">
+        <span class="badge rounded-circle p-2 d-flex align-items-center justify-content-center <%= step >= 4 ? 'bg-primary text-white' : 'bg-light text-secondary border' %>" style="width: 38px; height: 38px; font-size: 0.95rem;">4</span>
+        <div>
+          <span class="d-block small text-uppercase font-weight-bold">Step 4</span>
+          <span class="fs-6">Assessments</span>
+        </div>
+      </a>
+
+      <div class="flex-grow-1 bg-secondary bg-opacity-25 d-none d-md-block" style="height: 2px;"></div>
+
+      <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=5" class="d-flex align-items-center gap-2 text-decoration-none <%= step === 5 ? 'text-primary font-weight-bold' : 'text-secondary' %>">
+        <span class="badge rounded-circle p-2 d-flex align-items-center justify-content-center <%= step >= 5 ? 'bg-success text-white' : 'bg-light text-secondary border' %>" style="width: 38px; height: 38px; font-size: 0.95rem;">5</span>
+        <div>
+          <span class="d-block small text-uppercase font-weight-bold">Step 5</span>
+          <span class="fs-6">Review & Publish</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- WIZARD FORM CONTAINER -->
+  <form action="/instructor/courses/wizard/save" method="POST" enctype="application/x-www-form-urlencoded" id="wizardForm">
+    <input type="hidden" name="course_id" value="<%= course ? course.id : '' %>">
+    <input type="hidden" name="current_step" value="<%= step %>">
+
+    <!-- ============ STEP 1: BASIC COURSE INFORMATION ============ -->
+    <% if (step === 1) { %>
+      <input type="hidden" name="next_step" value="2">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border mb-4">
+        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2"><i class="ri-information-line text-primary me-2"></i>Step 1 — Basic Course Information</h5>
+        
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label font-weight-semibold text-dark">Course Title <span class="text-danger">*</span></label>
+            <input type="text" name="title" class="form-control rounded-3" value="<%= course ? course.title : '' %>" placeholder="e.g. Clinical Functional Anatomy & Movement Assessment" required>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label font-weight-semibold text-dark">Subject / Category <span class="text-danger">*</span></label>
+            <select name="category_id" class="form-select rounded-3" required>
+              <% categories.forEach(cat => { %>
+                <option value="<%= cat.id %>" <%= (course && course.category_id === cat.id) ? 'selected' : '' %>><%= cat.name %> (Year <%= cat.year || 'Elective' %>)</option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label font-weight-semibold text-dark">Subtitle (One-Line Summary)</label>
+            <input type="text" name="subtitle" class="form-control rounded-3" value="<%= course ? course.subtitle : '' %>" placeholder="e.g. Master human osteology, muscle origins/insertions, and nerve pathways.">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label font-weight-semibold text-dark">Full Course Description</label>
+            <textarea name="description" rows="4" class="form-control rounded-3" placeholder="Explain what students will master in this physiotherapy course..."><%= course ? course.description : '' %></textarea>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label font-weight-semibold text-dark">Academic Year / Program</label>
+            <select name="target_exam" class="form-select rounded-3">
+              <option value="BPT 1st Year" <%= (course && course.target_exam === 'BPT 1st Year') ? 'selected' : '' %>>BPT 1st Year</option>
+              <option value="BPT 2nd Year" <%= (course && course.target_exam === 'BPT 2nd Year') ? 'selected' : '' %>>BPT 2nd Year</option>
+              <option value="BPT 3rd Year" <%= (course && course.target_exam === 'BPT 3rd Year') ? 'selected' : '' %>>BPT 3rd Year</option>
+              <option value="BPT 4th Year" <%= (course && course.target_exam === 'BPT 4th Year') ? 'selected' : '' %>>BPT 4th Year</option>
+              <option value="MPT Master Specialty" <%= (course && course.target_exam === 'MPT Master Specialty') ? 'selected' : '' %>>MPT Master Specialty</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label font-weight-semibold text-dark">Difficulty Level</label>
+            <select name="level" class="form-select rounded-3">
+              <option value="Beginner" <%= (course && course.level === 'Beginner') ? 'selected' : '' %>>Beginner</option>
+              <option value="Intermediate" <%= (course && course.level === 'Intermediate') ? 'selected' : '' %>>Intermediate</option>
+              <option value="Advanced" <%= (course && course.level === 'Advanced') ? 'selected' : '' %>>Advanced</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label font-weight-semibold text-dark">Estimated Duration (Hours)</label>
+            <input type="number" name="duration_hours" class="form-control rounded-3" value="<%= course ? course.duration_hours : 12 %>">
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label font-weight-semibold text-dark">Course Thumbnail Image URL</label>
+            <input type="text" name="thumbnail" class="form-control rounded-3" value="<%= course ? course.thumbnail : '/images/courses/course-placeholder.jpg' %>">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label font-weight-semibold text-dark">Instructor Name</label>
+            <input type="text" class="form-control rounded-3 bg-light" value="<%= currentUser ? currentUser.name : 'Dr. Faculty' %>" readonly>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label font-weight-semibold text-dark">Prerequisites & Requirements (One per line)</label>
+            <input type="text" name="requirements" class="form-control rounded-3" value="<%= course ? course.requirements : 'Basic high school biology or BPT Year 1 enrollment' %>">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label font-weight-semibold text-dark">Learning Objectives (One per line)</label>
+            <textarea name="learning_outcomes" rows="3" class="form-control rounded-3" placeholder="Define anatomical positions & planes&#10;Analyze origin, insertion, and nerve supply&#10;Perform joint palpation protocols"><%= course ? course.learning_outcomes : '' %></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="submit" name="is_publish" value="0" class="btn btn-outline-secondary rounded-pill px-4 font-weight-bold">
+          <i class="ri-save-3-line me-1"></i> Save Draft
+        </button>
+        <button type="submit" name="is_publish" value="0" class="btn btn-primary rounded-pill px-4.5 font-weight-bold" style="background: #0a5dc2; border-color: #0a5dc2;">
+          Next: Course Structure <i class="ri-arrow-right-line ms-1"></i>
+        </button>
+      </div>
+    <% } %>
+
+    <!-- ============ STEP 2: COURSE STRUCTURE & MODULES ============ -->
+    <% if (step === 2) { %>
+      <input type="hidden" name="next_step" value="3">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border mb-4">
+        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2"><i class="ri-folder-2-line text-primary me-2"></i>Step 2 — Course Hierarchy & Module Builder</h5>
+
+        <div class="p-4 bg-light rounded-4 border mb-4">
+          <h6 class="fw-bold text-dark mb-2"><i class="ri-add-circle-fill text-primary me-1"></i>+ Add New Module</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small font-weight-semibold">Module Title <span class="text-danger">*</span></label>
+              <input type="text" name="module_title" class="form-control rounded-3" placeholder="e.g. Module 1: Introduction to Anatomy & General Osteology">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small font-weight-semibold">Module Description & Objectives</label>
+              <input type="text" name="module_description" class="form-control rounded-3" placeholder="Explain what students learn in this module...">
+            </div>
+          </div>
+        </div>
+
+        <% if (modules && modules.length > 0) { %>
+          <h6 class="fw-bold text-dark mb-2">Current Modules & Lessons Hierarchy:</h6>
+          <div class="accordion mb-3" id="wizardModAccordion">
+            <% modules.forEach((m, idx) => { %>
+              <div class="accordion-item border rounded-3 mb-2 overflow-hidden">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed font-weight-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#wizMod-<%= m.id %>">
+                    <span class="badge bg-primary me-2">Module <%= idx + 1 %></span> <%= m.title %> (<%= m.lessons.length %> lessons)
+                  </button>
+                </h2>
+                <div id="wizMod-<%= m.id %>" class="accordion-collapse collapse p-3 bg-light">
+                  <p class="text-muted small mb-2"><%= m.description || 'No module description provided.' %></p>
+                  <ul class="list-group list-group-flush rounded-3">
+                    <% m.lessons.forEach(l => { %>
+                      <li class="list-group-item d-flex align-items-center justify-content-between small">
+                        <span><i class="ri-play-circle-line me-2 text-primary"></i><%= l.title %></span>
+                        <span class="badge bg-secondary"><%= l.duration_minutes %> mins</span>
+                      </li>
+                    <% }) %>
+                  </ul>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=1" class="btn btn-outline-secondary rounded-pill px-4 font-weight-bold">
+          <i class="ri-arrow-left-line me-1"></i> Back
+        </a>
+        <button type="submit" name="is_publish" value="0" class="btn btn-primary rounded-pill px-4.5 font-weight-bold" style="background: #0a5dc2; border-color: #0a5dc2;">
+          Next: Add Content <i class="ri-arrow-right-line ms-1"></i>
+        </button>
+      </div>
+    <% } %>
+
+    <!-- ============ STEP 3: MULTI-CONTENT BUILDER ============ -->
+    <% if (step === 3) { %>
+      <input type="hidden" name="next_step" value="4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border mb-4">
+        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2"><i class="ri-layout-grid-line text-primary me-2"></i>Step 3 — Multi-Content Block Builder</h5>
+
+        <div class="p-4 bg-light rounded-4 border mb-4">
+          <h6 class="fw-bold text-dark mb-3"><i class="ri-add-box-fill text-primary me-1"></i>Create New Lesson & Select Content Block Types</h6>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-md-8">
+              <label class="form-label small font-weight-semibold">Lesson Title <span class="text-danger">*</span></label>
+              <input type="text" name="lesson_title" class="form-control rounded-3" placeholder="e.g. Lesson 1: Anatomical Terminology, Positions & Planes" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small font-weight-semibold">Duration (Minutes)</label>
+              <input type="number" name="duration_minutes" class="form-control rounded-3" value="18">
+            </div>
+          </div>
+
+          <!-- Selectable Content Block Cards -->
+          <h6 class="fw-bold text-dark mb-3">Select Learning Content Block Types to Attach:</h6>
+          <div class="row g-3 mb-4">
+            
+            <div class="col-md-4 col-sm-6">
+              <div class="card border rounded-3 p-3 h-100 shadow-sm text-center bg-white border-primary content-type-card active-card" id="card-video" onclick="selectContentBlock('video')" style="cursor: pointer; border-width: 2px !important;">
+                <i class="ri-film-line fs-2 text-primary mb-2"></i>
+                <h6 class="fw-bold text-dark mb-1">🎥 Internal Video</h6>
+                <p class="text-secondary small mb-0">Native MP4 streaming with speed controls & watch progress</p>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+              <div class="card border rounded-3 p-3 h-100 shadow-sm text-center bg-white content-type-card" id="card-notes" onclick="selectContentBlock('notes')" style="cursor: pointer;">
+                <i class="ri-file-text-line fs-2 text-info mb-2"></i>
+                <h6 class="fw-bold text-dark mb-1">📖 Study Notes</h6>
+                <p class="text-secondary small mb-0">Rich formatted notes, key points & clinical relevance</p>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+              <div class="card border rounded-3 p-3 h-100 shadow-sm text-center bg-white content-type-card" id="card-3d" onclick="selectContentBlock('3d')" style="cursor: pointer;">
+                <i class="ri-box-3-line fs-2 text-warning mb-2"></i>
+                <h6 class="fw-bold text-dark mb-1">🧬 3D WebGL Model</h6>
+                <p class="text-secondary small mb-0">Rotatable 360° anatomical joint & muscle mesh</p>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+              <div class="card border rounded-3 p-3 h-100 shadow-sm text-center bg-white content-type-card" id="card-flashcards" onclick="selectContentBlock('flashcards')" style="cursor: pointer;">
+                <i class="ri-cards-line fs-2 text-success mb-2"></i>
+                <h6 class="fw-bold text-dark mb-1">💡 Flashcards</h6>
+                <p class="text-secondary small mb-0">3D flip cards for spaced repetition learning</p>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+              <div class="card border rounded-3 p-3 h-100 shadow-sm text-center bg-white content-type-card" id="card-cases" onclick="selectContentBlock('cases')" style="cursor: pointer;">
+                <i class="ri-stethoscope-line fs-2 text-danger mb-2"></i>
+                <h6 class="fw-bold text-dark mb-1">🏥 Clinical Case Study</h6>
+                <p class="text-secondary small mb-0">Real patient history, symptoms & rehab protocol</p>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+              <div class="card border rounded-3 p-3 h-100 shadow-sm text-center bg-white content-type-card" id="card-quiz" onclick="selectContentBlock('quiz')" style="cursor: pointer;">
+                <i class="ri-question-line fs-2 text-purple mb-2"></i>
+                <h6 class="fw-bold text-dark mb-1">📝 Lesson Quiz</h6>
+                <p class="text-secondary small mb-0">Multiple choice self-assessment with explanations</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ============ DYNAMIC EXPANDABLE CONFIGURATION PANELS WITH MULTIPLE ADD BUTTONS ============ -->
+          
+          <!-- 1. VIDEO CONFIG PANEL -->
+          <div class="card border-0 shadow-sm p-4 bg-white rounded-4 mb-3 border block-config-panel" id="panel-video">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+              <h6 class="fw-bold text-dark mb-0"><i class="ri-film-line text-primary me-2 fs-5"></i>Internal Video Configuration</h6>
+              <button type="button" class="btn btn-sm btn-outline-primary rounded-pill font-weight-bold" onclick="addMoreVideoItem()">
+                <i class="ri-add-line me-1"></i> + Add Another Internal Video Stream
+              </button>
+            </div>
+            
+            <div id="videoItemsContainer">
+              <div class="row g-3 p-3 bg-light rounded-3 border mb-3">
+                <div class="col-12">
+                  <label class="form-label small font-weight-semibold">Video 1 Endpoint / MP4 URL</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-white text-primary fw-bold"><i class="ri-link me-1"></i> Stream Path:</span>
+                    <input type="text" name="video_url" class="form-control" value="/videos/stream/anat-m1-l1">
+                  </div>
+                  <div class="form-text text-muted">Videos stream natively inside PhysioEdvance with zero YouTube dependencies.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. STUDY NOTES & PDF DOCUMENT CONFIG PANEL -->
+          <div class="card border-0 shadow-sm p-4 bg-white rounded-4 mb-3 border block-config-panel d-none" id="panel-notes">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+              <h6 class="fw-bold text-dark mb-0"><i class="ri-file-text-line text-info me-2 fs-5"></i>Study Notes & Document Attachment Configuration</h6>
+              <button type="button" class="btn btn-sm btn-outline-info rounded-pill font-weight-bold" onclick="addMoreDocumentItem()">
+                <i class="ri-file-add-line me-1"></i> + Attach Another PDF / Document
+              </button>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-12">
+                <label class="form-label small font-weight-semibold">1. Type Complete Study Notes Content</label>
+                <textarea name="lesson_notes" rows="4" class="form-control rounded-3" placeholder="Type detailed study notes, 💡 Key Exam Points, and 🏥 Clinical Application summary..."></textarea>
+              </div>
+            </div>
+
+            <div id="pdfDocumentsContainer">
+              <div class="p-3 bg-light rounded-3 border mb-3">
+                <h6 class="fw-bold text-dark mb-2 small"><i class="ri-file-pdf-line text-danger me-1"></i>2. Attach Complete PDF or Word Document 1</h6>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label small font-weight-semibold">Upload PDF / Document File (.pdf, .doc, .docx)</label>
+                    <input type="file" class="form-control rounded-3" accept=".pdf,.doc,.docx">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small font-weight-semibold">OR Document File Path / URL</label>
+                    <input type="text" name="doc_url" class="form-control rounded-3" value="/uploads/notes-anatomy.pdf" placeholder="/uploads/notes-anatomy.pdf">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. 3D MODEL CONFIG PANEL (MULTIPLE ADD SUPPORT) -->
+          <div class="card border-0 shadow-sm p-4 bg-white rounded-4 mb-3 border block-config-panel d-none" id="panel-3d">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+              <h6 class="fw-bold text-dark mb-0"><i class="ri-box-3-line text-warning me-2 fs-5"></i>3D WebGL Model Configuration</h6>
+              <button type="button" class="btn btn-sm btn-outline-warning text-dark font-weight-bold rounded-pill" onclick="addMore3DModelItem()">
+                <i class="ri-add-line me-1"></i> + Add Another 3D Model
+              </button>
+            </div>
+
+            <div id="model3DItemsContainer">
+              <div class="row g-3 p-3 bg-light rounded-3 border mb-3">
+                <div class="col-md-6">
+                  <label class="form-label small font-weight-semibold">Select 3D Mesh Model 1 Preset</label>
+                  <select class="form-select rounded-3">
+                    <optgroup label="Musculoskeletal & Orthopedic Physiotherapy">
+                      <option value="knee" selected>Knee Joint Complex, ACL/PCL & Meniscus Biomechanics</option>
+                      <option value="shoulder">Shoulder Complex & Rotator Cuff Musculature</option>
+                      <option value="hip">Hip Joint & Acetabular Labrum Architecture</option>
+                      <option value="lumbar">Lumbar Spine, Intervertebral Discs & Sciatic Nerve</option>
+                      <option value="cervical">Cervical Spine & Vertebral Artery Passageway</option>
+                      <option value="ankle">Ankle Joint, Achilles Tendon & Foot Arches</option>
+                      <option value="elbow">Elbow Joint & Forearm Tendons</option>
+                    </optgroup>
+                    <optgroup label="Neurological & Neuro-Rehabilitation">
+                      <option value="brainstem">Brainstem, Pyramidal Decussation & Motor Cortex</option>
+                      <option value="corticospinal">Spinal Cord Cross-Section & Corticospinal Motor Tracts</option>
+                      <option value="cerebellum">Cerebellum & Ataxia Balance Control Center</option>
+                      <option value="brachial">Brachial Plexus (C5-T1) Roots & Nerve Pathways</option>
+                      <option value="mca">Stroke MCA Territory & Somatosensory Homunculus</option>
+                    </optgroup>
+                    <optgroup label="Cardiorespiratory & Sports Physiotherapy">
+                      <option value="thorax">Thoracic Cage, Intercostal Musculature & Diaphragm</option>
+                      <option value="cardiac">Cardiopulmonary Heart & Coronary Circulation System</option>
+                      <option value="lungs">Bronchopulmonary Segments & Lungs Architecture</option>
+                      <option value="gait">Gait Cycle Foot Pressure & Plantar Fascia Mesh</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small font-weight-semibold">GLB / GLTF Model Embed Link</label>
+                  <input type="text" class="form-control rounded-3" value="https://sketchfab.com/models/20349b1424694be695b28a8d11634b3e/embed?autostart=1">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. FLASHCARDS CONFIG PANEL (MULTIPLE ADD SUPPORT) -->
+          <div class="card border-0 shadow-sm p-4 bg-white rounded-4 mb-3 border block-config-panel d-none" id="panel-flashcards">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+              <h6 class="fw-bold text-dark mb-0"><i class="ri-cards-line text-success me-2 fs-5"></i>Flashcards Creator</h6>
+              <button type="button" class="btn btn-sm btn-outline-success rounded-pill font-weight-bold" onclick="addMoreFlashcardItem()">
+                <i class="ri-add-line me-1"></i> + Add Another Flashcard
+              </button>
+            </div>
+
+            <div id="flashcardsItemsContainer">
+              <div class="row g-3 p-3 bg-light rounded-3 border mb-3">
+                <div class="col-md-6">
+                  <label class="form-label small font-weight-semibold">Card 1 Front (Question)</label>
+                  <input type="text" class="form-control rounded-3" value="What is the root value of the Brachial Plexus?">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small font-weight-semibold">Card 1 Back (Answer)</label>
+                  <input type="text" class="form-control rounded-3" value="Ventral rami of spinal nerves C5, C6, C7, C8, and T1.">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. CLINICAL CASE CONFIG PANEL (MULTIPLE ADD SUPPORT) -->
+          <div class="card border-0 shadow-sm p-4 bg-white rounded-4 mb-3 border block-config-panel d-none" id="panel-cases">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+              <h6 class="fw-bold text-dark mb-0"><i class="ri-stethoscope-line text-danger me-2 fs-5"></i>Clinical Case Study Builder</h6>
+              <button type="button" class="btn btn-sm btn-outline-danger rounded-pill font-weight-bold" onclick="addMoreCaseItem()">
+                <i class="ri-add-line me-1"></i> + Add Another Case Study
+              </button>
+            </div>
+
+            <div id="casesItemsContainer">
+              <div class="row g-3 p-3 bg-light rounded-3 border mb-3">
+                <div class="col-md-6">
+                  <label class="form-label small font-weight-semibold">Case 1 Title</label>
+                  <input type="text" class="form-control rounded-3" value="Case 1: Anterior Cruciate Ligament (ACL) Injury & Rehab Protocol">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small font-weight-semibold">Patient History & Presentation</label>
+                  <input type="text" class="form-control rounded-3" value="22-year-old athlete presented with sudden knee pop after pivot maneuver.">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. QUIZ CONFIG PANEL (MULTIPLE ADD SUPPORT) -->
+          <div class="card border-0 shadow-sm p-4 bg-white rounded-4 mb-3 border block-config-panel d-none" id="panel-quiz">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+              <h6 class="fw-bold text-dark mb-0"><i class="ri-question-line text-purple me-2 fs-5"></i>Lesson Quiz Builder</h6>
+              <button type="button" class="btn btn-sm btn-outline-primary rounded-pill font-weight-bold" onclick="addMoreQuizQuestionItem()">
+                <i class="ri-add-line me-1"></i> + Add Another Question
+              </button>
+            </div>
+
+            <div id="quizItemsContainer">
+              <div class="row g-3 p-3 bg-light rounded-3 border mb-3">
+                <div class="col-12">
+                  <label class="form-label small font-weight-semibold">Question 1</label>
+                  <input type="text" class="form-control rounded-3" value="Which anatomical plane divides the body into anterior and posterior portions?">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control rounded-3" value="A. Sagittal Plane">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control rounded-3" value="B. Coronal (Frontal) Plane">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=2" class="btn btn-outline-secondary rounded-pill px-4 font-weight-bold">
+          <i class="ri-arrow-left-line me-1"></i> Back
+        </a>
+        <button type="submit" name="is_publish" value="0" class="btn btn-primary rounded-pill px-4.5 font-weight-bold" style="background: #0a5dc2; border-color: #0a5dc2;">
+          Next: Assessments <i class="ri-arrow-right-line ms-1"></i>
+        </button>
+      </div>
+    <% } %>
+
+    <!-- ============ STEP 4: ASSESSMENTS ============ -->
+    <% if (step === 4) { %>
+      <input type="hidden" name="next_step" value="5">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border mb-4">
+        <h5 class="fw-bold text-dark mb-3 border-bottom pb-2"><i class="ri-award-line text-primary me-2"></i>Step 4 — Assessments & Exam Criteria</h5>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label font-weight-semibold">Module Assessment Passing Percentage (%)</label>
+            <input type="number" name="pass_percentage" class="form-control rounded-3" value="75">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label font-weight-semibold">Time Limit (Minutes)</label>
+            <input type="number" name="time_limit" class="form-control rounded-3" value="30">
+          </div>
+          <div class="col-12">
+            <div class="form-check form-switch p-3 bg-light rounded-3 border">
+              <input class="form-check-input ms-0 me-3" type="checkbox" id="certEligibility" checked>
+              <label class="form-check-label font-weight-semibold text-dark" for="certEligibility">Generate Certificate of Completion for Students upon passing final exam</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=3" class="btn btn-outline-secondary rounded-pill px-4 font-weight-bold">
+          <i class="ri-arrow-left-line me-1"></i> Back
+        </a>
+        <button type="submit" name="is_publish" value="0" class="btn btn-primary rounded-pill px-4.5 font-weight-bold" style="background: #0a5dc2; border-color: #0a5dc2;">
+          Next: Review & Publish <i class="ri-arrow-right-line ms-1"></i>
+        </button>
+      </div>
+    <% } %>
+
+    <!-- ============ STEP 5: REVIEW & PUBLISH ============ -->
+    <% if (step === 5) { %>
+      <input type="hidden" name="next_step" value="5">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border mb-4 text-center">
+        <div class="my-3">
+          <i class="ri-checkbox-circle-fill display-3 text-success"></i>
+          <h3 class="fw-bold text-dark mt-2">Course Ready for Review!</h3>
+          <p class="text-secondary leading-relaxed" style="max-width: 600px; margin: 0 auto;">
+            Your course contains full module hierarchy, internal video streaming endpoints, structured notes, 💡 key points, 3D WebGL models, flashcards, and quizzes.
+          </p>
+        </div>
+
+        <div class="p-4 bg-light rounded-4 border text-start mb-4" style="max-width: 650px; margin: 0 auto;">
+          <h6 class="fw-bold text-dark mb-2">Publishing Validation Checklist:</h6>
+          <ul class="list-unstyled mb-0 small">
+            <li class="mb-1.5 text-success d-flex align-items-center"><i class="ri-checkbox-circle-fill me-2 fs-6"></i> Course Title & Subject Category selected</li>
+            <li class="mb-1.5 text-success d-flex align-items-center"><i class="ri-checkbox-circle-fill me-2 fs-6"></i> Internal Video Player configured</li>
+            <li class="mb-1.5 text-success d-flex align-items-center"><i class="ri-checkbox-circle-fill me-2 fs-6"></i> 3D WebGL Mesh & Flashcards enabled</li>
+            <li class="mb-0 text-success d-flex align-items-center"><i class="ri-checkbox-circle-fill me-2 fs-6"></i> Self-Assessment Quizzes attached</li>
+          </ul>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center gap-3">
+          <button type="submit" name="is_publish" value="0" class="btn btn-outline-secondary btn-lg rounded-pill px-4 font-weight-bold">
+            <i class="ri-save-3-line me-1"></i> Save as Draft
+          </button>
+          <button type="submit" name="is_publish" value="1" class="btn btn-success btn-lg rounded-pill px-5 font-weight-bold shadow-lg">
+            <i class="ri-rocket-line me-1"></i> 🚀 Publish Course Now
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="/instructor/courses/wizard?<%= course ? 'courseId=' + course.id + '&' : '' %>step=4" class="btn btn-outline-secondary rounded-pill px-4 font-weight-bold">
+          <i class="ri-arrow-left-line me-1"></i> Back
+        </a>
+      </div>
+    <% } %>
+
+  </form>
+</div>
+
+<!-- ============ DYNAMIC CONTENT BLOCK TOGGLE & MULTI-ADD SCRIPT ============ -->
+<script>
+  function selectContentBlock(type) {
+    document.querySelectorAll('.content-type-card').forEach(card => {
+      card.style.borderWidth = '1px';
+      card.classList.remove('border-primary', 'shadow');
+    });
+
+    const activeCard = document.getElementById(`card-${type}`);
+    if (activeCard) {
+      activeCard.style.borderWidth = '2px';
+      activeCard.classList.add('border-primary', 'shadow');
+    }
+
+    document.querySelectorAll('.block-config-panel').forEach(panel => {
+      panel.classList.add('d-none');
+    });
+
+    const targetPanel = document.getElementById(`panel-${type}`);
+    if (targetPanel) {
+      targetPanel.classList.remove('d-none');
+    }
+  }
+
+  // MULTI-ADD FUNCTIONS FOR INSTRUCTORS
+  let flashcardCount = 1;
+  function addMoreFlashcardItem() {
+    flashcardCount++;
+    const container = document.getElementById('flashcardsItemsContainer');
+    const div = document.createElement('div');
+    div.className = 'row g-3 p-3 bg-light rounded-3 border mb-3';
+    div.innerHTML = `
+      <div class="col-md-6">
+        <label class="form-label small font-weight-semibold">Card ${flashcardCount} Front (Question)</label>
+        <input type="text" class="form-control rounded-3" placeholder="Enter flashcard question...">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small font-weight-semibold">Card ${flashcardCount} Back (Answer)</label>
+        <input type="text" class="form-control rounded-3" placeholder="Enter flashcard answer...">
+      </div>
+    `;
+    container.appendChild(div);
+  }
+
+  let caseCount = 1;
+  function addMoreCaseItem() {
+    caseCount++;
+    const container = document.getElementById('casesItemsContainer');
+    const div = document.createElement('div');
+    div.className = 'row g-3 p-3 bg-light rounded-3 border mb-3';
+    div.innerHTML = `
+      <div class="col-md-6">
+        <label class="form-label small font-weight-semibold">Case ${caseCount} Title</label>
+        <input type="text" class="form-control rounded-3" placeholder="e.g. Case ${caseCount}: Lumbar Disc Herniation & Radiculopathy">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small font-weight-semibold">Patient History & Presentation</label>
+        <input type="text" class="form-control rounded-3" placeholder="Enter patient age, gender, complaint, and symptoms...">
+      </div>
+    `;
+    container.appendChild(div);
+  }
+
+  let quizCount = 1;
+  function addMoreQuizQuestionItem() {
+    quizCount++;
+    const container = document.getElementById('quizItemsContainer');
+    const div = document.createElement('div');
+    div.className = 'row g-3 p-3 bg-light rounded-3 border mb-3';
+    div.innerHTML = `
+      <div class="col-12">
+        <label class="form-label small font-weight-semibold">Question ${quizCount}</label>
+        <input type="text" class="form-control rounded-3" placeholder="Enter question ${quizCount}...">
+      </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control rounded-3" placeholder="A. Option A">
+      </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control rounded-3" placeholder="B. Option B">
+      </div>
+    `;
+    container.appendChild(div);
+  }
+
+  let modelCount = 1;
+  function addMore3DModelItem() {
+    modelCount++;
+    const container = document.getElementById('model3DItemsContainer');
+    const div = document.createElement('div');
+    div.className = 'row g-3 p-3 bg-light rounded-3 border mb-3';
+    div.innerHTML = `
+      <div class="col-md-6">
+        <label class="form-label small font-weight-semibold">Select Physiotherapy 3D Mesh Model ${modelCount} Preset</label>
+        <select class="form-select rounded-3">
+          <option value="shoulder">Shoulder Complex & Rotator Cuff Musculature</option>
+          <option value="lumbar">Lumbar Spine, Intervertebral Discs & Sciatic Nerve</option>
+          <option value="hip">Hip Joint & Acetabular Labrum Architecture</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small font-weight-semibold">GLB / GLTF Model Embed Link</label>
+        <input type="text" class="form-control rounded-3" placeholder="https://sketchfab.com/models/...">
+      </div>
+    `;
+    container.appendChild(div);
+  }
+
+  let videoCount = 1;
+  function addMoreVideoItem() {
+    videoCount++;
+    const container = document.getElementById('videoItemsContainer');
+    const div = document.createElement('div');
+    div.className = 'row g-3 p-3 bg-light rounded-3 border mb-3';
+    div.innerHTML = `
+      <div class="col-12">
+        <label class="form-label small font-weight-semibold">Video ${videoCount} Endpoint / MP4 URL</label>
+        <div class="input-group">
+          <span class="input-group-text bg-white text-primary fw-bold"><i class="ri-link me-1"></i> Stream Path:</span>
+          <input type="text" name="video_url" class="form-control" placeholder="/videos/stream/lesson-id or MP4 URL">
+        </div>
+    `;
+    container.appendChild(div);
+  }
+
+  let docCount = 1;
+  function addMoreDocumentItem() {
+    docCount++;
+    const container = document.getElementById('pdfDocumentsContainer');
+    const div = document.createElement('div');
+    div.className = 'p-3 bg-light rounded-3 border mb-3';
+    div.innerHTML = `
+      <h6 class="fw-bold text-dark mb-2 small"><i class="ri-file-pdf-line text-danger me-1"></i>2. Attach Complete PDF or Word Document ${docCount}</h6>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label small font-weight-semibold">Upload PDF / Document File (.pdf, .doc, .docx)</label>
+          <input type="file" class="form-control rounded-3" accept=".pdf,.doc,.docx">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small font-weight-semibold">OR Document File Path / URL</label>
+          <input type="text" name="doc_url" class="form-control rounded-3" placeholder="/uploads/notes-document-${docCount}.pdf">
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  }
+</script>

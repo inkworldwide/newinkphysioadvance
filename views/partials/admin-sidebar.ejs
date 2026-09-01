@@ -20,7 +20,8 @@
       <p class="pe-menu-label">Content</p>
       <a href="/admin/features" class="pe-menu-link <%= currentPath==='/admin/features'?'active':'' %>"><i class="ri-apps-2-line"></i><span>Hero Feature Cards</span></a>
       <a href="/admin/specialties" class="pe-menu-link <%= currentPath==='/admin/specialties'?'active':'' %>"><i class="ri-pulse-line"></i><span>Clinical Specialties</span></a>
-      <a href="/admin/team" class="pe-menu-link <%= currentPath==='/admin/team'?'active':'' %>"><i class="ri-team-line"></i><span>Team</span></a>
+      <a href="/admin/vision-mission" class="pe-menu-link <%= currentPath==='/admin/vision-mission'?'active':'' %>"><i class="ri-compass-3-line"></i><span>Vision & Mission</span></a>
+      <a href="/admin/team" class="pe-menu-link <%= currentPath==='/admin/team'?'active':'' %>"><i class="ri-user-star-line"></i><span>Expert Teachers & Team</span></a>
       <a href="/admin/blog" class="pe-menu-link <%= currentPath==='/admin/blog'?'active':'' %>"><i class="ri-article-line"></i><span>Blog</span></a>
       <a href="/admin/live-sessions" class="pe-menu-link <%= currentPath==='/admin/live-sessions'?'active':'' %>"><i class="ri-vidicon-line"></i><span>Live Sessions</span></a>
       <a href="/admin/appointments" class="pe-menu-link <%= currentPath==='/admin/appointments'?'active':'' %>"><i class="ri-calendar-check-line"></i><span>Appointments</span></a>
@@ -34,8 +35,8 @@
       <a href="/instructor/dashboard" class="pe-menu-link <%= currentPath==='/instructor/dashboard'?'active':'' %>"><i class="ri-dashboard-2-line"></i><span>Dashboard</span></a>
 
       <p class="pe-menu-label">Teaching</p>
-      <a href="/instructor/courses" class="pe-menu-link <%= currentPath.startsWith('/instructor/courses')?'active':'' %>"><i class="ri-book-2-line"></i><span>My Courses</span></a>
-      <a href="/instructor/courses/new" class="pe-menu-link"><i class="ri-add-circle-line"></i><span>Create Course</span></a>
+      <a href="/instructor/courses" class="pe-menu-link <%= currentPath === '/instructor/courses' ? 'active' : '' %>"><i class="ri-book-2-line"></i><span>My Courses</span></a>
+      <a href="/instructor/courses/wizard" class="pe-menu-link <%= currentPath.startsWith('/instructor/courses/wizard') ? 'active' : '' %>"><i class="ri-add-circle-line"></i><span>Create Course Wizard</span></a>
 
       <p class="pe-menu-label">Account</p>
       <a href="/instructor/profile" class="pe-menu-link <%= currentPath==='/instructor/profile'?'active':'' %>"><i class="ri-user-settings-line"></i><span>Profile</span></a>

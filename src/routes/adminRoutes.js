@@ -31,6 +31,9 @@ router.get('/features/:id/edit', adminController.editHeroFeature);
 router.post('/features/:id/update', adminController.updateHeroFeature);
 router.post('/features/:id/delete', adminController.deleteHeroFeature);
 
+router.get('/vision-mission', adminController.visionMissionIndex);
+router.post('/vision-mission', adminController.updateVisionMission);
+
 router.get('/specialties', adminController.specialtiesIndex);
 router.post('/specialties', adminController.addSpecialty);
 router.get('/specialties/:id/edit', adminController.editSpecialty);
@@ -39,6 +42,7 @@ router.post('/specialties/:id/toggle', adminController.toggleSpecialty);
 router.post('/specialties/:id/delete', adminController.deleteSpecialty);
 
 router.get('/team', adminController.teamIndex);
+router.post('/team/toggle-groups', adminController.toggleTeamGroups);
 router.post('/team', adminController.addTeamMember);
 router.get('/team/:id/edit', adminController.editTeamMember);
 router.post('/team/:id/update', adminController.updateTeamMember);

@@ -28,6 +28,22 @@
     <div class="row g-4">
       <div class="col-lg-8">
 
+        <!-- 🚀 3D INTERACTIVE COURSE PLATFORM BANNER -->
+        <div class="card border-0 shadow-lg rounded-4 p-4 text-white mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0a5dc2 0%, #0284c7 100%);">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 position-relative z-2">
+            <div>
+              <span class="badge bg-warning text-dark font-weight-bold px-3 py-1 rounded-pill mb-2 shadow-sm" style="background-color: #f59e0b !important;">
+                <i class="ri-box-3-line me-1"></i> Interactive Learning Hub
+              </span>
+              <h4 class="fw-bold text-white mb-1">Enter Complete <%= course.category_name || 'Subject' %> Course Platform</h4>
+              <p class="text-white-75 small mb-0" style="max-width: 520px;">Access 3D rotatable WebGL models, internal video lectures, spaced-repetition flashcards, clinical case studies, and end-of-lesson quizzes.</p>
+            </div>
+            <a href="/subjects/<%= course.category_slug || 'anatomy' %>/course" class="btn btn-warning btn-lg rounded-pill font-weight-bold px-4 py-2.5 text-dark shadow-lg d-flex align-items-center gap-2" style="background-color: #f59e0b !important; border: none;">
+              <i class="ri-play-circle-fill fs-4"></i> Open 3D Platform <i class="ri-arrow-right-line"></i>
+            </a>
+          </div>
+        </div>
+
         <!-- What you'll learn -->
         <div class="card p-4 mb-4">
           <h5 class="mb-3">What you'll learn</h5>

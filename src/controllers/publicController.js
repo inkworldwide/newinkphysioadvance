@@ -1,8 +1,11 @@
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 const db = require('../db/connection');
-const { Team, Blog, LiveSessions, HeroFeature, ClinicalSpecialty } = require('../models/Content');
+const { Team, Blog, LiveSessions, HeroFeature, ClinicalSpecialty, SiteSettings } = require('../models/Content');
 const { PHYSIOTHERAPY_SPECIALTIES, THERAPY_TYPES, slugify } = require('../config/subjectTaxonomy');
+const subjectInteractiveData = require('../data/subjectInteractiveData');
+const courseSystemData = require('../data/courseSystemData');
+const videoService = require('../services/videoService');
 
 exports.home = async (req, res) => {
   const featured = await Course.featured(6);
@@ -29,11 +32,12 @@ exports.home = async (req, res) => {
   const heroFeatures = await HeroFeature.allActive();
   const specialties = await ClinicalSpecialty.allActive();
   const activeCourses = await Course.allPublished();
+  const visionMission = await SiteSettings.getVisionMission();
 
   res.render('public/home', {
     title: 'PhysioEdvance — One-Stop Solution for Physiotherapy Students',
     featured, categoriesByYear, otherSubjects, stats, founders, heroFeatures, activeCourses,
-    specialties, therapyTypes: THERAPY_TYPES, slugify,
+    specialties, therapyTypes: THERAPY_TYPES, slugify, visionMission,
     bodyClass: 'landing-page'
   });
 };
@@ -90,8 +94,6 @@ exports.subjectsIndex = async (req, res) => {
   res.render('public/subjects-index', { title: 'All Subjects', categoriesByYear, otherSubjects });
 };
 
-const subjectInteractiveData = require('../data/subjectInteractiveData');
-
 exports.subjectDetail = async (req, res) => {
   const category = await db.prepare(`SELECT * FROM categories WHERE slug = ?`).get(req.params.slug);
   if (!category) {
@@ -107,8 +109,15 @@ exports.subjectDetail = async (req, res) => {
   const notes = await Notes.byCategory(category.id);
   const research = await db.prepare(`SELECT * FROM research_articles WHERE category_id = ? ORDER BY created_at DESC`).all(category.id);
 
-  // Load interactive subject hub data for Anatomy / Neurology or fallback
-  const interactiveData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
+  // Load interactive subject hub data dynamically based on selected subject
+  const rawData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
+  const interactiveData = {
+    ...rawData,
+    intro: {
+      title: `Introduction to ${category.name}`,
+      description: category.description || `Comprehensive study of clinical procedures, theoretical foundations, surgical considerations, and rehabilitation protocols for ${category.name} in BPT & MPT physiotherapy curriculum.`
+    }
+  };
 
   res.render('public/subject-detail', { title: category.name, category, courses, notes, research, interactiveData });
 };
@@ -119,7 +128,14 @@ exports.subjectSectionDetail = async (req, res) => {
     req.flash('error', 'Subject not found.');
     return res.redirect('/subjects');
   }
-  const interactiveData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
+  const rawData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
+  const interactiveData = {
+    ...rawData,
+    intro: {
+      title: `Introduction to ${category.name}`,
+      description: category.description || `Comprehensive study of clinical procedures, theoretical foundations, surgical considerations, and rehabilitation protocols for ${category.name} in BPT & MPT physiotherapy curriculum.`
+    }
+  };
   const activeSection = req.params.section || 'syllabus';
 
   res.render('public/subject-section', {
@@ -130,10 +146,82 @@ exports.subjectSectionDetail = async (req, res) => {
   });
 };
 
+exports.subjectCourseDetail = async (req, res) => {
+  const category = await db.prepare(`SELECT * FROM categories WHERE slug = ?`).get(req.params.slug);
+  if (!category) {
+    req.flash('error', 'Subject not found.');
+    return res.redirect('/subjects');
+  }
+
+  const courseData = courseSystemData.getCourseForSubject(category.slug);
+  const activeTab = req.query.tab || 'modules';
+
+  res.render('public/subject-course', {
+    title: `${category.name} - Complete Structured Course`,
+    category,
+    courseData,
+    activeTab
+  });
+};
+
+exports.subjectLessonDetail = async (req, res) => {
+  const category = await db.prepare(`SELECT * FROM categories WHERE slug = ?`).get(req.params.slug);
+  if (!category) {
+    req.flash('error', 'Subject not found.');
+    return res.redirect('/subjects');
+  }
+
+  const courseData = courseSystemData.getCourseForSubject(category.slug);
+  const lessonId = req.params.lessonId;
+
+  // Find requested lesson across all modules
+  let currentModule = null;
+  let currentLesson = null;
+  let prevLesson = null;
+  let nextLesson = null;
+
+  const allLessons = [];
+  courseData.modules.forEach(m => {
+    m.lessons.forEach(l => {
+      allLessons.push({ module: m, lesson: l });
+    });
+  });
+
+  const foundIndex = allLessons.findIndex(item => item.lesson.id === lessonId);
+  if (foundIndex !== -1) {
+    currentModule = allLessons[foundIndex].module;
+    currentLesson = allLessons[foundIndex].lesson;
+    if (foundIndex > 0) prevLesson = allLessons[foundIndex - 1].lesson;
+    if (foundIndex < allLessons.length - 1) nextLesson = allLessons[foundIndex + 1].lesson;
+  } else {
+    // Fallback to first lesson
+    if (allLessons.length > 0) {
+      currentModule = allLessons[0].module;
+      currentLesson = allLessons[0].lesson;
+      if (allLessons.length > 1) nextLesson = allLessons[1].lesson;
+    }
+  }
+
+  res.render('public/subject-lesson', {
+    title: currentLesson ? currentLesson.title : `${category.name} Lesson`,
+    category,
+    courseData,
+    currentModule,
+    currentLesson,
+    prevLesson,
+    nextLesson
+  });
+};
+
+exports.streamVideo = async (req, res) => {
+  return videoService.handleStreamRequest(req, res, req.params.videoId);
+};
+
 exports.about = async (req, res) => {
   const aboutStatements = await Team.aboutStatements();
+  const visionMission = await SiteSettings.getVisionMission();
   console.log(`[About Controller] Rendering /about with ${aboutStatements.length} leadership statements`);
-  res.render('public/about', { title: 'About Us', aboutStatements });
+  res.render('public/about', { title: 'About Us', aboutStatements, visionMission });
 };
 
 exports.theTeam = async (req, res) => {

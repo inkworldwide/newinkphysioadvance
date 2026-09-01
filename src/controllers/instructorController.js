@@ -33,8 +33,7 @@ exports.courseList = async (req, res) => {
 };
 
 exports.newCourseForm = async (req, res) => {
-  const categories = await Course.categories();
-  res.render('instructor/course-form', { title: 'Create Course', layout: 'layouts/admin', categories, course: null });
+  res.redirect('/instructor/courses/wizard');
 };
 
 exports.createCourse = async (req, res) => {
@@ -50,6 +49,119 @@ exports.createCourse = async (req, res) => {
   });
   req.flash('success', 'Course created! Now add modules and lessons.');
   res.redirect(`/instructor/courses/${course.id}/edit`);
+};
+
+exports.courseWizardView = async (req, res) => {
+  const categories = await Course.categories();
+  let course = null;
+  let modules = [];
+  let quizzes = [];
+  if (req.query.courseId) {
+    course = await Course.findById(req.query.courseId);
+    if (course) {
+      modules = await Course.getModulesWithLessons(course.id);
+      quizzes = await Quiz.byCourse(course.id);
+    }
+  }
+  res.render('instructor/course-wizard', {
+    title: course ? 'Edit Course Wizard' : 'Create Course Wizard',
+    layout: 'layouts/admin',
+    categories,
+    course,
+    modules,
+    quizzes,
+    step: parseInt(req.query.step || 1, 10)
+  });
+};
+
+exports.saveCourseWizard = async (req, res) => {
+  try {
+    const data = req.body;
+    let courseId = data.course_id;
+
+    if (!courseId) {
+      const slug = slugify(data.title) + '-' + Date.now().toString().slice(-4);
+      courseId = await Course.create({
+        instructor_id: req.session.user.id,
+        category_id: data.category_id || 1,
+        title: data.title || 'Untitled Course',
+        slug,
+        subtitle: data.subtitle || '',
+        description: data.description || '',
+        level: data.level || 'Beginner',
+        duration_hours: parseFloat(data.duration_hours) || 12,
+        target_exam: data.target_exam || 'BPT 1st Year',
+        status: data.is_publish === '1' ? 'published' : 'draft',
+        learning_outcomes: data.learning_outcomes || '',
+        requirements: data.requirements || '',
+        thumbnail: data.thumbnail || '/images/courses/course-placeholder.jpg'
+      });
+    } else {
+      const existing = await Course.findById(courseId);
+      if (existing) {
+        await Course.update(courseId, {
+          ...existing,
+          title: data.title || existing.title,
+          subtitle: data.subtitle !== undefined ? data.subtitle : existing.subtitle,
+          description: data.description !== undefined ? data.description : existing.description,
+          category_id: data.category_id || existing.category_id,
+          level: data.level || existing.level,
+          language: existing.language || 'English',
+          price: existing.price || 0,
+          discount_price: existing.discount_price || null,
+          duration_hours: parseFloat(data.duration_hours) || existing.duration_hours || 12,
+          target_exam: data.target_exam || existing.target_exam,
+          status: data.is_publish === '1' ? 'published' : (data.is_publish === '0' ? 'draft' : existing.status),
+          requirements: data.requirements !== undefined ? data.requirements : existing.requirements,
+          learning_outcomes: data.learning_outcomes !== undefined ? data.learning_outcomes : existing.learning_outcomes,
+          thumbnail: data.thumbnail || existing.thumbnail || '/images/courses/course-placeholder.jpg'
+        });
+      }
+    }
+
+    // Process Module creation if module_title is provided
+    if (data.module_title) {
+      const moduleCount = (await db.prepare(`SELECT COUNT(*) as cnt FROM modules WHERE course_id = ?`).get(courseId))?.cnt || 0;
+      const modId = await Course.addModule(courseId, {
+        title: data.module_title,
+        description: data.module_description || '',
+        sort_order: moduleCount + 1
+      });
+
+      if (data.lesson_title && modId) {
+        const lessonCount = (await db.prepare(`SELECT COUNT(*) as cnt FROM lessons WHERE module_id = ?`).get(modId))?.cnt || 0;
+        await Course.addLesson(modId, {
+          title: data.lesson_title,
+          type: data.lesson_type || 'video',
+          content: data.lesson_notes || '',
+          video_url: data.video_url || `/videos/stream/anat-m1-l1`,
+          duration_minutes: parseInt(data.duration_minutes || 15, 10),
+          sort_order: lessonCount + 1,
+          is_preview: 0
+        });
+      }
+    }
+
+    const actionMsg = data.is_publish === '1' ? '🎉 Course Published Successfully!' : '💾 Course Saved as Draft!';
+    req.flash('success', actionMsg);
+    res.redirect(`/instructor/courses/wizard?courseId=${courseId}&step=${data.next_step || 1}`);
+  } catch (err) {
+    console.error('Save Course Wizard Error:', err);
+    req.flash('error', 'Could not save course wizard data.');
+    res.redirect('/instructor/courses');
+  }
+};
+
+exports.publishCourseToggle = async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (!course) {
+    req.flash('error', 'Course not found.');
+    return res.redirect('/instructor/courses');
+  }
+  const newStatus = course.status === 'published' ? 'draft' : 'published';
+  await db.prepare('UPDATE courses SET status = ? WHERE id = ?').run(newStatus, course.id);
+  req.flash('success', `Course status updated to ${newStatus.toUpperCase()}!`);
+  res.redirect('/instructor/courses');
 };
 
 exports.editCourseForm = async (req, res) => {

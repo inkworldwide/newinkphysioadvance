@@ -1,11 +1,114 @@
 <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
   <div>
-    <h3 class="fw-bold text-dark mb-1"><i class="ri-team-line me-2 text-primary"></i>Team Members & Staff Management</h3>
-    <p class="text-muted small mb-0">Manage teaching staff, technical assistance, subject experts, and team display visibility.</p>
+    <h3 class="fw-bold text-dark mb-1"><i class="ri-user-star-line me-2 text-primary"></i>Expert Teachers & Faculty Management</h3>
+    <p class="text-muted small mb-0">Add, edit, and manage expert teachers, clinical professors, advisory board members, and team display visibility.</p>
   </div>
   <button type="button" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addTeamMemberModal">
-    <i class="ri-user-add-fill me-1"></i> Add Team Member
+    <i class="ri-user-add-fill me-1"></i> + Add Expert Teacher / Faculty
   </button>
+</div>
+
+<!-- ============ STAFF GROUP VISIBILITY CONTROL PANEL (5 GROUPS) ============ -->
+<div class="card border-0 shadow-sm rounded-4 mb-4 bg-white border overflow-hidden">
+  <div class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 fw-bold text-dark"><i class="ri-toggle-line text-primary me-2"></i>Staff Group Visibility</h5>
+    <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1 font-weight-bold">5 Staff Sections</span>
+  </div>
+  <div class="card-body p-4">
+    <form action="/admin/team/toggle-groups" method="POST" id="toggleGroupsForm">
+      <div class="row g-3">
+        <!-- 1. Teaching Staff -->
+        <div class="col-md-4 col-sm-6">
+          <div class="p-3 border rounded-3 bg-white d-flex align-items-center justify-content-between shadow-sm">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 p-2 bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                <i class="ri-book-open-line fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-dark mb-0" style="font-size:0.92rem;">Teaching Staff</h6>
+                <small class="text-muted">Academic Faculty</small>
+              </div>
+            </div>
+            <div class="form-check form-switch fs-5 mb-0">
+              <input class="form-check-input" type="checkbox" name="teaching_staff" value="1" <%= (typeof groupStatuses !== 'undefined' && groupStatuses.teaching_staff) ? 'checked' : '' %> onchange="document.getElementById('toggleGroupsForm').submit()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Non-Teaching Staff -->
+        <div class="col-md-4 col-sm-6">
+          <div class="p-3 border rounded-3 bg-white d-flex align-items-center justify-content-between shadow-sm">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 p-2 bg-secondary-subtle text-secondary d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                <i class="ri-user-settings-line fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-dark mb-0" style="font-size:0.92rem;">Non - Teaching staff</h6>
+                <small class="text-muted">Admin & Operations</small>
+              </div>
+            </div>
+            <div class="form-check form-switch fs-5 mb-0">
+              <input class="form-check-input" type="checkbox" name="non_teaching_staff" value="1" <%= (typeof groupStatuses !== 'undefined' && groupStatuses.non_teaching_staff) ? 'checked' : '' %> onchange="document.getElementById('toggleGroupsForm').submit()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Experts for all Subjects -->
+        <div class="col-md-4 col-sm-6">
+          <div class="p-3 border rounded-3 bg-white d-flex align-items-center justify-content-between shadow-sm">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 p-2 bg-info-subtle text-info d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                <i class="ri-microscope-line fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-dark mb-0" style="font-size:0.92rem;">Experts for all subjects</h6>
+                <small class="text-muted">Subject Specialists</small>
+              </div>
+            </div>
+            <div class="form-check form-switch fs-5 mb-0">
+              <input class="form-check-input" type="checkbox" name="subject_experts" value="1" <%= (typeof groupStatuses !== 'undefined' && groupStatuses.subject_experts) ? 'checked' : '' %> onchange="document.getElementById('toggleGroupsForm').submit()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Technical Assistance -->
+        <div class="col-md-4 col-sm-6">
+          <div class="p-3 border rounded-3 bg-white d-flex align-items-center justify-content-between shadow-sm">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 p-2 bg-warning-subtle text-warning d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                <i class="ri-computer-line fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-dark mb-0" style="font-size:0.92rem;">Technical Assistance</h6>
+                <small class="text-muted">Platform Support</small>
+              </div>
+            </div>
+            <div class="form-check form-switch fs-5 mb-0">
+              <input class="form-check-input" type="checkbox" name="technical_assistance" value="1" <%= (typeof groupStatuses !== 'undefined' && groupStatuses.technical_assistance) ? 'checked' : '' %> onchange="document.getElementById('toggleGroupsForm').submit()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Other Staff -->
+        <div class="col-md-4 col-sm-6">
+          <div class="p-3 border rounded-3 bg-white d-flex align-items-center justify-content-between shadow-sm">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-3 p-2 bg-light-subtle text-dark border d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                <i class="ri-group-line fs-5"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold text-dark mb-0" style="font-size:0.92rem;">Other staff</h6>
+                <small class="text-muted">Collaborators</small>
+              </div>
+            </div>
+            <div class="form-check form-switch fs-5 mb-0">
+              <input class="form-check-input" type="checkbox" name="other_staff" value="1" <%= (typeof groupStatuses !== 'undefined' && groupStatuses.other_staff) ? 'checked' : '' %> onchange="document.getElementById('toggleGroupsForm').submit()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">

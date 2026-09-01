@@ -1,7 +1,7 @@
 const Course = require('../models/Course');
 const User = require('../models/User');
 const db = require('../db/connection');
-const { Team, Blog, LiveSessions, HeroFeature, ClinicalSpecialty } = require('../models/Content');
+const { Team, Blog, LiveSessions, HeroFeature, ClinicalSpecialty, SiteSettings } = require('../models/Content');
 
 exports.dashboard = async (req, res) => {
   try {
@@ -198,7 +198,20 @@ exports.profile = async (req, res) => {
 
 exports.teamIndex = async (req, res) => {
   const members = await Team.all();
-  res.render('admin/team', { title: 'Manage Team', layout: 'layouts/admin', members });
+  const groupStatuses = await SiteSettings.getTeamGroupStatuses();
+  res.render('admin/team', { title: 'Manage Team', layout: 'layouts/admin', members, groupStatuses });
+};
+
+exports.toggleTeamGroups = async (req, res) => {
+  await SiteSettings.updateTeamGroupStatuses({
+    teaching_staff: req.body.teaching_staff === '1',
+    non_teaching_staff: req.body.non_teaching_staff === '1',
+    subject_experts: req.body.subject_experts === '1',
+    technical_assistance: req.body.technical_assistance === '1',
+    other_staff: req.body.other_staff === '1'
+  });
+  req.flash('success', 'Staff group visibility updated.');
+  res.redirect('/admin/team');
 };
 
 exports.addTeamMember = async (req, res) => {
@@ -453,4 +466,19 @@ exports.updateAppointmentStatus = async (req, res) => {
   await db.prepare(`UPDATE appointment_requests SET status = ? WHERE id = ?`).run(req.body.status, req.params.id);
   req.flash('success', 'Status updated.');
   res.redirect('/admin/appointments');
+};
+
+// ===========================================================
+// VISION & MISSION MANAGEMENT
+// ===========================================================
+exports.visionMissionIndex = async (req, res) => {
+  const visionMission = await SiteSettings.getVisionMission();
+  res.render('admin/vision-mission', { title: 'Vision & Mission', layout: 'layouts/admin', visionMission });
+};
+
+exports.updateVisionMission = async (req, res) => {
+  const { vision, mission } = req.body;
+  await SiteSettings.updateVisionMission(vision, mission);
+  req.flash('success', 'Our Vision & Our Mission updated successfully!');
+  res.redirect('/admin/vision-mission');
 };

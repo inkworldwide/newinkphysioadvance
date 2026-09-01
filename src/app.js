@@ -101,11 +101,18 @@ app.use(refreshUser);
 app.use(attachUser);
 
 // Flash + global locals available to every view
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.successMessages = req.flash('success');
   res.locals.errorMessages = req.flash('error');
   res.locals.siteName = 'PhysioEdvance';
   res.locals.showDemoCredentials = env.showDemoCredentials;
+  try {
+    const { SiteSettings } = require('./models/Content');
+    const groupStatuses = await SiteSettings.getTeamGroupStatuses();
+    res.locals.teamNavGroups = groupStatuses;
+  } catch (err) {
+    res.locals.teamNavGroups = { teaching_staff: true, non_teaching_staff: true, subject_experts: true, technical_assistance: true, other_staff: true };
+  }
   next();
 });
 

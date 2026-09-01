@@ -17,6 +17,16 @@
   box-shadow: 0 16px 36px rgba(10, 93, 194, 0.16) !important;
 }
 
+.pe-badge-btn {
+  transition: all 0.25s ease !important;
+}
+.pe-badge-btn:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+  background: rgba(255, 255, 255, 0.32) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  cursor: pointer !important;
+}
+
 /* =========================================================
    NAVBAR — Edufast two-band header style
    ========================================================= */
@@ -2176,4 +2186,13 @@ p a, span a, td a, li a, .pe-breadcrumb a, .nav-link, .dropdown-item {
 .pe-course-hero,
 .pe-subjects-hero {
   background: linear-gradient(135deg, #0a5dc2 0%, #0284c7 100%) !important;
+}
+
+/* Desktop hover dropdown for The Team */
+@media (min-width: 992px) {
+  .pe-team-dropdown:hover > .dropdown-menu {
+    display: block;
+    margin-top: 0;
+    animation: fadeIn 0.2s ease-in-out;
+  }
 }

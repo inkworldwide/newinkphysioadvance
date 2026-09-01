@@ -120,7 +120,55 @@
           </ul>
         </li>
 
-        <li class="nav-item"><a class="nav-link <%= currentPath === '/the-team' ? 'active' : '' %>" href="/the-team">The Team</a></li>
+        <!-- THE TEAM DROPDOWN (PROFESSIONAL STYLE, NO ICONS) -->
+        <li class="nav-item dropdown pe-team-dropdown">
+          <a class="nav-link dropdown-toggle <%= currentPath.startsWith('/the-team') ? 'active' : '' %>"
+             href="/the-team" id="teamDropdown" role="button" aria-expanded="false" onclick="window.location.href='/the-team';">
+            The Team
+          </a>
+          <ul class="dropdown-menu pe-subjects-menu shadow-lg border-0 rounded-3 p-2" aria-labelledby="teamDropdown" style="min-width: 250px;">
+            <% if (typeof teamNavGroups === 'undefined' || teamNavGroups.teaching_staff) { %>
+              <li>
+                <a class="dropdown-item py-2.5 px-3 rounded-2 fw-medium text-dark d-flex align-items-center justify-content-between" href="/the-team#teaching-staff">
+                  <span>Teaching Staff</span>
+                  <i class="ri-arrow-right-s-line text-muted"></i>
+                </a>
+              </li>
+            <% } %>
+            <% if (typeof teamNavGroups === 'undefined' || teamNavGroups.non_teaching_staff) { %>
+              <li>
+                <a class="dropdown-item py-2.5 px-3 rounded-2 fw-medium text-dark d-flex align-items-center justify-content-between" href="/the-team#non-teaching-staff">
+                  <span>Non-Teaching Staff</span>
+                  <i class="ri-arrow-right-s-line text-muted"></i>
+                </a>
+              </li>
+            <% } %>
+            <% if (typeof teamNavGroups === 'undefined' || teamNavGroups.subject_experts) { %>
+              <li>
+                <a class="dropdown-item py-2.5 px-3 rounded-2 fw-medium text-dark d-flex align-items-center justify-content-between" href="/the-team#subject-experts">
+                  <span>Experts for all Subjects</span>
+                  <i class="ri-arrow-right-s-line text-muted"></i>
+                </a>
+              </li>
+            <% } %>
+            <% if (typeof teamNavGroups === 'undefined' || teamNavGroups.technical_assistance) { %>
+              <li>
+                <a class="dropdown-item py-2.5 px-3 rounded-2 fw-medium text-dark d-flex align-items-center justify-content-between" href="/the-team#technical-assistance">
+                  <span>Technical Assistance</span>
+                  <i class="ri-arrow-right-s-line text-muted"></i>
+                </a>
+              </li>
+            <% } %>
+            <% if (typeof teamNavGroups === 'undefined' || teamNavGroups.other_staff) { %>
+              <li>
+                <a class="dropdown-item py-2.5 px-3 rounded-2 fw-medium text-dark d-flex align-items-center justify-content-between" href="/the-team#other-staff">
+                  <span>Other Staff</span>
+                  <i class="ri-arrow-right-s-line text-muted"></i>
+                </a>
+              </li>
+            <% } %>
+          </ul>
+        </li>
         <li class="nav-item"><a class="nav-link <%= currentPath === '/live-sessions' ? 'active' : '' %>" href="/live-sessions">Live Classes</a></li>
         <li class="nav-item"><a class="nav-link <%= currentPath === '/blog' ? 'active' : '' %>" href="/blog">Blog</a></li>
         <li class="nav-item"><a class="nav-link <%= currentPath === '/about' ? 'active' : '' %>" href="/about">About</a></li>

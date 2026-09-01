@@ -9,6 +9,9 @@ router.get('/dashboard', instructorController.dashboard);
 router.get('/profile', instructorController.profile);
 
 router.get('/courses', instructorController.courseList);
+router.get('/courses/wizard', instructorController.courseWizardView);
+router.post('/courses/wizard/save', instructorController.saveCourseWizard);
+router.post('/courses/:id/publish', instructorController.publishCourseToggle);
 router.get('/courses/new', instructorController.newCourseForm);
 router.post('/courses', instructorController.createCourse);
 router.get('/courses/:id/edit', instructorController.editCourseForm);

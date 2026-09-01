@@ -367,4 +367,61 @@ const ClinicalSpecialty = {
   }
 };
 
-module.exports = { Notes, Team, Blog, LiveSessions, HeroFeature, ClinicalSpecialty };
+// ============ SITE SETTINGS (VISION & MISSION) ============
+const SiteSettings = {
+  async initTable() {
+    await db.prepare(`
+      CREATE TABLE IF NOT EXISTS site_settings (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      )
+    `).run();
+  },
+  async get(key, defaultValue = '') {
+    await this.initTable();
+    const row = await db.prepare(`SELECT value FROM site_settings WHERE key = ?`).get(key);
+    return row ? row.value : defaultValue;
+  },
+  async set(key, value) {
+    await this.initTable();
+    await db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES (?, ?)
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value
+    `).run(key, value);
+  },
+  async getVisionMission() {
+    const vision = await this.get('our_vision', 'To become the one-stop educational destination for physiotherapy students across India — making advanced, clinically-relevant physiotherapy education accessible to every student, regardless of which college they attend.');
+    const mission = await this.get('our_mission', '"Help students to help themselves." We build structured notes, digital library content, live discussions, and research resources that empower physiotherapy students to learn independently and confidently, year after year.');
+    return { vision, mission };
+  },
+  async updateVisionMission(vision, mission) {
+    await this.set('our_vision', vision);
+    await this.set('our_mission', mission);
+  },
+  async isGroupEnabled(groupName, defaultVal = 1) {
+    const key = `team_group_enabled_${groupName}`;
+    const val = await this.get(key, defaultVal.toString());
+    return val === '1';
+  },
+  async setGroupEnabled(groupName, enabled) {
+    const key = `team_group_enabled_${groupName}`;
+    await this.set(key, enabled ? '1' : '0');
+  },
+  async getTeamGroupStatuses() {
+    return {
+      teaching_staff: await this.isGroupEnabled('teaching_staff', 1),
+      non_teaching_staff: await this.isGroupEnabled('non_teaching_staff', 1),
+      subject_experts: await this.isGroupEnabled('subject_experts', 1),
+      technical_assistance: await this.isGroupEnabled('technical_assistance', 1),
+      other_staff: await this.isGroupEnabled('other_staff', 1)
+    };
+  },
+  async updateTeamGroupStatuses(statuses) {
+    const groups = ['teaching_staff', 'non_teaching_staff', 'subject_experts', 'technical_assistance', 'other_staff'];
+    for (const g of groups) {
+      await this.setGroupEnabled(g, !!statuses[g]);
+    }
+  }
+};
+
+module.exports = { Notes, Team, Blog, LiveSessions, HeroFeature, ClinicalSpecialty, SiteSettings };
