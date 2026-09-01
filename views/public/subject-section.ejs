@@ -1,0 +1,342 @@
+<!-- ============ UNIFIED ROYAL GRADIENT HERO BANNER ============ -->
+<section class="pe-subject-hero position-relative py-5 text-white overflow-hidden" style="background: linear-gradient(135deg, #0a5dc2 0%, #0284c7 100%);">
+  <div class="container position-relative z-2 py-3">
+    <nav class="pe-breadcrumb mb-3" style="font-size: 0.88rem; color: rgba(255,255,255,0.85);">
+      <a href="/subjects" class="text-white text-decoration-none"><i class="ri-home-3-line"></i> Subjects</a>
+      <i class="ri-arrow-right-s-line mx-1 text-white-50"></i>
+      <a href="/subjects/<%= category.slug %>" class="text-white text-decoration-none"><%= category.name %></a>
+      <i class="ri-arrow-right-s-line mx-1 text-white-50"></i>
+      <span class="text-warning font-weight-bold text-uppercase"><%= activeSection.replace('-', ' ') %></span>
+    </nav>
+
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="pe-subject-hero-icon shadow-sm" style="width: 64px; height: 64px; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.25); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #ffffff;">
+          <i class="<%= category.icon || 'ri-book-open-line' %>"></i>
+        </div>
+        <div>
+          <span class="badge bg-warning text-dark font-weight-bold text-uppercase px-3 py-1.5 rounded-pill mb-1.5 shadow-sm" style="font-size: 0.75rem; background-color: #f59e0b !important;">
+            <i class="ri-stack-line me-1"></i> Dedicated Module Page
+          </span>
+          <h1 class="text-white fw-bold display-6 mb-0 text-capitalize"><%= category.name %>: <%= activeSection.replace('-', ' ') %></h1>
+        </div>
+      </div>
+
+      <a href="/subjects/<%= category.slug %>" class="btn btn-outline-light rounded-pill px-4 font-weight-bold">
+        <i class="ri-arrow-left-line me-1"></i> Back to <%= category.name %> Hub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NAVIGATION SWITCHER TABS ============ -->
+<section class="bg-white border-bottom sticky-top shadow-sm z-3" style="top:64px;">
+  <div class="container overflow-auto py-2">
+    <div class="d-flex gap-2 flex-nowrap">
+      <a href="/subjects/<%= category.slug %>/module/syllabus" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='syllabus' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-quill-pen-line me-1"></i> Syllabus
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/regions" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='regions' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-brain-line me-1"></i> Regions & Maps
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/hd-videos" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='hd-videos' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-vidicon-line me-1"></i> HD Videos
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/interactive-modules" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='interactive-modules' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-focus-3-line me-1"></i> Interactive Hotspots
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/3d-models" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='3d-models' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-box-3-line me-1"></i> 3D Models
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/cross-sections" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='cross-sections' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-layout-grid-line me-1"></i> Cross-Sections
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/mri-scans" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='mri-scans' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-pulse-line me-1"></i> MRIs & Radiology
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/stroke-models" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='stroke-models' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-heart-pulse-line me-1"></i> Pathology Models
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEDICATED MODULE CONTENT DISPLAY ============ -->
+<div class="pe-section bg-light-subtle py-5">
+  <div class="container">
+
+    <!-- 1. SYLLABUS & TOPICS -->
+    <% if (activeSection === 'syllabus') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-book-open-line text-primary me-2"></i>Complete <%= category.name %> Syllabus & Topics</h3>
+          <p class="text-muted small mb-0">Full curriculum units, lecture objectives, and high-yield examination topics for BPT & MPT students.</p>
+        </div>
+        <span class="badge bg-primary text-white rounded-pill px-3.5 py-2 font-weight-bold">
+          <%= (interactiveData.syllabusUnits || []).length %> Academic Units
+        </span>
+      </div>
+
+      <div class="row g-4">
+        <% (interactiveData.syllabusUnits || []).forEach((u, uIdx) => { %>
+          <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="badge bg-primary text-white font-weight-bold px-3 py-1 rounded-pill small"><%= u.unit %></span>
+                <span class="badge bg-success-subtle text-success font-weight-bold px-2.5 py-1 rounded-pill small"><i class="ri-checkbox-circle-fill me-1"></i> Core Module</span>
+              </div>
+              <h4 class="fw-bold text-dark mb-2"><%= u.title %></h4>
+              <p class="text-secondary small mb-3 leading-relaxed" style="font-size: 0.92rem; line-height: 1.6;"><%= u.description %></p>
+              
+              <div class="fw-bold small text-dark mb-2"><i class="ri-key-line text-warning me-1"></i> Key Learning Objectives:</div>
+              <ul class="list-unstyled mb-3">
+                <% u.objectives.forEach(obj => { %>
+                  <li class="small text-secondary mb-2 d-flex align-items-start"><i class="ri-arrow-right-circle-fill text-primary me-2 mt-0.5"></i> <%= obj %></li>
+                <% }) %>
+              </ul>
+
+              <div class="border-top pt-3 mt-auto">
+                <div class="fw-bold small text-dark mb-2">High-Yield Exam Topics:</div>
+                <div class="d-flex flex-wrap gap-1.5">
+                  <% u.topics.forEach(tp => { %>
+                    <span class="badge bg-light text-dark border rounded-pill px-3 py-1.5 small fw-semibold"><%= tp %></span>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- 2. REGIONS & MAPS -->
+    <% if (activeSection === 'regions') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-brain-line text-info me-2"></i>Anatomical Regions & Structural Maps</h3>
+          <p class="text-muted small mb-0">Structural breakdown of anatomical regions, nerve pathways, and functional maps.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <% (interactiveData.regions || []).forEach(rg => { %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white border">
+              <div class="pe-category-icon mb-3" style="width: 56px; height: 56px; font-size: 1.6rem; background: rgba(14, 165, 233, 0.1); color: #0ea5e9; border-radius: 18px; display: flex; align-items: center; justify-content: center;">
+                <i class="<%= rg.icon %>"></i>
+              </div>
+              <h5 class="fw-bold text-dark mb-2"><%= rg.name %></h5>
+              <p class="text-secondary small mb-0" style="font-size: 0.92rem; line-height: 1.6;"><%= rg.desc %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- 3. HD VIDEOS -->
+    <% if (activeSection === 'hd-videos') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-vidicon-line text-danger me-2"></i>HD Video Demonstrations & Dissections</h3>
+          <p class="text-muted small mb-0">Faculty video walkthroughs, clinical demonstrations, and dissection guides.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <% (interactiveData.videos || []).forEach(v => { %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+              <div class="ratio ratio-16x9 bg-dark">
+                <iframe src="<%= v.embedUrl %>" title="<%= v.title %>" allowfullscreen style="border:none;"></iframe>
+              </div>
+              <div class="card-body p-4">
+                <span class="badge bg-danger-subtle text-danger font-weight-bold px-3 py-1 rounded-pill small mb-2"><%= v.type %></span>
+                <h5 class="fw-bold text-dark mb-2"><%= v.title %></h5>
+                <div class="text-muted small pt-2 border-top">
+                  <i class="ri-user-3-line me-1 text-primary"></i> Presenter: <strong><%= v.instructor %></strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- 4. INTERACTIVE HOTSPOTS -->
+    <% if (activeSection === 'interactive-modules') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-focus-3-line text-warning me-2"></i>Interactive HD Hotspot Identification Model</h3>
+          <p class="text-muted small mb-0">Click on numbered pin buttons on the diagram below to inspect muscle origins, innervation, and clinical action.</p>
+        </div>
+      </div>
+
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white text-center h-100 position-relative">
+            <div class="position-relative d-inline-block mx-auto my-auto" style="max-width: 100%;">
+              <img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=800&auto=format&fit=crop&q=80" alt="Hotspot Diagram" class="img-fluid rounded-4 shadow-sm" style="max-height: 440px; object-fit: cover;">
+              <% (interactiveData.hotspots || []).forEach(hs => { %>
+                <button type="button" class="btn btn-warning btn-sm rounded-circle position-absolute translate-middle fw-bold shadow-lg pe-hotspot-pin" style="left: <%= hs.x %>%; top: <%= hs.y %>%; width: 34px; height: 34px; border: 3px solid #ffffff;" onclick="showHotspotInfo(<%= hs.id %>)">
+                  <%= hs.id %>
+                </button>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-center border">
+            <% const defaultHs = (interactiveData.hotspots || [])[0] || {}; %>
+            <span class="badge bg-primary text-white font-weight-bold px-3 py-1.5 rounded-pill w-fit mb-3" id="hsBadge">
+              Pin Structure #<span id="hsId"><%= defaultHs.id || 1 %></span>
+            </span>
+            <h4 class="fw-bold text-dark mb-2" id="hsTitle"><%= defaultHs.title || 'Anatomical Structure' %></h4>
+            <p class="text-secondary leading-relaxed mb-4" id="hsDesc" style="font-size: 0.95rem; line-height: 1.6;"><%= defaultHs.description %></p>
+
+            <div class="bg-light rounded-4 p-3.5 mb-3 border">
+              <div class="fw-bold text-dark small mb-1"><i class="ri-flashlight-line text-warning me-1"></i> Innervation / Supply:</div>
+              <div class="text-primary font-weight-semibold small" id="hsNerve"><%= defaultHs.nerveSupply %></div>
+            </div>
+
+            <div class="bg-light rounded-4 p-3.5 border">
+              <div class="fw-bold text-dark small mb-1"><i class="ri-run-line text-success me-1"></i> Clinical Action / Biomechanics:</div>
+              <div class="text-dark small fw-semibold" id="hsAction"><%= defaultHs.action %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- 5. 3D MODELS -->
+    <% if (activeSection === '3d-models') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-box-3-line text-info me-2"></i>Interactive 3D Rotatable Model</h3>
+          <p class="text-muted small mb-0">Orbit, rotate 360°, and inspect anatomical structures in real-time 3D.</p>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border">
+        <div class="ratio ratio-21x9 rounded-4 overflow-hidden border shadow-inner bg-dark">
+          <iframe src="<%= (interactiveData.threeDModel || {}).modelUrl %>" title="3D Model Viewer" allowfullscreen style="border:none;"></iframe>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- 6. CROSS-SECTIONS -->
+    <% if (activeSection === 'cross-sections') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-layout-grid-line text-primary me-2"></i>Coronal, Sagittal & Transverse Cross-Sections</h3>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <% (interactiveData.crossSections || []).forEach(cs => { %>
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white border">
+              <img src="<%= cs.image %>" alt="<%= cs.title %>" class="card-img-top" style="height: 220px; object-fit: cover;">
+              <div class="card-body p-4">
+                <span class="badge bg-primary-subtle text-primary font-weight-bold px-3 py-1 rounded-pill small mb-2"><%= cs.view %></span>
+                <h5 class="fw-bold text-dark mb-3"><%= cs.title %></h5>
+                <div class="fw-bold text-dark small mb-2">Identified Structures:</div>
+                <div class="d-flex flex-wrap gap-1.5">
+                  <% cs.labels.forEach(lbl => { %>
+                    <span class="badge bg-light text-dark border rounded-pill px-2.5 py-1 small"><%= lbl %></span>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- 7. MRIS -->
+    <% if (activeSection === 'mri-scans') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-pulse-line text-success me-2"></i>Clinical MRI & Scan Diagnostic Desk</h3>
+        </div>
+      </div>
+
+      <% (interactiveData.mriScans || []).forEach(mri => { %>
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white border mb-4">
+          <h5 class="fw-bold text-dark mb-3"><%= mri.title %></h5>
+          <div class="row g-4">
+            <div class="col-md-6 text-center">
+              <div class="rounded-4 overflow-hidden border mb-3">
+                <img src="<%= mri.normalImg %>" alt="Normal Scan" class="img-fluid w-100" style="height: 240px; object-fit: cover;">
+              </div>
+              <span class="badge bg-success-subtle text-success font-weight-bold px-3 py-1.5 rounded-pill mb-2">Normal Anatomical Scan</span>
+              <p class="text-secondary small mb-0"><%= mri.anatomyDesc %></p>
+            </div>
+
+            <div class="col-md-6 text-center">
+              <div class="rounded-4 overflow-hidden border mb-3">
+                <img src="<%= mri.pathologyImg %>" alt="Pathology Scan" class="img-fluid w-100" style="height: 240px; object-fit: cover;">
+              </div>
+              <span class="badge bg-danger-subtle text-danger font-weight-bold px-3 py-1.5 rounded-pill mb-2">Pathology Lesion Scan</span>
+              <p class="text-secondary small mb-0"><%= mri.mriDesc %></p>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <!-- 8. STROKE & PATHOLOGY MODELS -->
+    <% if (activeSection === 'stroke-models') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-heart-pulse-line text-danger me-2"></i>Stroke & Clinical Pathology Case Models</h3>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <% (interactiveData.clinicalCases || []).forEach(cc => { %>
+          <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-white border">
+              <span class="badge bg-danger-subtle text-danger font-weight-bold px-3 py-1.5 rounded-pill w-fit mb-3">
+                Clinical Case Model
+              </span>
+              <h5 class="fw-bold text-dark mb-3"><%= cc.title %></h5>
+              
+              <div class="bg-light rounded-3 p-3 mb-3 border">
+                <div class="fw-bold text-dark small mb-1"><i class="ri-user-search-line me-1 text-primary"></i> Patient Presentation:</div>
+                <p class="text-secondary small mb-0"><%= cc.history %></p>
+              </div>
+
+              <div class="fw-bold text-dark small mb-2"><i class="ri-stethoscope-line me-1 text-warning"></i> Diagnostic Findings:</div>
+              <ul class="list-unstyled mb-3">
+                <% cc.findings.forEach(f => { %>
+                  <li class="small text-secondary mb-1.5 d-flex align-items-center"><i class="ri-checkbox-circle-fill text-danger me-2"></i> <%= f %></li>
+                <% }) %>
+              </ul>
+
+              <div class="bg-primary-subtle text-primary rounded-3 p-3 mt-auto border border-primary-subtle">
+                <div class="fw-bold small mb-1"><i class="ri-heart-pulse-fill me-1"></i> Physiotherapy Rehab Protocol:</div>
+                <div class="small fw-semibold"><%= cc.rehabPlan %></div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+<script>
+  const hotspotsData = <%- JSON.stringify(interactiveData.hotspots || []) %>;
+
+  function showHotspotInfo(id) {
+    const hs = hotspotsData.find(item => item.id === id);
+    if (!hs) return;
+    document.getElementById('hsId').innerText = hs.id;
+    document.getElementById('hsTitle').innerText = hs.title;
+    document.getElementById('hsDesc').innerText = hs.description;
+    document.getElementById('hsNerve').innerText = hs.nerveSupply;
+    document.getElementById('hsAction').innerText = hs.action;
+  }
+</script>

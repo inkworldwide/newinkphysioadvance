@@ -90,6 +90,8 @@ exports.subjectsIndex = async (req, res) => {
   res.render('public/subjects-index', { title: 'All Subjects', categoriesByYear, otherSubjects });
 };
 
+const subjectInteractiveData = require('../data/subjectInteractiveData');
+
 exports.subjectDetail = async (req, res) => {
   const category = await db.prepare(`SELECT * FROM categories WHERE slug = ?`).get(req.params.slug);
   if (!category) {
@@ -105,7 +107,27 @@ exports.subjectDetail = async (req, res) => {
   const notes = await Notes.byCategory(category.id);
   const research = await db.prepare(`SELECT * FROM research_articles WHERE category_id = ? ORDER BY created_at DESC`).all(category.id);
 
-  res.render('public/subject-detail', { title: category.name, category, courses, notes, research });
+  // Load interactive subject hub data for Anatomy / Neurology or fallback
+  const interactiveData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
+
+  res.render('public/subject-detail', { title: category.name, category, courses, notes, research, interactiveData });
+};
+
+exports.subjectSectionDetail = async (req, res) => {
+  const category = await db.prepare(`SELECT * FROM categories WHERE slug = ?`).get(req.params.slug);
+  if (!category) {
+    req.flash('error', 'Subject not found.');
+    return res.redirect('/subjects');
+  }
+  const interactiveData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
+  const activeSection = req.params.section || 'syllabus';
+
+  res.render('public/subject-section', {
+    title: `${category.name} - ${activeSection.replace('-', ' ').toUpperCase()}`,
+    category,
+    interactiveData,
+    activeSection
+  });
 };
 
 exports.about = async (req, res) => {

@@ -6,6 +6,7 @@ const { requireAuth } = require('../middleware/auth');
 router.get('/', publicController.home);
 
 router.get('/subjects', publicController.subjectsIndex);
+router.get('/subjects/:slug/module/:section', publicController.subjectSectionDetail);
 router.get('/subjects/:slug', publicController.subjectDetail);
 
 router.get('/courses', publicController.courseList);

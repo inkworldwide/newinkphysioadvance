@@ -38,8 +38,8 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
       imgSrc: ["'self'", "data:", "blob:", "https:"],
-      mediaSrc: ["'self'", "blob:"],
-      frameSrc: ["'self'", "https://www.youtube.com", "https://api.razorpay.com", "https://checkout.razorpay.com"],
+      mediaSrc: ["'self'", "blob:", "https:", "https://www.neuroanatomy.ca", "https://commondatastorage.googleapis.com"],
+      frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://sketchfab.com", "https://www.neuroanatomy.ca", "https://api.razorpay.com", "https://checkout.razorpay.com"],
       workerSrc: ["'self'", "blob:"],
       connectSrc: ["'self'", "https://api.razorpay.com", "https://lumberjack.razorpay.com", "https://cdn.jsdelivr.net"],
     }
