@@ -80,15 +80,25 @@
     <div class="pe-therapy-slider">
       <div class="pe-therapy-track">
         <% 
-          const coursesToDisplay = (typeof activeCourses !== 'undefined' && activeCourses.length > 0) ? activeCourses : featured;
-          const tickerCourses = coursesToDisplay.concat(coursesToDisplay).concat(coursesToDisplay); 
+          let tickerSubjects = [];
+          [1,2,3,4].forEach(y => {
+            if (typeof categoriesByYear !== 'undefined' && categoriesByYear[y]) {
+              tickerSubjects = tickerSubjects.concat(categoriesByYear[y]);
+            }
+          });
+          if (tickerSubjects.length === 0 && typeof activeCourses !== 'undefined') {
+            tickerSubjects = activeCourses;
+          }
+          const marqueeList = tickerSubjects.concat(tickerSubjects).concat(tickerSubjects); 
         %>
-        <% tickerCourses.forEach(course => { %>
-          <a href="/courses/<%= course.slug %>" class="pe-therapy-pill" title="View <%= course.title %>">
+        <% marqueeList.forEach(sub => { %>
+          <a href="/subjects/<%= sub.slug %>" class="pe-therapy-pill" title="View <%= sub.name %>">
             <i class="ri-book-read-line me-1 text-warning"></i>
-            <span><%= course.title %></span>
-            <% if (course.category_name) { %>
-              <span class="badge bg-white text-primary ms-1" style="font-size:0.65rem;"><%= course.category_name %></span>
+            <span><%= sub.name %></span>
+            <% if (typeof SUBJECT_ABBREVIATIONS !== 'undefined' && SUBJECT_ABBREVIATIONS[sub.name]) { %>
+              <span class="badge bg-white text-primary ms-1" style="font-size:0.65rem;"><%= SUBJECT_ABBREVIATIONS[sub.name] %></span>
+            <% } else if (sub.year) { %>
+              <span class="badge bg-white text-primary ms-1" style="font-size:0.65rem;">Year <%= sub.year %></span>
             <% } %>
           </a>
         <% }) %>
@@ -143,6 +153,46 @@
           </div>
         </div>
       <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NCAHP & PAN-INDIA CURRICULUM POSITIONING BANNER ============ -->
+<section class="pe-ncahp-banner-section py-4 my-2" style="background: linear-gradient(135deg, #091e3a 0%, #10376d 100%);">
+  <div class="container">
+    <div class="card border-0 shadow-lg rounded-4 p-4 text-white overflow-hidden position-relative" style="background: transparent;">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+            <span class="badge bg-warning text-dark font-weight-bold px-3 py-1.5 rounded-pill shadow-sm" style="font-size: 0.8rem; background-color: #f59e0b !important;">
+              <i class="ri-shield-check-fill me-1"></i> NCAHP Guidelines Aligned
+            </span>
+            <span class="badge bg-white-20 text-white font-weight-bold px-3 py-1.5 rounded-pill shadow-sm" style="font-size: 0.8rem; background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+              <i class="ri-map-pin-2-fill text-warning me-1"></i> PAN-India Physiotherapy Syllabus
+            </span>
+          </div>
+          <h3 class="fw-bold text-white mb-2" style="letter-spacing: -0.02em;">Designed for the New NCAHP-Aligned National BPT Curriculum</h3>
+          <p class="text-white-75 mb-0 leading-relaxed" style="font-size: 0.98rem; max-width: 780px;">
+            PhysioEdvance is engineered specifically to cater to the latest <strong>National Commission for Allied and Healthcare Professions (NCAHP)</strong> guidelines. Our structured subjects, 3D rotatable models, and clinical case studies support a unified <strong>PAN-India physiotherapy syllabus</strong> across all major health science universities.
+          </p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <div class="d-inline-flex flex-column gap-2 p-3.5 rounded-4 border border-white-20 text-start" style="background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);">
+            <div class="d-flex align-items-center gap-2 text-white small font-weight-semibold">
+              <i class="ri-checkbox-circle-fill text-warning fs-5"></i>
+              <span>Universal Indian University Standard</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-white small font-weight-semibold">
+              <i class="ri-checkbox-circle-fill text-warning fs-5"></i>
+              <span>Full Year 1 to Year 4 Coverage</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-white small font-weight-semibold">
+              <i class="ri-checkbox-circle-fill text-warning fs-5"></i>
+              <span>Evidence-Based Clinical Practice</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -267,7 +317,7 @@
       <div class="swiper-wrapper pb-4">
         <% featured.forEach(course => { %>
           <div class="swiper-slide pe-course-slide">
-            <a href="/courses/<%= course.slug %>" class="text-decoration-none d-block h-100">
+            <a href="/subjects/<%= course.category_slug || course.slug %>" class="text-decoration-none d-block h-100">
               <div class="pe-fc-card">
                 <!-- Thumbnail with gradient overlay -->
                 <div class="pe-fc-thumb">
@@ -322,7 +372,7 @@
         <div class="row g-4">
           <% featured.forEach(course => { %>
             <div class="col-md-6 col-lg-4">
-              <a href="/courses/<%= course.slug %>" class="text-decoration-none d-block h-100">
+              <a href="/subjects/<%= course.category_slug || course.slug %>" class="text-decoration-none d-block h-100">
                 <div class="pe-fc-card shadow-sm h-100 bg-white" style="border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
                   <div class="pe-fc-thumb position-relative" style="height: 150px;">
                     <div class="pe-fc-thumb-bg"></div>

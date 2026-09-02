@@ -162,7 +162,7 @@ const Course = {
   },
 
   async categories() {
-    return db.prepare(`SELECT * FROM categories ORDER BY (year IS NULL), year, name`).all();
+    return db.prepare(`SELECT * FROM categories ORDER BY (year IS NULL), year, id ASC`).all();
   },
 
   async ensureAllCategoriesExist() {
@@ -193,7 +193,7 @@ const Course = {
       SELECT cat.id, cat.name, cat.slug, cat.icon, cat.year, cat.is_other_subject, COUNT(c.id) as course_count
       FROM categories cat
       LEFT JOIN courses c ON c.category_id = cat.id AND c.status = 'published'
-      GROUP BY cat.id ORDER BY (cat.year IS NULL), cat.year, cat.name
+      GROUP BY cat.id ORDER BY (cat.year IS NULL), cat.year, cat.id ASC
     `).all();
     return rows.map(r => ({ ...r, course_count: Number(r.course_count) }));
   },

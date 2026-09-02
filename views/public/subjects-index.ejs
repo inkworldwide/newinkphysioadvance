@@ -96,9 +96,14 @@
                       <div class="pe-subject-icon fs-3" style="background: <%= y===1 ? 'rgba(10,93,194,0.1)' : y===2 ? 'rgba(14,165,233,0.1)' : y===3 ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)' %>; color: <%= y===1 ? '#0a5dc2' : y===2 ? '#0ea5e9' : y===3 ? '#10b981' : '#ef4444' %>;">
                         <i class="<%= cat.icon || 'ri-book-open-line' %>"></i>
                       </div>
-                      <span class="pe-subject-arrow-btn">
-                        <i class="ri-arrow-right-line"></i>
-                      </span>
+                      <div class="d-flex align-items-center gap-1.5">
+                        <% if (typeof SUBJECT_ABBREVIATIONS !== 'undefined' && SUBJECT_ABBREVIATIONS[cat.name]) { %>
+                          <span class="badge bg-primary-subtle text-primary font-weight-bold px-2 py-1 rounded-pill small" style="font-size: 0.72rem;"><%= SUBJECT_ABBREVIATIONS[cat.name] %></span>
+                        <% } %>
+                        <span class="pe-subject-arrow-btn">
+                          <i class="ri-arrow-right-line"></i>
+                        </span>
+                      </div>
                     </div>
                     <h6 class="fw-bold text-dark mb-1 fs-6"><%= cat.name %></h6>
                     <div class="d-flex align-items-center gap-1.5 text-muted small">

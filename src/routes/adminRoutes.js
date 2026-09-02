@@ -34,6 +34,10 @@ router.post('/features/:id/delete', adminController.deleteHeroFeature);
 router.get('/vision-mission', adminController.visionMissionIndex);
 router.post('/vision-mission', adminController.updateVisionMission);
 
+router.get('/notes', adminController.notesIndex);
+router.post('/notes', adminController.createNote);
+router.post('/notes/:id/delete', adminController.deleteNote);
+
 router.get('/specialties', adminController.specialtiesIndex);
 router.post('/specialties', adminController.addSpecialty);
 router.get('/specialties/:id/edit', adminController.editSpecialty);

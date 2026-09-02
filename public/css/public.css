@@ -1501,7 +1501,7 @@ body::after {
   align-items: center;
   gap: 1rem;
   white-space: nowrap;
-  animation: peTickerScroll 35s linear infinite;
+  animation: peTickerScroll 90s linear infinite;
   will-change: transform;
 }
 .pe-therapy-track:hover {

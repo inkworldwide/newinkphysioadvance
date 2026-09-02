@@ -8,7 +8,7 @@
 const bcrypt = require('bcryptjs');
 const db = require('./connection');
 const migrate = require('./migrate');
-const { YEAR_SUBJECTS, OTHER_SUBJECTS, slugify } = require('../config/subjectTaxonomy');
+const { YEAR_SUBJECTS, SUBJECT_ABBREVIATIONS, OTHER_SUBJECTS, slugify } = require('../config/subjectTaxonomy');
 
 async function clearTables() {
   const tables = [
@@ -221,9 +221,10 @@ const categoryIds = {};
 for (const [year, subjects] of Object.entries(YEAR_SUBJECTS)) {
   for (const name of subjects) {
     const slug = slugify(name);
+    const abbr = (SUBJECT_ABBREVIATIONS && SUBJECT_ABBREVIATIONS[name]) || '';
     const info = await insertCategory.run({
       name, slug, icon: iconFor(name),
-      description: `${name} — Year ${year} subject for physiotherapy students.`,
+      description: `${name}${abbr ? ' (' + abbr + ')' : ''} — Year ${year} subject referenced to NCAHP guidelines.`,
       year: parseInt(year), is_other_subject: 0
     });
     categoryIds[slug] = info.lastInsertRowid;

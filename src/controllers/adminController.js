@@ -482,3 +482,38 @@ exports.updateVisionMission = async (req, res) => {
   req.flash('success', 'Our Vision & Our Mission updated successfully!');
   res.redirect('/admin/vision-mission');
 };
+
+// ===========================================================
+// STUDY NOTES MANAGEMENT (In-Built Native Reader + PDF Upload)
+// ===========================================================
+exports.notesIndex = async (req, res) => {
+  const notes = await db.prepare(`
+    SELECT n.*, c.name as subject_name, c.slug as subject_slug
+    FROM notes n JOIN categories c ON n.category_id = c.id
+    ORDER BY n.created_at DESC
+  `).all();
+  const categories = await db.prepare(`SELECT * FROM categories ORDER BY (year IS NULL), year, id ASC`).all();
+  res.render('admin/notes', { title: 'Manage Study Notes', layout: 'layouts/admin', notes, categories });
+};
+
+exports.createNote = async (req, res) => {
+  const { category_id, title, content, file_url, year } = req.body;
+  const cat = await db.prepare(`SELECT year FROM categories WHERE id = ?`).get(category_id);
+  const noteYear = year || (cat ? cat.year : 1);
+  await Notes.create({
+    category_id,
+    title,
+    content: content || '',
+    file_url: file_url || null,
+    year: noteYear,
+    created_by: req.session.user.id
+  });
+  req.flash('success', 'Study Note created with native reader view!');
+  res.redirect('/admin/notes');
+};
+
+exports.deleteNote = async (req, res) => {
+  await Notes.delete(req.params.id);
+  req.flash('success', 'Study Note deleted.');
+  res.redirect('/admin/notes');
+};

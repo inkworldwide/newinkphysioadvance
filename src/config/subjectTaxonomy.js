@@ -7,46 +7,88 @@
 
 const YEAR_SUBJECTS = {
   1: [
-    'Anatomy',
-    'Physiology',
+    'Human Anatomy',
+    'Human Physiology',
     'Biochemistry',
-    'Biomechanics',
-    'Psychology',
-    'Sociology'
+    'Fundamentals of Exercise Modalities',
+    'Fundamentals of Electro Physical Agents',
+    'Psychology & Sociology',
+    'Fundamentals of Healthcare Delivery System in India',
+    'English [NUES]',
+    'Information Technology [NUES]',
+    'Clinic Orientation'
   ],
   2: [
-    'Pathology',
-    'Microbiology',
+    'Pathology & Microbiology',
+    'Pharmacology',
+    'Public Health & Health Promotion',
+    'Emergency Care and Life Support Skills',
     'Exercise Therapy',
     'Electrotherapy',
-    'Pharmacology'
+    'Biomechanics & Kinesiology',
+    'Yoga and Systems of Medicine',
+    'Clinical Observation'
   ],
   3: [
-    'General Medicine',
+    'General Medicine and Pediatrics',
     'General Surgery',
-    'Orthopedics and Traumatology',
-    'Physiotherapy in Orthopedics',
-    'Physiotherapy in Cardiorespiratory Conditions',
-    'OBG',
-    'Physiotherapy in OBG Conditions',
-    'Sports Medicine',
-    'Physiotherapy in Sports Conditions',
-    'Dermatology',
-    'Ophthalmology',
-    'ENT',
-    'ICU Care and Intensive Medicine, and Emergency Care',
-    'Physiotherapy in ICU Setup and Emergency Conditions'
+    'Orthopedics',
+    'Physiotherapy in Adult and Pediatric Medical and Surgical Conditions',
+    'Physiotherapy in Adult and Pediatric Orthopedics Conditions',
+    'Physical & Functional Diagnosis and Prescription',
+    'Research Methodology, Biostatistics and Evidence Based Practice',
+    'Clinical Education'
   ],
   4: [
-    'Neurology, Neuromedicine, and Neurosurgery',
-    'Pediatrics and Pediatric Neurology',
-    'Physiotherapy in Neurological Conditions',
-    'Physiotherapy in Pediatric Conditions',
-    'Community Medicine',
-    'Community Physiotherapy',
-    'Research Methodology',
-    'Biostatistics'
+    'Neurology, Psychiatry and Neurosurgery',
+    'Physiotherapy in Adult and Pediatric Neurological and Neurosurgical Conditions',
+    'Cardiothoracic Diseases and Surgeries',
+    'Physiotherapy in Adult and Pediatric Cardiothoracic Conditions and Surgical Conditions',
+    'Sports Physiotherapy & Exercise Prescription',
+    'PT Ethics, Medico Legal Aspects, Management & Administration',
+    'Community Physiotherapy & Rehabilitation',
+    'Project Work Orientation [NUES]',
+    'Clinical Rotation'
   ]
+};
+
+const SUBJECT_ABBREVIATIONS = {
+  'Human Anatomy': 'HA',
+  'Human Physiology': 'HP',
+  'Biochemistry': 'BC',
+  'Fundamentals of Exercise Modalities': 'FoEM',
+  'Fundamentals of Electro Physical Agents': 'FoEA',
+  'Psychology & Sociology': 'PS',
+  'Fundamentals of Healthcare Delivery System in India': 'FoHS',
+  'English [NUES]': 'EG',
+  'Information Technology [NUES]': 'IT',
+  'Clinic Orientation': 'COr',
+  'Pathology & Microbiology': 'PM',
+  'Pharmacology': 'PC',
+  'Public Health & Health Promotion': 'PH',
+  'Emergency Care and Life Support Skills': 'ECLS',
+  'Exercise Therapy': 'ExT',
+  'Electrotherapy': 'ET',
+  'Biomechanics & Kinesiology': 'BK',
+  'Yoga and Systems of Medicine': 'YoG',
+  'Clinical Observation': 'COb',
+  'General Medicine and Pediatrics': 'GMP',
+  'General Surgery': 'GS',
+  'Orthopedics': 'OR',
+  'Physiotherapy in Adult and Pediatric Medical and Surgical Conditions': 'PTMS',
+  'Physiotherapy in Adult and Pediatric Orthopedics Conditions': 'PTO',
+  'Physical & Functional Diagnosis and Prescription': 'PFDP',
+  'Research Methodology, Biostatistics and Evidence Based Practice': 'RMB',
+  'Clinical Education': 'CEd',
+  'Neurology, Psychiatry and Neurosurgery': 'NPNS',
+  'Physiotherapy in Adult and Pediatric Neurological and Neurosurgical Conditions': 'PTN',
+  'Cardiothoracic Diseases and Surgeries': 'CTD',
+  'Physiotherapy in Adult and Pediatric Cardiothoracic Conditions and Surgical Conditions': 'PTCT',
+  'Sports Physiotherapy & Exercise Prescription': 'PTS',
+  'PT Ethics, Medico Legal Aspects, Management & Administration': 'PTLM',
+  'Community Physiotherapy & Rehabilitation': 'CPTR',
+  'Project Work Orientation [NUES]': 'PW',
+  'Clinical Rotation': 'CR'
 };
 
 // "Other Subjects" — cross-cutting / elective subjects not tied to a specific year
@@ -153,6 +195,7 @@ function allYearSubjectsFlat() {
 
 module.exports = {
   YEAR_SUBJECTS,
+  SUBJECT_ABBREVIATIONS,
   OTHER_SUBJECTS,
   PHYSIOTHERAPY_SPECIALTIES,
   THERAPY_TYPES,

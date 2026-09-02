@@ -37,7 +37,7 @@ exports.home = async (req, res) => {
   res.render('public/home', {
     title: 'PhysioEdvance — One-Stop Solution for Physiotherapy Students',
     featured, categoriesByYear, otherSubjects, stats, founders, heroFeatures, activeCourses,
-    specialties, therapyTypes: THERAPY_TYPES, slugify, visionMission,
+    specialties, therapyTypes: THERAPY_TYPES, slugify, visionMission, SUBJECT_ABBREVIATIONS,
     bodyClass: 'landing-page'
   });
 };
@@ -57,30 +57,17 @@ exports.courseList = async (req, res) => {
 exports.courseDetail = async (req, res) => {
   const course = await Course.findBySlug(req.params.slug);
   if (!course) {
-    req.flash('error', 'Course not found.');
+    req.flash('error', 'Subject not found.');
     return res.redirect('/subjects');
   }
-  const modules = await Course.getModulesWithLessons(course.id);
-  const totalLessons = await Course.totalLessonsCount(course.id);
-  const reviews = await Course.getReviews(course.id);
-
-  let isEnrolled = false;
-  let enrollment = null;
-  if (req.session.user) {
-    enrollment = await Enrollment.find(req.session.user.id, course.id);
-    isEnrolled = !!enrollment;
+  // Seamlessly redirect to the Subject Interactive Portal layout for this course
+  if (course.category_slug) {
+    return res.redirect(`/subjects/${course.category_slug}`);
   }
-
-  const related = await db.prepare(`
-    SELECT c.*, u.name as instructor_name FROM courses c JOIN users u ON c.instructor_id = u.id
-    WHERE c.category_id = ? AND c.id != ? AND c.status = 'published' LIMIT 4
-  `).all(course.category_id, course.id);
-
-  res.render('public/course-detail', {
-    title: course.title,
-    course, modules, totalLessons, reviews, isEnrolled, enrollment, related
-  });
+  return res.redirect('/subjects');
 };
+
+const { SUBJECT_ABBREVIATIONS } = require('../config/subjectTaxonomy');
 
 // ===== SUBJECTS (subdomain-ready: subjects.physioedvance.com per proposal) =====
 exports.subjectsIndex = async (req, res) => {
@@ -91,8 +78,26 @@ exports.subjectsIndex = async (req, res) => {
     if (cat.year) categoriesByYear[cat.year].push(cat);
     else otherSubjects.push(cat);
   });
-  res.render('public/subjects-index', { title: 'All Subjects', categoriesByYear, otherSubjects });
+  res.render('public/subjects-index', { title: 'All Subjects — NCAHP Syllabus', categoriesByYear, otherSubjects, SUBJECT_ABBREVIATIONS });
 };
+
+function buildSubjectInteractiveData(category) {
+  const existing = subjectInteractiveData[category.slug];
+  const fallback = subjectInteractiveData['anatomy'];
+  const base = existing || fallback;
+
+  return {
+    ...base,
+    intro: {
+      title: `Introduction to ${category.name}`,
+      description: category.description || `Comprehensive study of clinical procedures, theoretical foundations, surgical considerations, and rehabilitation protocols for ${category.name} in BPT & MPT physiotherapy curriculum.`
+    },
+    syllabusUnits: (base.syllabusUnits || []).map((u) => ({
+      ...u,
+      title: u.title.includes('Anatomy') ? u.title.replace('Anatomy', category.name) : `${category.name}: ${u.title}`
+    }))
+  };
+}
 
 exports.subjectDetail = async (req, res) => {
   const category = await db.prepare(`SELECT * FROM categories WHERE slug = ?`).get(req.params.slug);
@@ -109,15 +114,8 @@ exports.subjectDetail = async (req, res) => {
   const notes = await Notes.byCategory(category.id);
   const research = await db.prepare(`SELECT * FROM research_articles WHERE category_id = ? ORDER BY created_at DESC`).all(category.id);
 
-  // Load interactive subject hub data dynamically based on selected subject
-  const rawData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
-  const interactiveData = {
-    ...rawData,
-    intro: {
-      title: `Introduction to ${category.name}`,
-      description: category.description || `Comprehensive study of clinical procedures, theoretical foundations, surgical considerations, and rehabilitation protocols for ${category.name} in BPT & MPT physiotherapy curriculum.`
-    }
-  };
+  // Load complete interactive hub data with all 9 options for any newly created subject
+  const interactiveData = buildSubjectInteractiveData(category);
 
   res.render('public/subject-detail', { title: category.name, category, courses, notes, research, interactiveData });
 };
@@ -128,20 +126,16 @@ exports.subjectSectionDetail = async (req, res) => {
     req.flash('error', 'Subject not found.');
     return res.redirect('/subjects');
   }
-  const rawData = subjectInteractiveData[category.slug] || subjectInteractiveData['anatomy'];
-  const interactiveData = {
-    ...rawData,
-    intro: {
-      title: `Introduction to ${category.name}`,
-      description: category.description || `Comprehensive study of clinical procedures, theoretical foundations, surgical considerations, and rehabilitation protocols for ${category.name} in BPT & MPT physiotherapy curriculum.`
-    }
-  };
+  const interactiveData = buildSubjectInteractiveData(category);
+  const { Notes } = require('../models/Content');
+  const notes = await Notes.byCategory(category.id);
   const activeSection = req.params.section || 'syllabus';
 
   res.render('public/subject-section', {
     title: `${category.name} - ${activeSection.replace('-', ' ').toUpperCase()}`,
     category,
     interactiveData,
+    notes,
     activeSection
   });
 };

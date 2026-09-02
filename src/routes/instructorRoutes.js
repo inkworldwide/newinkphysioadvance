@@ -8,22 +8,20 @@ router.use(requireAuth, requireRole('instructor', 'admin'));
 router.get('/dashboard', instructorController.dashboard);
 router.get('/profile', instructorController.profile);
 
+const { uploadLessonVideo, uploadCourseThumbnail, uploadWizardFiles } = require('../middleware/upload');
+
+function handleCourseWizardUpload(req, res, next) {
+  uploadWizardFiles.any()(req, res, (err) => {
+    if (err) {
+      req.flash('error', err.message || 'Could not upload files.');
+    }
+    next();
+  });
+}
+
 router.get('/courses', instructorController.courseList);
 router.get('/courses/wizard', instructorController.courseWizardView);
-router.post('/courses/wizard/save', instructorController.saveCourseWizard);
-router.post('/courses/:id/publish', instructorController.publishCourseToggle);
-router.get('/courses/new', instructorController.newCourseForm);
-router.post('/courses', instructorController.createCourse);
-router.get('/courses/:id/edit', instructorController.editCourseForm);
-router.post('/courses/:id', instructorController.updateCourse);
-router.post('/courses/:id/delete', instructorController.deleteCourse);
-router.get('/courses/:id/students', instructorController.students);
-router.get('/courses/:id/attendance', require('../controllers/attendanceController').courseAttendance);
-
-router.post('/courses/:courseId/modules', instructorController.addModule);
-router.post('/courses/:courseId/modules/:moduleId/delete', instructorController.deleteModule);
-
-const { uploadLessonVideo } = require('../middleware/upload');
+router.post('/courses/wizard/save', handleCourseWizardUpload, instructorController.saveCourseWizard);
 
 function handleLessonVideoUpload(req, res, next) {
   uploadLessonVideo.single('video_file')(req, res, (err) => {

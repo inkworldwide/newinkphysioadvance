@@ -57,6 +57,12 @@
       <a href="/subjects/<%= category.slug %>/module/stroke-models" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='stroke-models' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
         <i class="ri-heart-pulse-line me-1"></i> Pathology Models
       </a>
+      <a href="/subjects/<%= category.slug %>/module/notes" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='notes' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-file-text-line me-1"></i> Curriculum Notes
+      </a>
+      <a href="/subjects/<%= category.slug %>/module/research" class="btn btn-sm rounded-pill font-weight-bold px-3 py-2 <%= activeSection==='research' ? 'btn-primary shadow-sm' : 'btn-outline-primary' %>">
+        <i class="ri-microscope-line me-1"></i> Research Desk
+      </a>
     </div>
   </div>
 </section>
@@ -109,7 +115,54 @@
       </div>
     <% } %>
 
-    <!-- 2. REGIONS & MAPS -->
+    <!-- 2. CURRICULUM NOTES & IN-BUILT NATIVE READER VIEW -->
+    <% if (activeSection === 'notes') { %>
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <h3 class="fw-bold text-dark mb-1"><i class="ri-file-text-line text-primary me-2"></i>Curriculum Notes & Study Material</h3>
+          <p class="text-muted small mb-0">Read subject notes directly on the platform with native in-built reader view, or download PDF attachments.</p>
+        </div>
+      </div>
+
+      <% if (typeof notes !== 'undefined' && notes && notes.length > 0) { %>
+        <div class="row g-4 mb-4">
+          <% notes.forEach(n => { %>
+            <div class="col-12">
+              <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+                <div class="p-4 bg-light border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3">
+                  <div>
+                    <h5 class="fw-bold text-dark mb-1"><%= n.title %></h5>
+                    <span class="badge bg-primary-subtle text-primary font-weight-bold px-3 py-1 rounded-pill small"><%= category.name %></span>
+                  </div>
+                  <% if (n.file_url) { %>
+                    <a href="<%= n.file_url %>" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3.5 font-weight-bold">
+                      <i class="ri-file-pdf-line me-1"></i> Download PDF Document
+                    </a>
+                  <% } %>
+                </div>
+                <div class="p-4 pe-native-note-reader" style="font-size: 1rem; line-height: 1.8; color: #1e293b;">
+                  <% if (n.content && n.content.trim().length > 0) { %>
+                    <div class="pe-note-text-body bg-light-subtle p-4 rounded-4 border">
+                      <%- n.content.replace(/\n/g, '<br>') %>
+                    </div>
+                  <% } else { %>
+                    <p class="text-muted mb-0"><i class="ri-information-line me-1"></i> Note content available via PDF download above.</p>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white mb-4">
+          <i class="ri-file-text-line display-4 text-muted mb-2"></i>
+          <h5 class="fw-bold text-dark mb-1"><%= category.name %> Study Notes Active</h5>
+          <p class="text-muted small mb-0">High-yield <%= category.name %> study notes and native reading modules are updated regularly by faculty.</p>
+        </div>
+      <% } %>
+    <% } %>
+
+    <!-- 3. REGIONS & MAPS -->
     <% if (activeSection === 'regions') { %>
       <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
         <div>

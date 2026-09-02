@@ -27,7 +27,7 @@
         <div class="row g-4">
           <% courses.forEach(course => { %>
             <div class="col-md-6">
-              <a href="/courses/<%= course.slug %>" class="text-decoration-none d-block h-100">
+              <a href="/subjects/<%= course.category_slug || course.slug %>" class="text-decoration-none d-block h-100">
                 <div class="pe-fc-card">
                   <div class="pe-fc-thumb">
                     <div class="pe-fc-thumb-bg"></div>

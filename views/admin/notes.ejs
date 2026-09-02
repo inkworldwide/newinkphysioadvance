@@ -1,0 +1,131 @@
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+  <div>
+    <h3 class="fw-bold text-dark mb-1">Study Notes Management</h3>
+    <p class="text-muted small mb-0">Upload study notes with in-built native HTML/Markdown reading view and optional downloadable PDF files.</p>
+  </div>
+  <button class="btn btn-primary rounded-pill font-weight-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addNoteModal" style="background: #0a5dc2; border: none;">
+    <i class="ri-add-line me-1"></i> Upload New Study Note
+  </button>
+</div>
+
+<!-- NOTES LIST TABLE -->
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="bg-light">
+        <tr>
+          <th class="ps-4">Title</th>
+          <th>Subject</th>
+          <th>Year</th>
+          <th>Native Reader View</th>
+          <th>PDF Download</th>
+          <th>Created At</th>
+          <th class="pe-4 text-end">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!notes || notes.length === 0) { %>
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="ri-file-text-line display-5 d-block mb-2 text-muted"></i>
+              No study notes uploaded yet. Click "Upload New Study Note" above.
+            </td>
+          </tr>
+        <% } else { %>
+          <% notes.forEach(note => { %>
+            <tr>
+              <td class="ps-4 fw-bold text-dark"><%= note.title %></td>
+              <td><span class="badge bg-primary-subtle text-primary font-weight-bold px-2.5 py-1 rounded-pill"><%= note.subject_name %></span></td>
+              <td><span class="badge bg-secondary-subtle text-secondary font-weight-bold px-2.5 py-1 rounded-pill">Year <%= note.year %></span></td>
+              <td>
+                <% if (note.content && note.content.trim().length > 0) { %>
+                  <span class="badge bg-success-subtle text-success font-weight-bold px-2.5 py-1 rounded-pill"><i class="ri-article-line me-1"></i> Enabled (Native Reader)</span>
+                <% } else { %>
+                  <span class="badge bg-light text-muted border px-2.5 py-1 rounded-pill">PDF Only</span>
+                <% } %>
+              </td>
+              <td>
+                <% if (note.file_url) { %>
+                  <a href="<%= note.file_url %>" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3 py-1 font-weight-semibold">
+                    <i class="ri-file-pdf-line me-1"></i> View PDF
+                  </a>
+                <% } else { %>
+                  <span class="text-muted small">None</span>
+                <% } %>
+              </td>
+              <td class="small text-muted"><%= new Date(note.created_at || Date.now()).toLocaleDateString() %></td>
+              <td class="pe-4 text-end">
+                <form action="/admin/notes/<%= note.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this study note?')">
+                  <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" title="Delete Note">
+                    <i class="ri-delete-bin-line"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- UPLOAD NEW NOTE MODAL -->
+<div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header text-white p-4" style="background: linear-gradient(135deg, #0a5dc2 0%, #0369a1 100%);">
+        <div>
+          <h5 class="modal-title font-weight-bold text-white mb-1" id="addNoteModalLabel">
+            <i class="ri-file-add-line me-1 text-warning"></i> Upload Study Note with Native Reader View
+          </h5>
+          <p class="text-white-75 small mb-0">Add study material with native in-built reader content and optional PDF attachment.</p>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form action="/admin/notes" method="POST">
+        <div class="modal-body p-4 bg-light">
+          <div class="row g-3 mb-3">
+            <div class="col-md-8">
+              <label class="form-label fw-bold text-dark small">Note Title</label>
+              <input type="text" name="title" class="form-control form-control-lg bg-white" placeholder="e.g. Upper Limb Osteology & Muscle Attachments" required>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label fw-bold text-dark small">Subject Category</label>
+                <select name="category_id" class="form-select form-select-lg bg-white" required>
+                  <% categories.forEach(cat => { %>
+                    <option value="<%= cat.id %>"><%= cat.name %> (Year <%= cat.year %>)</option>
+                  <% }) %>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold text-dark small">
+              <i class="ri-article-line text-primary me-1"></i> In-Built Native Reading View Content (HTML / Text)
+            </label>
+            <textarea name="content" rows="6" class="form-control bg-white font-monospace small" placeholder="Enter study notes content, key clinical points, osteology landmarks, and summary text for direct in-browser reading..."></textarea>
+            <span class="text-muted small d-block mt-1">Students will be able to read this content natively inside the website browser.</span>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold text-dark small">
+              <i class="ri-file-pdf-line text-danger me-1"></i> Optional PDF / Document File URL
+            </label>
+            <input type="text" name="file_url" class="form-control form-control-lg bg-white" placeholder="/uploads/notes/upper-limb-notes.pdf">
+            <span class="text-muted small d-block mt-1">Enter path or URL for downloadable PDF document.</span>
+          </div>
+        </div>
+
+        <div class="modal-footer bg-white border-top p-3">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary rounded-pill px-4 font-weight-bold" style="background: #0a5dc2; border: none;">
+            <i class="ri-save-line me-1"></i> Save Study Note
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

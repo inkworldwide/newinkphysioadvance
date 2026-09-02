@@ -52,4 +52,47 @@ const uploadLessonVideo = multer({
   fileFilter: videoFileFilter
 });
 
-module.exports = { uploadAvatar, uploadLessonVideo };
+const COURSE_DIR = path.join(__dirname, '..', '..', 'public', 'uploads', 'courses');
+fs.mkdirSync(COURSE_DIR, { recursive: true });
+
+const courseStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, COURSE_DIR),
+  filename: (req, file, cb) => {
+    const ext = (path.extname(file.originalname) || '.jpg').toLowerCase();
+    const safeExt = ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext) ? ext : '.jpg';
+    cb(null, `course-${Date.now()}-${Math.round(Math.random() * 1e6)}${safeExt}`);
+  }
+});
+
+const uploadCourseThumbnail = multer({
+  storage: courseStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: imageFileFilter
+});
+
+const wizardStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (file.fieldname === 'video_file') {
+      cb(null, VIDEO_DIR);
+    } else {
+      cb(null, COURSE_DIR);
+    }
+  },
+  filename: (req, file, cb) => {
+    const ext = (path.extname(file.originalname) || '').toLowerCase();
+    if (file.fieldname === 'video_file') {
+      const safeExt = ['.mp4', '.webm', '.ogg'].includes(ext) ? ext : '.mp4';
+      cb(null, `lesson-${Date.now()}-${Math.round(Math.random() * 1e6)}${safeExt}`);
+    } else {
+      const safeExt = ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext) ? ext : '.jpg';
+      cb(null, `course-${Date.now()}-${Math.round(Math.random() * 1e6)}${safeExt}`);
+    }
+  }
+});
+
+const uploadWizardFiles = multer({
+  storage: wizardStorage,
+  limits: { fileSize: 250 * 1024 * 1024 }
+});
+
+module.exports = { uploadAvatar, uploadLessonVideo, uploadCourseThumbnail, uploadWizardFiles };

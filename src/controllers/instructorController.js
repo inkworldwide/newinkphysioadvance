@@ -79,75 +79,126 @@ exports.saveCourseWizard = async (req, res) => {
     const data = req.body;
     let courseId = data.course_id;
 
-    if (!courseId) {
-      const slug = slugify(data.title) + '-' + Date.now().toString().slice(-4);
-      courseId = await Course.create({
-        instructor_id: req.session.user.id,
-        category_id: data.category_id || 1,
-        title: data.title || 'Untitled Course',
-        slug,
-        subtitle: data.subtitle || '',
-        description: data.description || '',
-        level: data.level || 'Beginner',
-        duration_hours: parseFloat(data.duration_hours) || 12,
-        target_exam: data.target_exam || 'BPT 1st Year',
-        status: data.is_publish === '1' ? 'published' : 'draft',
-        learning_outcomes: data.learning_outcomes || '',
-        requirements: data.requirements || '',
-        thumbnail: data.thumbnail || '/images/courses/course-placeholder.jpg'
+    // Map uploaded files by fieldname
+    const uploadedFiles = {};
+    if (req.files && Array.isArray(req.files)) {
+      req.files.forEach(f => {
+        uploadedFiles[f.fieldname] = f.filename;
       });
+    }
+
+    let thumbnail = data.thumbnail || '/images/courses/course-placeholder.jpg';
+    if (uploadedFiles['thumbnail_file']) {
+      thumbnail = `/uploads/courses/${uploadedFiles['thumbnail_file']}`;
+    }
+
+    if (!courseId) {
+      const slug = slugify(data.title || 'course') + '-' + Date.now().toString().slice(-4);
+      const info = await db.prepare(`
+        INSERT INTO courses (instructor_id, category_id, title, slug, subtitle, description, level, duration_hours, target_exam, status, learning_outcomes, requirements, thumbnail, price, language)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'English') RETURNING id
+      `).run(
+        req.session.user.id,
+        data.category_id || 1,
+        data.title || 'Untitled Course',
+        slug,
+        data.subtitle || '',
+        data.description || '',
+        data.level || 'Beginner',
+        parseFloat(data.duration_hours) || 12,
+        data.target_exam || 'BPT 1st Year',
+        data.is_publish === '1' ? 'published' : 'draft',
+        data.learning_outcomes || '',
+        data.requirements || '',
+        thumbnail
+      );
+      courseId = info.lastInsertRowid;
     } else {
       const existing = await Course.findById(courseId);
       if (existing) {
-        await Course.update(courseId, {
-          ...existing,
-          title: data.title || existing.title,
-          subtitle: data.subtitle !== undefined ? data.subtitle : existing.subtitle,
-          description: data.description !== undefined ? data.description : existing.description,
-          category_id: data.category_id || existing.category_id,
-          level: data.level || existing.level,
-          language: existing.language || 'English',
-          price: existing.price || 0,
-          discount_price: existing.discount_price || null,
-          duration_hours: parseFloat(data.duration_hours) || existing.duration_hours || 12,
-          target_exam: data.target_exam || existing.target_exam,
-          status: data.is_publish === '1' ? 'published' : (data.is_publish === '0' ? 'draft' : existing.status),
-          requirements: data.requirements !== undefined ? data.requirements : existing.requirements,
-          learning_outcomes: data.learning_outcomes !== undefined ? data.learning_outcomes : existing.learning_outcomes,
-          thumbnail: data.thumbnail || existing.thumbnail || '/images/courses/course-placeholder.jpg'
-        });
+        let finalThumbnail = existing.thumbnail || '/images/courses/course-placeholder.jpg';
+        if (uploadedFiles['thumbnail_file']) {
+          finalThumbnail = `/uploads/courses/${uploadedFiles['thumbnail_file']}`;
+        } else if (data.thumbnail) {
+          finalThumbnail = data.thumbnail;
+        }
+
+        await db.prepare(`
+          UPDATE courses
+          SET title = ?, subtitle = ?, description = ?, category_id = ?, level = ?, duration_hours = ?, target_exam = ?, status = ?, requirements = ?, learning_outcomes = ?, thumbnail = ?
+          WHERE id = ?
+        `).run(
+          data.title || existing.title,
+          data.subtitle !== undefined ? data.subtitle : existing.subtitle,
+          data.description !== undefined ? data.description : existing.description,
+          data.category_id || existing.category_id,
+          data.level || existing.level,
+          parseFloat(data.duration_hours) || existing.duration_hours || 12,
+          data.target_exam || existing.target_exam,
+          data.is_publish === '1' ? 'published' : (data.is_publish === '0' ? 'draft' : existing.status),
+          data.requirements !== undefined ? data.requirements : existing.requirements,
+          data.learning_outcomes !== undefined ? data.learning_outcomes : existing.learning_outcomes,
+          finalThumbnail,
+          courseId
+        );
       }
     }
 
-    // Process Module creation if module_title is provided
+    // Determine target module ID (existing module OR newly created module)
+    let targetModuleId = data.existing_module_id ? parseInt(data.existing_module_id, 10) : null;
     if (data.module_title) {
       const moduleCount = (await db.prepare(`SELECT COUNT(*) as cnt FROM modules WHERE course_id = ?`).get(courseId))?.cnt || 0;
-      const modId = await Course.addModule(courseId, {
+      targetModuleId = await Course.addModule(courseId, {
         title: data.module_title,
         description: data.module_description || '',
         sort_order: moduleCount + 1
       });
+    }
 
-      if (data.lesson_title && modId) {
-        const lessonCount = (await db.prepare(`SELECT COUNT(*) as cnt FROM lessons WHERE module_id = ?`).get(modId))?.cnt || 0;
-        await Course.addLesson(modId, {
-          title: data.lesson_title,
-          type: data.lesson_type || 'video',
-          content: data.lesson_notes || '',
-          video_url: data.video_url || `/videos/stream/anat-m1-l1`,
-          duration_minutes: parseInt(data.duration_minutes || 15, 10),
-          sort_order: lessonCount + 1,
+    // Process multiple lessons under the target module
+    if (targetModuleId) {
+      const lessonTitles = Array.isArray(data.lesson_title) ? data.lesson_title : (data.lesson_title ? [data.lesson_title] : []);
+      const lessonDurations = Array.isArray(data.duration_minutes) ? data.duration_minutes : (data.duration_minutes ? [data.duration_minutes] : []);
+      const lessonUrls = Array.isArray(data.video_url) ? data.video_url : (data.video_url ? [data.video_url] : []);
+      const lessonNotes = Array.isArray(data.lesson_notes) ? data.lesson_notes : (data.lesson_notes ? [data.lesson_notes] : []);
+
+      for (let i = 0; i < lessonTitles.length; i++) {
+        const title = lessonTitles[i];
+        if (!title || !title.trim()) continue;
+
+        let videoUrl = lessonUrls[i] || `/videos/stream/anat-m1-l${i + 1}`;
+        if (uploadedFiles[`video_file_${i}`]) {
+          videoUrl = `/uploads/lessons/${uploadedFiles[`video_file_${i}`]}`;
+        } else if (i === 0 && uploadedFiles['video_file']) {
+          videoUrl = `/uploads/lessons/${uploadedFiles['video_file']}`;
+        }
+
+        const duration = parseInt(lessonDurations[i] || 15, 10);
+        const notes = lessonNotes[i] || '';
+
+        const currentLessonCount = (await db.prepare(`SELECT COUNT(*) as cnt FROM lessons WHERE module_id = ?`).get(targetModuleId))?.cnt || 0;
+        await Course.addLesson(targetModuleId, {
+          title,
+          type: 'video',
+          content: notes,
+          video_url: videoUrl,
+          duration_minutes: duration,
+          sort_order: currentLessonCount + 1,
           is_preview: 0
         });
       }
     }
 
-    const actionMsg = data.is_publish === '1' ? '🎉 Course Published Successfully!' : '💾 Course Saved as Draft!';
-    req.flash('success', actionMsg);
-    res.redirect(`/instructor/courses/wizard?courseId=${courseId}&step=${data.next_step || 1}`);
+    if (data.is_publish === '1') {
+      req.flash('success', '🎉 Course Published Successfully with Multiple Video Lessons & Interactive Features!');
+      return res.redirect('/instructor/courses');
+    }
+
+    req.flash('success', '💾 Course & Video Lessons Saved Successfully!');
+    res.redirect(`/instructor/courses/wizard?courseId=${courseId}`);
   } catch (err) {
     console.error('Save Course Wizard Error:', err);
-    req.flash('error', 'Could not save course wizard data.');
+    req.flash('error', 'Could not save course data.');
     res.redirect('/instructor/courses');
   }
 };
