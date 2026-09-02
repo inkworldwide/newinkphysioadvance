@@ -326,12 +326,32 @@ const ClinicalSpecialty = {
     const slug = (data.slug || data.name).toString().toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-');
     const targetOrder = Math.max(1, parseInt(data.display_order) || 1);
     await db.prepare(`UPDATE clinical_specialties SET display_order = display_order + 1 WHERE display_order >= ?`).run(targetOrder);
+
+    // Auto non-repeating theme palette
+    const PALETTE = ['primary', 'success', 'warning', 'danger', 'info', 'purple', 'indigo', 'teal', 'orange'];
+    const count = Number((await db.prepare(`SELECT COUNT(*) as c FROM clinical_specialties`).get()).c);
+    const autoTheme = data.theme || PALETTE[count % PALETTE.length];
+
+    // Smart contextual icon resolver
+    let autoIcon = data.icon;
+    if (!autoIcon || autoIcon === 'ri-stethoscope-fill') {
+      const n = (data.name || '').toLowerCase();
+      if (n.includes('surgery') || n.includes('surgical')) autoIcon = 'ri-hospital-line';
+      else if (n.includes('geriatric') || n.includes('elderly') || n.includes('senior')) autoIcon = 'ri-user-heart-line';
+      else if (n.includes('pain') || n.includes('chronic') || n.includes('spine')) autoIcon = 'ri-mental-health-line';
+      else if (n.includes('ortho') || n.includes('sports') || n.includes('injury')) autoIcon = 'ri-run-line';
+      else if (n.includes('pediatric') || n.includes('child') || n.includes('baby')) autoIcon = 'ri-bear-smile-line';
+      else if (n.includes('neuro') || n.includes('brain') || n.includes('stroke')) autoIcon = 'ri-brain-line';
+      else if (n.includes('cardio') || n.includes('chest')) autoIcon = 'ri-heart-pulse-fill';
+      else autoIcon = 'ri-stethoscope-fill';
+    }
+
     const info = await db.prepare(`
       INSERT INTO clinical_specialties (name, slug, icon, badge, theme, items, display_order, is_active)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id
     `).run(
-      data.name, slug, data.icon || 'ri-stethoscope-fill',
-      data.badge || 'Clinical', data.theme || 'primary',
+      data.name, slug, autoIcon,
+      data.badge || 'Clinical', autoTheme,
       data.items || '', targetOrder, data.is_active === '0' || data.is_active === 0 ? 0 : 1
     );
     await this.normalizePositions();

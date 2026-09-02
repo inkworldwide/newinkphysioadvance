@@ -133,16 +133,36 @@
       <p class="pe-section-sub mx-auto">Every subject, workshop, and course on PhysioEdvance maps directly back to real clinical specialties you'll practice in.</p>
     </div>
 
+    <% 
+       const CLINICAL_PALETTE = ['primary', 'success', 'warning', 'danger', 'info', 'purple', 'indigo', 'teal', 'orange'];
+       
+       function resolveClinicalIcon(name, defaultIcon) {
+         if (!name) return defaultIcon || 'ri-stethoscope-fill';
+         const n = name.toLowerCase();
+         if (n.includes('surgery') || n.includes('surgical') || n.includes('post-op')) return 'ri-hospital-line';
+         if (n.includes('geriatric') || n.includes('elderly') || n.includes('senior')) return 'ri-user-heart-line';
+         if (n.includes('pain') || n.includes('chronic') || n.includes('spine')) return 'ri-mental-health-line';
+         if (n.includes('ortho') || n.includes('sports') || n.includes('injury')) return 'ri-run-line';
+         if (n.includes('pediatric') || n.includes('child') || n.includes('baby')) return 'ri-bear-smile-line';
+         if (n.includes('neuro') || n.includes('brain') || n.includes('stroke')) return 'ri-brain-line';
+         if (n.includes('cardio') || n.includes('chest') || n.includes('pulmonary')) return 'ri-heart-pulse-fill';
+         if (n.includes('rehab') || n.includes('therapy')) return 'ri-hand-heart-line';
+         return defaultIcon || 'ri-stethoscope-fill';
+       }
+    %>
     <div class="row g-4">
-      <% specialties.forEach(s => { %>
+      <% specialties.forEach((s, idx) => { 
+           const cardTheme = (s.theme && s.theme !== 'primary') ? s.theme : CLINICAL_PALETTE[idx % CLINICAL_PALETTE.length];
+           const cardIcon = resolveClinicalIcon(s.name, s.icon);
+      %>
         <div class="col-md-6 col-lg-4">
-          <div class="pe-clinical-card pe-theme-<%= s.theme || 'primary' %>">
+          <div class="pe-clinical-card pe-theme-<%= cardTheme %>">
             <div class="pe-clinical-card-header d-flex justify-content-between align-items-center mb-3">
-              <div class="pe-clinical-icon-badge bg-<%= s.theme || 'primary' %>-subtle text-<%= s.theme || 'primary' %>">
-                <i class="<%= s.icon %>"></i>
+              <div class="pe-clinical-icon-badge bg-<%= cardTheme %>-subtle text-<%= cardTheme %>">
+                <i class="<%= cardIcon %>"></i>
               </div>
               <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-<%= s.theme || 'primary' %>-subtle text-<%= s.theme || 'primary' %> fw-bold px-3 py-1 rounded-pill small">
+                <span class="badge bg-<%= cardTheme %>-subtle text-<%= cardTheme %> fw-bold px-3 py-1 rounded-pill small">
                   <%= s.badge || 'Clinical' %>
                 </span>
                 <a href="/subjects/<%= s.slug %>" class="pe-clinical-arrow-btn" title="Explore <%= s.name %>">
@@ -161,7 +181,7 @@
               <% s.items.forEach(item => { %>
                 <li class="pe-clinical-item">
                   <a href="/courses?search=<%= encodeURIComponent(item) %>" class="text-decoration-none">
-                    <i class="ri-checkbox-circle-fill text-<%= s.theme || 'primary' %> me-2 fs-6"></i>
+                    <i class="ri-checkbox-circle-fill text-<%= cardTheme %> me-2 fs-6"></i>
                     <span><%= item %></span>
                   </a>
                 </li>
