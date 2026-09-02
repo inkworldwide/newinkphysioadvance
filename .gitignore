@@ -5,7 +5,7 @@ node_modules/
 .env
 
 # Database data
-data/
+/data/
 
 # Runtime logs
 src/logs/*.log
