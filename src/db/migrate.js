@@ -94,9 +94,10 @@ async function migrate() {
         const defaults = [
           { title: 'Seminars', subtitle: '25+ Webinars & Research', icon: 'ri-slideshow-3-line', url: '/live-sessions', badge_color: 'warning', display_order: 1 },
           { title: 'Recorded Videos', subtitle: '120+ HD Video Lectures', icon: 'ri-video-download-line', url: '/courses', badge_color: 'info', display_order: 2 },
-          { title: 'Workshops', subtitle: '18+ Practical Workshops', icon: 'ri-tools-line', url: '/live-sessions', badge_color: 'success', display_order: 3 },
-          { title: 'Live Classes', subtitle: '50+ Live Classes Done', icon: 'ri-live-line', url: '/live-sessions', badge_color: 'danger', display_order: 4 },
-          { title: 'Free Courses', subtitle: '30+ BPT Study Modules', icon: 'ri-gift-line', url: '/subjects', badge_color: 'primary', display_order: 5 }
+          { title: 'Students', subtitle: '500+ Active Students', icon: 'ri-graduation-cap-line', url: '/auth/register', badge_color: 'purple', display_order: 3 },
+          { title: 'Workshops', subtitle: '18+ Practical Workshops', icon: 'ri-tools-line', url: '/live-sessions', badge_color: 'success', display_order: 4 },
+          { title: 'Live Classes', subtitle: '50+ Live Classes Done', icon: 'ri-live-line', url: '/live-sessions', badge_color: 'danger', display_order: 5 },
+          { title: 'Free Courses', subtitle: '30+ BPT Study Modules', icon: 'ri-gift-line', url: '/subjects', badge_color: 'primary', display_order: 6 }
         ];
         for (const d of defaults) {
           await db.prepare(`

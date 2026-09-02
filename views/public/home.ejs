@@ -50,15 +50,32 @@
       </div>
     </div>
 
-    <!-- Dynamic Hero Feature Cards Strip (Managed from Admin Dashboard) -->
-    <% if (typeof heroFeatures !== 'undefined' && heroFeatures.length > 0) { %>
+    <!-- Dynamic Hero Feature Cards Strip (Smart Auto-Color & Related Icon Resolver) -->
+    <% if (typeof heroFeatures !== 'undefined' && heroFeatures.length > 0) { 
+         const COLOR_PALETTE = ['warning', 'info', 'purple', 'success', 'danger', 'primary', 'indigo', 'teal', 'orange'];
+         function resolveSmartIcon(title, fallbackIcon) {
+           if (!title) return fallbackIcon || 'ri-star-line';
+           const t = title.toLowerCase();
+           if (t.includes('student') || t.includes('learner') || t.includes('enroll')) return 'ri-graduation-cap-line';
+           if (t.includes('seminar') || t.includes('webinar')) return 'ri-slideshow-3-line';
+           if (t.includes('record') || t.includes('video') || t.includes('lecture')) return 'ri-video-download-line';
+           if (t.includes('workshop') || t.includes('practical')) return 'ri-tools-line';
+           if (t.includes('live') || t.includes('class')) return 'ri-live-line';
+           if (t.includes('free') || t.includes('course') || t.includes('module')) return 'ri-gift-line';
+           if (t.includes('note') || t.includes('study') || t.includes('pdf')) return 'ri-file-text-line';
+           return fallbackIcon || 'ri-star-line';
+         }
+    %>
       <div class="pe-hero-features-grid mt-4 pt-2">
         <div class="row g-3">
-          <% heroFeatures.forEach(feat => { %>
+          <% heroFeatures.forEach((feat, idx) => { 
+               const assignedColor = (feat.badge_color && feat.badge_color !== 'warning') ? feat.badge_color : COLOR_PALETTE[idx % COLOR_PALETTE.length];
+               const assignedIcon = resolveSmartIcon(feat.title, feat.icon);
+          %>
             <div class="col-6 col-md">
               <a href="<%= feat.url || '/courses' %>" class="pe-feature-card">
-                <div class="pe-feature-icon bg-<%= feat.badge_color || 'primary' %>-subtle text-<%= feat.badge_color || 'primary' %>">
-                  <i class="<%= feat.icon || 'ri-star-line' %>"></i>
+                <div class="pe-feature-icon bg-<%= assignedColor %>-subtle text-<%= assignedColor %>">
+                  <i class="<%= assignedIcon %>"></i>
                 </div>
                 <div>
                   <div class="pe-feature-title"><%= feat.title %></div>

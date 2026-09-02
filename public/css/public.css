@@ -2,6 +2,16 @@
    PhysioEdvance — Public Pages CSS (Edufast LMS Layout Style)
    ========================================================= */
 
+/* Color Palette Utilities for Hero Feature Cards */
+.bg-purple-subtle { background-color: #f3e8ff !important; }
+.text-purple { color: #9333ea !important; }
+.bg-indigo-subtle { background-color: #e0e7ff !important; }
+.text-indigo { color: #4f46e5 !important; }
+.bg-teal-subtle { background-color: #ccfbf1 !important; }
+.text-teal { color: #0d9488 !important; }
+.bg-orange-subtle { background-color: #ffedd5 !important; }
+.text-orange { color: #ea580c !important; }
+
 /* --- Logo --- */
 .pe-logo-img{height:2.75rem;width:auto;display:block;}
 .pe-logo-badge{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:8px;padding:0.3rem 0.4rem;}
