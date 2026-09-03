@@ -124,75 +124,7 @@
   </div>
 </section>
 
-<!-- ============ PHYSIOTHERAPY CLINICAL SERVICES ============ -->
-<section class="pe-section bg-light-subtle position-relative py-5">
-  <div class="container py-2">
-    <div class="text-center mb-5">
-      <span class="pe-eyebrow">Services</span>
-      <h2 class="pe-section-title">What We Focus On</h2>
-      <p class="pe-section-sub mx-auto">Every subject, workshop, and course on PhysioEdvance maps directly back to real clinical specialties you'll practice in.</p>
-    </div>
 
-    <% 
-       const CLINICAL_PALETTE = ['primary', 'success', 'warning', 'danger', 'info', 'purple', 'indigo', 'teal', 'orange'];
-       
-       function resolveClinicalIcon(name, defaultIcon) {
-         if (!name) return defaultIcon || 'ri-stethoscope-fill';
-         const n = name.toLowerCase();
-         if (n.includes('surgery') || n.includes('surgical') || n.includes('post-op')) return 'ri-hospital-line';
-         if (n.includes('geriatric') || n.includes('elderly') || n.includes('senior')) return 'ri-user-heart-line';
-         if (n.includes('pain') || n.includes('chronic') || n.includes('spine')) return 'ri-mental-health-line';
-         if (n.includes('ortho') || n.includes('sports') || n.includes('injury')) return 'ri-run-line';
-         if (n.includes('pediatric') || n.includes('child') || n.includes('baby')) return 'ri-bear-smile-line';
-         if (n.includes('neuro') || n.includes('brain') || n.includes('stroke')) return 'ri-brain-line';
-         if (n.includes('cardio') || n.includes('chest') || n.includes('pulmonary')) return 'ri-heart-pulse-fill';
-         if (n.includes('rehab') || n.includes('therapy')) return 'ri-hand-heart-line';
-         return defaultIcon || 'ri-stethoscope-fill';
-       }
-    %>
-    <div class="row g-4">
-      <% specialties.forEach((s, idx) => { 
-           const cardTheme = (s.theme && s.theme !== 'primary') ? s.theme : CLINICAL_PALETTE[idx % CLINICAL_PALETTE.length];
-           const cardIcon = resolveClinicalIcon(s.name, s.icon);
-      %>
-        <div class="col-md-6 col-lg-4">
-          <div class="pe-clinical-card pe-theme-<%= cardTheme %>">
-            <div class="pe-clinical-card-header d-flex justify-content-between align-items-center mb-3">
-              <div class="pe-clinical-icon-badge bg-<%= cardTheme %>-subtle text-<%= cardTheme %>">
-                <i class="<%= cardIcon %>"></i>
-              </div>
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-<%= cardTheme %>-subtle text-<%= cardTheme %> fw-bold px-3 py-1 rounded-pill small">
-                  <%= s.badge || 'Clinical' %>
-                </span>
-                <a href="/subjects/<%= s.slug %>" class="pe-clinical-arrow-btn" title="Explore <%= s.name %>">
-                  <i class="ri-arrow-right-line"></i>
-                </a>
-              </div>
-            </div>
-
-            <h5 class="pe-clinical-title mb-3">
-              <a href="/subjects/<%= s.slug %>" class="text-decoration-none text-dark">
-                <%= s.name %>
-              </a>
-            </h5>
-
-            <ul class="pe-clinical-list list-unstyled mb-0">
-              <% s.items.forEach(item => { %>
-                <li class="pe-clinical-item">
-                  <a href="/courses?search=<%= encodeURIComponent(item) %>" class="text-decoration-none">
-                    <i class="ri-checkbox-circle-fill text-<%= cardTheme %> me-2 fs-6"></i>
-                    <span><%= item %></span>
-                  </a>
-                </li>
-              <% }) %>
-            </ul>
-          </div>
-        </div>
-      <% }) %>
-    </div>
-  </div>
-</section>
 
 
 
@@ -556,91 +488,30 @@
               </div>
 
               <div class="row g-3 mb-3">
-                <!-- Left Field: Category Type Selector -->
                 <div class="col-md-6">
                   <label class="form-label fw-bold text-dark small">
-                    <i class="ri-apps-line text-primary me-1"></i> Interest Category
+                    <i class="ri-book-open-line text-primary me-1"></i> Academic Year / Program Interest
                   </label>
-                  <select id="interestCategorySelect" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;" onchange="updateDynamicDropdownOptions()">
-                    <option value="services" selected>🏥 Clinical Services</option>
-                    <option value="courses">🎓 Year / Academic Courses</option>
+                  <select name="service_type" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;">
+                    <option value="BPT 1st Year (Foundation & Osteology)">BPT 1st Year (Foundation & Osteology)</option>
+                    <option value="BPT 2nd Year (Pathology & Biomechanics)">BPT 2nd Year (Pathology & Biomechanics)</option>
+                    <option value="BPT 3rd Year (Medicine, Surgery & Ortho)">BPT 3rd Year (Medicine, Surgery & Ortho)</option>
+                    <option value="BPT 4th Year (Neurology, Sports & Rehab)">BPT 4th Year (Neurology, Sports & Rehab)</option>
+                    <option value="Live Classes & Interactive Workshops">Live Classes & Interactive Workshops</option>
+                    <option value="General Academic Inquiry">General Academic Inquiry</option>
                   </select>
                 </div>
 
-                <!-- Right Field: Dynamic Option Dropdown -->
                 <div class="col-md-6">
-                  <label class="form-label fw-bold text-dark small" id="dynamicDropdownLabel">
-                    <i class="ri-heart-pulse-line text-primary me-1"></i> Select Clinical Service
+                  <label class="form-label fw-bold text-dark small">
+                    <i class="ri-question-answer-line text-primary me-1"></i> Request Type
                   </label>
-                  <select name="service_type" id="dynamicOptionSelect" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;">
-                    <!-- Dynamically populated via JS -->
+                  <select name="request_type" class="form-select form-select-lg bg-light-subtle border-light-subtle" style="font-size: 0.95rem;">
+                    <option value="callback" selected>Request a Call Back</option>
+                    <option value="appointment">Book Academic Guidance Session</option>
+                    <option value="notes_help">Library & Notes Access Help</option>
                   </select>
                 </div>
-              </div>
-
-              <!-- Dynamic Dropdown Option Switcher Script -->
-              <script>
-                const clinicalServicesOptions = [
-                  { value: "Post-Surgery Physiotherapy", text: "Post-Surgery Physiotherapy" },
-                  { value: "Orthopedic & Joint Rehabilitation", text: "Orthopedic & Joint Rehabilitation" },
-                  { value: "Neurological Rehabilitation (Stroke / TBI)", text: "Neurological Rehabilitation (Stroke / TBI)" },
-                  { value: "Sports Injury & Athletic Conditioning", text: "Sports Injury & Athletic Conditioning" },
-                  { value: "Cardiorespiratory ICU & Pulmonary Therapy", text: "Cardiorespiratory ICU & Pulmonary Therapy" },
-                  { value: "Pediatric & Geriatric Physical Therapy", text: "Pediatric & Geriatric Physical Therapy" },
-                  { value: "Clinical Internship & Practical Guidance", text: "Clinical Internship & Practical Guidance" },
-                  { value: "General Physiotherapy Consultation", text: "General Physiotherapy Consultation" }
-                ];
-
-                const academicCoursesOptions = [
-                  { value: "Year 1 (Foundation & Human Osteology)", text: "Year 1 (Foundation & Human Osteology)" },
-                  { value: "Year 2 (Pathology & Biomechanics)", text: "Year 2 (Pathology & Biomechanics)" },
-                  { value: "Year 3 (Medicine, Surgery & Ortho)", text: "Year 3 (Medicine, Surgery & Ortho)" },
-                  { value: "Year 4 (Neurology, Sports & Rehab)", text: "Year 4 (Neurology, Sports & Rehab)" },
-                  { value: "MPT Master Specialty Courses", text: "MPT Master Specialty Courses" },
-                  { value: "Competitive Exam Prep (NPTE / GPAT)", text: "Competitive Exam Prep (NPTE / GPAT)" }
-                ];
-
-                function updateDynamicDropdownOptions() {
-                  const categorySelect = document.getElementById('interestCategorySelect');
-                  const targetSelect = document.getElementById('dynamicOptionSelect');
-                  const labelElement = document.getElementById('dynamicDropdownLabel');
-                  
-                  if (!categorySelect || !targetSelect) return;
-                  
-                  const selectedCategory = categorySelect.value;
-                  targetSelect.innerHTML = '';
-
-                  if (selectedCategory === 'services') {
-                    labelElement.innerHTML = '<i class="ri-heart-pulse-line text-primary me-1"></i> Select Clinical Service';
-                    clinicalServicesOptions.forEach(opt => {
-                      const option = document.createElement('option');
-                      option.value = opt.value;
-                      option.textContent = opt.text;
-                      targetSelect.appendChild(option);
-                    });
-                  } else {
-                    labelElement.innerHTML = '<i class="ri-graduation-cap-line text-primary me-1"></i> Select Academic Year / Course';
-                    academicCoursesOptions.forEach(opt => {
-                      const option = document.createElement('option');
-                      option.value = opt.value;
-                      option.textContent = opt.text;
-                      targetSelect.appendChild(option);
-                    });
-                  }
-                }
-
-                // Initial populate on load
-                document.addEventListener('DOMContentLoaded', updateDynamicDropdownOptions);
-              </script>
-
-              <div class="mb-3">
-                <label class="form-label fw-bold text-dark small">
-                  <i class="ri-question-answer-line text-primary me-1"></i> Request Type
-                </label>
-                <select name="request_type" class="form-select form-select-lg bg-light-subtle border-light-subtle">
-                  <option value="appointment" selected>Book an Appointment</option>
-                  <option value="callback">Request a Call Back</option>
-                </select>
               </div>
 
               <div class="mb-4">
