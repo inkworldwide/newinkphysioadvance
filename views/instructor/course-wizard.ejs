@@ -182,6 +182,23 @@
                 <span class="text-muted small d-block mt-1">Stream path fallback if no video file is selected.</span>
               </div>
 
+              <!-- DIRECT PDF / NOTES FILE UPLOAD SECTION -->
+              <div class="col-md-6">
+                <label class="form-label small font-weight-semibold text-danger">
+                  <i class="ri-file-pdf-2-line me-1"></i> Upload PDF Study Notes / Handout Document
+                </label>
+                <input type="file" name="pdf_file" class="form-control rounded-3" accept=".pdf,.doc,.docx,.ppt,.pptx">
+                <span class="text-muted small d-block mt-1">Attach PDF study guide, lecture slides, or exam key points.</span>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label small font-weight-semibold text-secondary">
+                  <i class="ri-drive-line me-1"></i> Or Enter PDF Link / Google Drive URL
+                </label>
+                <input type="text" name="pdf_url" class="form-control rounded-3" placeholder="https://drive.google.com/... or /uploads/notes/lecture1.pdf">
+                <span class="text-muted small d-block mt-1">Direct PDF link or cloud document URL fallback.</span>
+              </div>
+
               <div class="col-12">
                 <label class="form-label small font-weight-semibold">In-Built Study Notes & Key Points</label>
                 <textarea name="lesson_notes" rows="2" class="form-control rounded-3" placeholder="Type key clinical notes and exam takeaways for students..."></textarea>
@@ -633,8 +650,17 @@
           <label class="form-label small font-weight-semibold text-secondary"><i class="ri-link me-1"></i> Or Enter Video Stream URL</label>
           <input type="text" name="video_url" class="form-control rounded-3" value="/videos/stream/anat-m1-l${lessonCounter}">
         </div>
+        <div class="col-md-6">
+          <label class="form-label small font-weight-semibold text-danger"><i class="ri-file-pdf-2-line me-1"></i> Upload PDF Study Notes / Handout Document</label>
+          <input type="file" name="pdf_file_${idx}" class="form-control rounded-3" accept=".pdf,.doc,.docx,.ppt,.pptx">
+          <span class="text-muted small d-block mt-1">Attach PDF study guide for Lesson ${lessonCounter}.</span>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small font-weight-semibold text-secondary"><i class="ri-drive-line me-1"></i> Or Enter PDF Link / Google Drive URL</label>
+          <input type="text" name="pdf_url" class="form-control rounded-3" placeholder="https://drive.google.com/...">
+        </div>
         <div class="col-12">
-          <label class="form-label small font-weight-semibold">In-Built Study Notes</label>
+          <label class="form-label small font-weight-semibold">In-Built Study Notes & Key Points</label>
           <textarea name="lesson_notes" rows="2" class="form-control rounded-3" placeholder="Notes for Lesson ${lessonCounter}..."></textarea>
         </div>
       </div>

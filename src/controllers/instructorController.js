@@ -173,8 +173,22 @@ exports.saveCourseWizard = async (req, res) => {
           videoUrl = `/uploads/lessons/${uploadedFiles['video_file']}`;
         }
 
+        let pdfUrl = '';
+        if (uploadedFiles[`pdf_file_${i}`]) {
+          pdfUrl = `/uploads/notes/${uploadedFiles[`pdf_file_${i}`]}`;
+        } else if (i === 0 && uploadedFiles['pdf_file']) {
+          pdfUrl = `/uploads/notes/${uploadedFiles['pdf_file']}`;
+        } else if (Array.isArray(data.pdf_url) && data.pdf_url[i]) {
+          pdfUrl = data.pdf_url[i];
+        } else if (data.pdf_url && typeof data.pdf_url === 'string') {
+          pdfUrl = data.pdf_url;
+        }
+
         const duration = parseInt(lessonDurations[i] || 15, 10);
-        const notes = lessonNotes[i] || '';
+        let notes = lessonNotes[i] || '';
+        if (pdfUrl) {
+          notes = notes ? `${notes}\n\n[PDF_DOCUMENT:${pdfUrl}]` : `[PDF_DOCUMENT:${pdfUrl}]`;
+        }
 
         const currentLessonCount = (await db.prepare(`SELECT COUNT(*) as cnt FROM lessons WHERE module_id = ?`).get(targetModuleId))?.cnt || 0;
         await Course.addLesson(targetModuleId, {
@@ -186,6 +200,21 @@ exports.saveCourseWizard = async (req, res) => {
           sort_order: currentLessonCount + 1,
           is_preview: 0
         });
+
+        // If category_id and pdfUrl are present, also add to notes table for subject library
+        if (data.category_id && pdfUrl) {
+          try {
+            const { Notes } = require('../models/Content');
+            await Notes.create({
+              category_id: data.category_id,
+              title: `${title} - Study Notes PDF`,
+              content: notes,
+              file_url: pdfUrl,
+              year: 1,
+              created_by: req.session.user.id
+            });
+          } catch (e) {}
+        }
       }
     }
 

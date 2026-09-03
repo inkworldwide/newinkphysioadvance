@@ -70,19 +70,27 @@ const uploadCourseThumbnail = multer({
   fileFilter: imageFileFilter
 });
 
+const NOTES_DIR = path.join(__dirname, '..', '..', 'public', 'uploads', 'notes');
+fs.mkdirSync(NOTES_DIR, { recursive: true });
+
 const wizardStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (file.fieldname === 'video_file') {
+    if (file.fieldname.startsWith('video_file')) {
       cb(null, VIDEO_DIR);
+    } else if (file.fieldname.startsWith('pdf_file') || file.fieldname.startsWith('note_file')) {
+      cb(null, NOTES_DIR);
     } else {
       cb(null, COURSE_DIR);
     }
   },
   filename: (req, file, cb) => {
     const ext = (path.extname(file.originalname) || '').toLowerCase();
-    if (file.fieldname === 'video_file') {
+    if (file.fieldname.startsWith('video_file')) {
       const safeExt = ['.mp4', '.webm', '.ogg'].includes(ext) ? ext : '.mp4';
       cb(null, `lesson-${Date.now()}-${Math.round(Math.random() * 1e6)}${safeExt}`);
+    } else if (file.fieldname.startsWith('pdf_file') || file.fieldname.startsWith('note_file')) {
+      const safeExt = ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.txt'].includes(ext) ? ext : '.pdf';
+      cb(null, `note-${Date.now()}-${Math.round(Math.random() * 1e6)}${safeExt}`);
     } else {
       const safeExt = ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext) ? ext : '.jpg';
       cb(null, `course-${Date.now()}-${Math.round(Math.random() * 1e6)}${safeExt}`);
