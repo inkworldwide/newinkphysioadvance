@@ -68,9 +68,13 @@ async function migrate() {
     const count = parseInt((userCount && (userCount.cnt || userCount.count)) || 0, 10);
     if (count === 0) {
       console.log('🌱 Database is empty. Seeding initial data...');
-      const seedFn = require('./seed');
-      if (typeof seedFn === 'function') {
-        await seedFn();
+      try {
+        const seedFn = require('./seed');
+        if (typeof seedFn === 'function') {
+          await seedFn();
+        }
+      } catch (seedErr) {
+        console.error('Seeding notice (non-fatal):', seedErr.message || seedErr);
       }
     }
 

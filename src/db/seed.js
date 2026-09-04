@@ -441,14 +441,14 @@ const { LiveSessions } = require('../models/Content');
 await LiveSessions.create({
   title: 'Live Q&A: Surviving Your First Anatomy Practical',
   description: 'An open discussion session for 1st year students preparing for anatomy practicals.',
-  session_type: 'live_class', category_id: categoryIds['anatomy'], host_id: FOUNDER_HEENA,
+  session_type: 'live_class', category_id: categoryIds['human-anatomy'] || categoryIds['anatomy'] || 1, host_id: FOUNDER_HEENA,
   scheduled_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5).toISOString(),
   duration_minutes: 60
 });
 await LiveSessions.create({
   title: 'Webinar: Building a Career in Sports Physiotherapy',
   description: 'A panel-style webinar on career paths within sports physiotherapy.',
-  session_type: 'webinar', category_id: categoryIds['sports-medicine'], host_id: I_PRAMEELA,
+  session_type: 'webinar', category_id: categoryIds['sports-physiotherapy'] || categoryIds['sports-medicine'] || 1, host_id: I_PRAMEELA,
   scheduled_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 12).toISOString(),
   duration_minutes: 90
 });
